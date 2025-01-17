@@ -1,4 +1,4 @@
-@extends('admin.dashboard.index')
+@extends('admin.layouts.layouts')
 
 @section('content')
     <main class="main-wrapper">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\MovieContoller;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\Guest;
@@ -34,10 +35,13 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::get('/setting', 'setting')->name('users.setting');
             });
         });
-        Route::prefix('front')->group(
+        Route::prefix('')->group(
             function () {
                 Route::controller(FrontController::class)->prefix('')->group(function () {
                     Route::get('/', 'index')->name('front.index');
+                });
+                Route::controller((MovieContoller::class))->prefix('movies')->group(function () {
+                    Route::get('/grid', 'grid')->name('movies.grid');
                 });
             }
         );
