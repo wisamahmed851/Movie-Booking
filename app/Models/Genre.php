@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-    
+
     use HasFactory;
 
     /**
@@ -15,7 +15,7 @@ class Genre extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'status'];
 
     /**
      * Relationships: If a genre can be associated with multiple movies,

@@ -15,7 +15,7 @@ class Language extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'status'];
 
     /**
      * Relationships: If a language can be associated with multiple movies,

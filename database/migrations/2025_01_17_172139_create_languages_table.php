@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('languages', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique(); // Add unique constraint
+            $table->integer('status')->default(1)->comment('0 for Inactive, 1 for Active'); // Adding a status column
             $table->timestamps();
         });
     }

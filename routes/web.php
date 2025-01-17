@@ -36,6 +36,15 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::post('/store', 'store')->name('users.store');
                 Route::post('/togglerole/{user}', 'togglerole')->name('user.togglerole');
             });
+            Route::controller(GenreController::class)->prefix('genres')->group(function () {
+                Route::get('/', 'index')->name('genres.index');
+                Route::post('/status/{id}', 'status')->name('genres.status'); // Changed {user} to {id}
+                Route::get('/create', 'create')->name('genres.create');
+                Route::post('/store', 'store')->name('genres.store');
+                Route::get('/edit/{id}', 'edit')->name('genres.edit'); // Added edit route
+            });
+
+            Route::resource('languages', LanguageController::class);
         });
         Route::prefix('')->group(
             function () {
@@ -46,8 +55,6 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                     Route::get('/grid', 'grid')->name('movies.grid');
                     Route::get('/details', 'details')->name('movies.details');
                 });
-                Route::resource('genres', GenreController::class);
-                Route::resource('languages', LanguageController::class);
             }
         );
     }

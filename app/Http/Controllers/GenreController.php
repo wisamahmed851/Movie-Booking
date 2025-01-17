@@ -13,9 +13,10 @@ class GenreController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $genres = Genre::all();
+        return view('admin.genre.index', compact('genres'));
     }
 
     /**
@@ -89,8 +90,24 @@ class GenreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function status(string $id)
     {
-        //
+        try{
+
+            $genre = Genre::find($id);
+            $genre->status = ($genre->status == 1) ? 0 : 1;
+            $genre->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Genre status is updated',
+                'data' => null
+            ]);
+        }catch(Exception $ex){
+            return response()->json([
+                'status' => 'Error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
     }
 }
