@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MovieContoller;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
@@ -44,6 +46,8 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                     Route::get('/grid', 'grid')->name('movies.grid');
                     Route::get('/details', 'details')->name('movies.details');
                 });
+                Route::resource('genres', GenreController::class);
+                Route::resource('languages', LanguageController::class);
             }
         );
     }
