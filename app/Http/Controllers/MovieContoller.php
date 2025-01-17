@@ -11,4 +11,7 @@ class MovieContoller extends Controller
     public function grid(){
         return view('frontend.movies.grid');
     }
+    public function details(){
+        return view('frontend.movies.details');
+    }
 }

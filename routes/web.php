@@ -30,9 +30,9 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(UserController::class)->prefix('user')->group(function () {
                 Route::get('/', 'index')->name('users.index');
                 Route::post('/toggleStatus/{user}', 'toggleStatus')->name('user.toggleStatus');
+                Route::get('/create', 'create')->name('users.create');
+                Route::post('/store', 'store')->name('users.store');
                 Route::post('/togglerole/{user}', 'togglerole')->name('user.togglerole');
-                Route::get('/profile', 'profile')->name('users.profile');
-                Route::get('/setting', 'setting')->name('users.setting');
             });
         });
         Route::prefix('')->group(
@@ -42,6 +42,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 });
                 Route::controller((MovieContoller::class))->prefix('movies')->group(function () {
                     Route::get('/grid', 'grid')->name('movies.grid');
+                    Route::get('/details', 'details')->name('movies.details');
                 });
             }
         );

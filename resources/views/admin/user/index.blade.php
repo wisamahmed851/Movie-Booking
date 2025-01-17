@@ -9,7 +9,7 @@
                         <div
                             class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
                             <h4 class="card-title flex-grow-1">All Users List</h4>
-                            <a href="" class="btn btn-sm btn-primary">
+                            <a href="{{route ('users.create')}}" class="btn btn-sm btn-primary">
                                 Add User
                             </a>
                         </div>
