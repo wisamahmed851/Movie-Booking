@@ -15,6 +15,8 @@ class LanguageController extends Controller
     public function index()
     {
         //
+        $languages = Language::all();
+        return view('admin.language.index', compact('languages'));
     }
 
     /**
@@ -76,6 +78,11 @@ class LanguageController extends Controller
     public function edit(string $id)
     {
         //
+        $language = Language::find($id);
+        if (!$language) {
+            return redirect()->route('genres.index')->with('error', 'Language not found.');
+        }
+        return view('admin.language.edit', compact('language'));
     }
 
     /**
@@ -84,13 +91,57 @@ class LanguageController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try {
+            //
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors(),
+                    'data' => null
+                ]);
+            }
+
+            $language = Language::find($id);
+            $language->name = $request->name;
+            $language->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Language is updated',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function status(string $id)
     {
-        //
+        try {
+
+            $genre = Language::find($id);
+            $genre->status = ($genre->status == 1) ? 0 : 1;
+            $genre->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Genre status is updated',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
     }
 }

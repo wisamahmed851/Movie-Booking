@@ -2,13 +2,13 @@
 
 @section('content')
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner bg_img" data-background="assets/images/banner/banner03.jpg') }}">
+    <section class="details-banner bg_img" data-background="{{asset ('frontend/images/banner/banner03.jpg') }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
                     <img src="{{ asset ('Frontend/images/movie/venus.jpg') }}" alt="movie">
                     <a href="https://www.youtube.com/embed/KGeBMAgc46E" class="video-popup">
-                        <img src="{{ asset ('Frontend/images/movie/video-button.jpg') }}" alt="movie">
+                        <img src="{{ asset ('frontend/images/movie/video-button.jpg') }}" alt="movie">
                     </a>
                 </div>
                 <div class="details-banner-content offset-lg-3">
@@ -156,7 +156,7 @@
                                     <h6>
                                         <a href="#0">HDFC Bank Offer</a>
                                     </h6>
-                                    <p>Get 15% discount up to INR 100* 
+                                    <p>Get 15% discount up to INR 100*
                                         and INR 50* off on F&B T&C apply</p>
                                 </div>
                             </div>

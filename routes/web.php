@@ -42,9 +42,17 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::get('/create', 'create')->name('genres.create');
                 Route::post('/store', 'store')->name('genres.store');
                 Route::get('/edit/{id}', 'edit')->name('genres.edit'); // Added edit route
+                Route::post('/update/{id}', 'update')->name('genres.update'); // Added update route
+            });
+            Route::controller(LanguageController::class)->prefix('languages')->group(function () {
+                Route::get('/', 'index')->name('languages.index');
+                Route::post('/status/{id}', 'status')->name('languages.status'); // Changed {user} to {id}
+                Route::get('/create', 'create')->name('languages.create');
+                Route::post('/store', 'store')->name('languages.store');
+                Route::get('/edit/{id}', 'edit')->name('languages.edit'); // Added edit route
+                Route::post('/update/{id}', 'update')->name('languages.update'); // Added update route
             });
 
-            Route::resource('languages', LanguageController::class);
         });
         Route::prefix('')->group(
             function () {

@@ -74,10 +74,19 @@ class GenreController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, $id)
     {
-        //
+
+
+        $genre = Genre::find($id);
+
+        if (!$genre) {
+            return redirect()->route('genres.index')->with('error', 'Genre not found.');
+        }
+
+        return view('admin.genre.edit', compact('genre'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -85,6 +94,40 @@ class GenreController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try {
+            $genre = Genre::find($id);
+            if (!$genre) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Genre not found',
+                    'data' => null
+                ]);
+            }
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors(),
+                    'data' => null
+                ]);
+            }
+
+            $genre->name = $request->name;
+            $genre->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Genre is updated',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
     }
 
     /**
