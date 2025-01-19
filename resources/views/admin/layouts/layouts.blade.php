@@ -8,7 +8,7 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- Toastify CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
@@ -94,8 +94,8 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                 class="far fa-file-alt me-2"></i>Movies</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('users.index') }}" class="dropdown-item">List</a>
-                            <a href="{{ route('users.create') }}" class="dropdown-item">Create</a>
+                            <a href="{{ route('movies.index') }}" class="dropdown-item">List</a>
+                            <a href="{{ route('movies.create') }}" class="dropdown-item">Create</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">

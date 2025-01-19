@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid pt-4 px-4">
-         <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
             <h4 class="card-title flex-grow-1">All Language List</h4>
             <a href="{{ route('languages.create') }}" class="btn btn-sm btn-primary">
                 Add Language
@@ -31,24 +31,27 @@
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{ route('languages.edit', ['id' => $language->id]) }}" class="dropdown-item">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        @if ($language->status === 1)
+                                    @if ($language->status === 1)
+                                        <li>
+                                            <a href="{{ route('languages.edit', ['id' => $language->id]) }}"
+                                                class="dropdown-item">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                        </li>
+                                        <li>
                                             <button class="dropdown-item change-status" data-id="{{ $language->id }}"
                                                 data-status="0">
                                                 <i class="fas fa-toggle-off"></i> Mark as Inactive
                                             </button>
+                                        </li>
                                         @else
+                                        <li>
                                             <button class="dropdown-item change-status" data-id="{{ $language->id }}"
                                                 data-status="1">
                                                 <i class="fas fa-toggle-on"></i> Mark as Active
                                             </button>
-                                        @endif
-                                    </li>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                         </td>
@@ -127,15 +130,36 @@
                             if (newStatus == 1) {
                                 statusCell.text('Active'); // Update status text
                                 button.data('status', 0); // Update button data-status
-                                button.html(
-                                    '<i class="fas fa-toggle-off"></i> Mark as Inactive'
-                                ); // Update button text/icon
+                                
                             } else {
                                 statusCell.text('InActive'); // Update status text
                                 button.data('status', 1); // Update button data-status
-                                button.html(
-                                    '<i class="fas fa-toggle-on"></i> Mark as Active'
-                                ); // Update button text/icon
+
+                            }
+                            // Update the dropdown menu for Actions
+                            const actionsDropdown = row.find(
+                            '.dropdown-menu'); // Locate dropdown menu
+                            if (newStatus == 1) {
+                                actionsDropdown.html(`
+                <li>
+                    <a href="/movies/edit/${button.data('id')}" class="dropdown-item">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                </li>
+                <li>
+                    <button class="dropdown-item change-status" data-id="${button.data('id')}" data-status="0">
+                        <i class="fas fa-toggle-off"></i> Mark as Inactive
+                    </button>
+                </li>
+            `);
+                            } else {
+                                actionsDropdown.html(`
+                <li>
+                    <button class="dropdown-item change-status" data-id="${button.data('id')}" data-status="1">
+                        <i class="fas fa-toggle-on"></i> Mark as Active
+                    </button>
+                </li>
+            `);
                             }
                         } else {
                             Toastify({

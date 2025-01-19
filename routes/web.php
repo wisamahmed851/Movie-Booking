@@ -52,7 +52,14 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::get('/edit/{id}', 'edit')->name('languages.edit'); // Added edit route
                 Route::post('/update/{id}', 'update')->name('languages.update'); // Added update route
             });
-
+            Route::controller(MovieContoller::class)->prefix('movies')->group(function () {
+                Route::get('/', 'index')->name('movies.index');
+                Route::post('/status/{id}', 'status')->name('movies.status'); // Changed {user} to {id}
+                Route::get('/create', 'create')->name('movies.create');
+                Route::post('/store', 'store')->name('movies.store');
+                Route::get('/edit/{id}', 'edit')->name('movies.edit'); // Added edit route
+                Route::post('/update/{id}', 'update')->name('movies.update'); // Added update route
+            });
         });
         Route::prefix('')->group(
             function () {
