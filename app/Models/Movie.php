@@ -17,6 +17,12 @@ class Movie extends Model
         'cover_image_id',
         'banner_image_id',
         'slider_image_id',
+        'status',
+        'trailler',
+        'istrending',
+        'isExclusive',
+        'release_date',
+        'duration',
     ];
 
     protected $casts = [

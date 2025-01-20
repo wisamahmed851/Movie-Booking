@@ -58,7 +58,12 @@ class MovieContoller extends Controller
         // Validate the incoming data
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'trailer_url' => 'required|string',
             'description' => 'required|string',
+            'release_date' => 'required|date',
+            'duration' => 'required|integer',
+            'isTrending' => 'required|boolean',
+            'isExclusive' => 'required|boolean',
             'genre_ids' => 'required|array',
             'language_ids' => 'required|array',
             'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif',
@@ -85,11 +90,15 @@ class MovieContoller extends Controller
             'banner_image_path' => $bannerImage,
             'slider_images' => $sliderImages,
         ]);
-
         // Create the movie
         $movie = Movie::create([
             'title' => $request->title,
+            'trailler' => $request->trailer_url,
             'description' => $request->description,
+            'release_date' => $request->release_date,
+            'duration' => $request->duration,
+            'isTrending' => $request->isTrending,
+            'isExclusive' => $request->isExclusive,
             'genre_ids' => $request->genre_ids,
             'language_ids' => $request->language_ids,
             'cover_image_id' => $movieImage->id,
@@ -184,7 +193,63 @@ class MovieContoller extends Controller
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
     }
-    public function grid(Request $request)
+    public function loadmovies(Request $request)
+    {
+        // Build the query for movies with relationships
+        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages']);
+
+        // Debug log for languages and genres received from the AJAX request
+        \Log::info('Selected Languages: ', $request->languages ?? []);
+        \Log::info('Selected Genres: ', $request->genres ?? []);
+
+        // Apply filters for languages
+        if ($request->has('languages') && !empty($request->languages)) {
+            foreach ($request->languages as $language) {
+                $query->orWhereJsonContains('language_ids', $language);
+            }
+        }
+
+        // Apply filters for genres
+        if ($request->has('genres') && !empty($request->genres)) {
+            foreach ($request->genres as $genre) {
+                $query->orWhereJsonContains('genre_ids', $genre);
+            }
+        }
+
+        // Paginate the results
+        $movies = $query->paginate(12); // Adjust the number of movies per page as needed
+
+        // Transform the movies to include additional data
+        $movies->getCollection()->transform(function ($movie) {
+            $movie->genres = Genre::whereIn('id', $movie->genre_ids ?? [])->pluck('name')->toArray();
+            $movie->languages = Language::whereIn('id', $movie->language_ids ?? [])->pluck('name')->toArray();
+            $movie->banner_image = $movie->bannerImage?->banner_image_path ?? null;
+            $movie->cover_image = $movie->coverImage?->cover_image_path ?? null;
+            $movie->slider_images = $movie->sliderImages?->slider_images ?? [];
+            return $movie;
+        });
+
+        // Generate pagination HTML (if necessary for frontend)
+        $pagination = $movies->links()->toHtml();
+
+        // If it's an AJAX request, return JSON with movies and pagination
+        if ($request->ajax()) {
+            $moviesHtml = view('frontend.movies.partials.movies', ['movies' => $movies])->render();
+            return response()->json([
+                'moviesHtml' => $moviesHtml,
+                'pagination' => $pagination,
+            ]);
+        }
+
+        // If not an AJAX request, return a success response with the movies data
+        return response()->json([
+            'status' => 'success',
+            'movies' => $movies,
+        ]);
+    }
+
+
+    public function list(Request $request)
     {
         // Get languages and genres
         $languages = Language::where('status', 1)->get();
@@ -202,7 +267,7 @@ class MovieContoller extends Controller
         }
 
         // Fetch the movies with pagination
-        $movies = $query->paginate(4);
+        $movies = $query->paginate(12);
         // Map movie data to include image paths on the actual items (not on the paginator)
         $movies->getCollection()->transform(function ($movie) {
             $movie->banner_image = $movie->bannerImage?->banner_image_path ?? null;

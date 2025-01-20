@@ -13,12 +13,47 @@
                         required>
                 </div>
 
+                <!-- YouTube Trailer URL -->
+                <div class="mb-3">
+                    <label for="trailer_url" class="form-label text-white">Trailer URL (YouTube)</label>
+                    <input type="url" class="form-control" id="trailer_url" name="trailer_url"
+                        placeholder="Enter YouTube trailer URL" required>
+                </div>
+
                 <!-- Description -->
                 <div class="mb-3">
                     <label for="description" class="form-label text-white">Description</label>
                     <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter description"
                         required></textarea>
                 </div>
+
+                <!-- Release Date -->
+                <div class="mb-3">
+                    <label for="release_date" class="form-label text-white">Release Date</label>
+                    <input type="date" class="form-control" id="release_date" name="release_date" required>
+                </div>
+
+                <!-- Duration -->
+                <div class="mb-3">
+                    <label for="duration" class="form-label text-white">Duration (in minutes)</label>
+                    <input type="number" class="form-control" id="duration" name="duration"
+                        placeholder="Enter duration in minutes" required>
+                </div>
+
+                <!-- Is Trending Checkbox -->
+                <div class="mb-3">
+                    <input type="hidden" name="isTrending" value="0"> <!-- Hidden input -->
+                    <input type="checkbox" class="form-check-input" id="isTrending" name="isTrending" value="1">
+                    <label class="form-check-label text-white" for="isTrending">Is Trending</label>
+                </div>
+
+                <!-- Is Exclusive Checkbox -->
+                <div class="mb-3">
+                    <input type="hidden" name="isExclusive" value="0"> <!-- Hidden input -->
+                    <input type="checkbox" class="form-check-input" id="isExclusive" name="isExclusive" value="1">
+                    <label class="form-check-label text-white" for="isExclusive">Is Exclusive</label>
+                </div>
+
 
                 <!-- Dropdowns -->
                 <div class="row g-3">
@@ -75,13 +110,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="bannerImage" class="form-label text-white">Banner Image</label>
-                        <input type="file" class="form-control" id="bannerImage" name="banner_image" accept="image/*"
-                            required>
+                        <input type="file" class="form-control" id="bannerImage" name="banner_image"
+                            accept="image/*" required>
                     </div>
                     <div class="mb-3">
                         <label for="sliderImages" class="form-label text-white">Slider Images</label>
-                        <input type="file" class="form-control" id="sliderImages" name="slider_images[]" accept="image/*"
-                            multiple required>
+                        <input type="file" class="form-control" id="sliderImages" name="slider_images[]"
+                            accept="image/*" multiple required>
                     </div>
                 </div>
 
@@ -90,6 +125,7 @@
                     <button type="submit" id="submitMovie" class="btn btn-primary">Submit</button>
                 </div>
             </form>
+
         </div>
     </div>
 @endsection
@@ -101,6 +137,12 @@
                 e.preventDefault(); // Prevent form from submitting normally
 
                 let formData = new FormData(this);
+                if (!$('#isTrending').is(':checked')) {
+                    formData.append('isTrending', 0);
+                }
+                if (!$('#isExclusive').is(':checked')) {
+                    formData.append('isExclusive', 0);
+                }
 
                 $.ajax({
                     url: "{{ route('movies.store') }}",

@@ -14,6 +14,7 @@
                     <th>Banner</th>
                     <th>Cover</th>
                     <th>Slider Images</th>
+                    <th>Release Date</th>
                     <th>Genres</th>
                     <th>Languages</th>
                     <th>Status</th>
@@ -47,6 +48,7 @@
                                 No images available
                             @endif
                         </td>
+                        <td>{{ $movie->release_date }}</td>
                         <td>
                             @if (!empty($movie->genres))
                                 {{ implode(', ', $movie->genres) }}
