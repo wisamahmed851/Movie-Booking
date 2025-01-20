@@ -66,7 +66,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::controller(FrontController::class)->prefix('')->group(function () {
                     Route::get('/', 'index')->name('front.index');
                 });
-                Route::controller((MovieContoller::class))->prefix('movies')->group(function () {
+                Route::controller(MovieContoller::class)->prefix('movies')->group(function () {
                     Route::get('/grid', 'grid')->name('movies.grid');
                     Route::get('/details', 'details')->name('movies.details');
                 });

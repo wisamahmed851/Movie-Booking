@@ -45,9 +45,6 @@ class MovieContoller extends Controller
         return view('admin.movies.index', compact('movies'));
     }
 
-
-
-
     public function create()
     {
         $genres = Genre::where('status', 1)->get();
@@ -187,10 +184,67 @@ class MovieContoller extends Controller
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
     }
-    public function grid()
+    public function grid(Request $request)
     {
-        return view('frontend.movies.grid');
+        // Get languages and genres
+        $languages = Language::where('status', 1)->get();
+        $genres = Genre::where('status', 1)->get();
+
+        // Build the query for movies based on the filters
+        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages']);
+
+        if ($request->has('languages')) {
+            $query->whereIn('language_id', $request->languages);
+        }
+
+        if ($request->has('genres')) {
+            $query->whereIn('genre_id', $request->genres);
+        }
+
+        // Fetch the movies with pagination
+        $movies = $query->paginate(4);
+        // Map movie data to include image paths on the actual items (not on the paginator)
+        $movies->getCollection()->transform(function ($movie) {
+            $movie->banner_image = $movie->bannerImage?->banner_image_path ?? null;
+            $movie->cover_image = $movie->coverImage?->cover_image_path ?? null;
+            return $movie;
+        });
+
+        // Get pagination links (works on the Paginator object, not the collection)
+        $pagination = $movies->links()->toHtml();
+
+        // If the request is AJAX, return the filtered movie list and pagination
+        if ($request->ajax()) {
+            $moviesHtml = view('frontend.movies.partials.movies', compact('movies'))->render();
+
+            return response()->json(['moviesHtml' => $moviesHtml, 'pagination' => $pagination]);
+        }
+
+        // For non-AJAX requests, return the view with the movies, genres, and languages
+        return view('frontend.movies.grid', compact('movies', 'genres', 'languages', 'pagination'));
     }
+
+
+
+
+    public function gridz()
+    {
+        $languages = Language::where('status', 1)->get();
+        $genres = Genre::where('status', 1)->get();
+        $movies = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->get();
+
+        // Transform movie data if needed
+        $movies = $movies->map(function ($movie) {
+            $movie->banner_image = $movie->bannerImage?->banner_image_path ?? null;
+            $movie->cover_image = $movie->coverImage?->cover_image_path ?? null;
+            return $movie;
+        });
+
+        return view('frontend.movies.grid', compact('movies', 'genres', 'languages'));
+    }
+
+
+
     public function details()
     {
         return view('frontend.movies.details');

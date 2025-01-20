@@ -1,7 +1,7 @@
 @extends('frontend.layouts.layouts')
 
 @section('content')
-<!-- ==========Banner-Section========== -->
+    <!-- ==========Banner-Section========== -->
     <section class="banner-section">
         <div class="banner-bg bg_img bg-fixed" data-background="assets/images/banner/banner02.jpg') }}"></div>
         <div class="container">
@@ -28,19 +28,19 @@
                         <ul class="tab-menu ticket-tab-menu">
                             <li class="active">
                                 <div class="tab-thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/ticket-tab01.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/ticket-tab01.png') }}" alt="ticket">
                                 </div>
                                 <span>movie</span>
                             </li>
                             <li>
                                 <div class="tab-thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/ticket-tab02.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/ticket-tab02.png') }}" alt="ticket">
                                 </div>
                                 <span>events</span>
                             </li>
                             <li>
                                 <div class="tab-thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/ticket-tab03.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/ticket-tab03.png') }}" alt="ticket">
                                 </div>
                                 <span>sports</span>
                             </li>
@@ -56,7 +56,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/city.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
@@ -71,7 +71,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/date.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
                                 <select class="select-bar">
@@ -83,7 +83,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/cinema.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">cinema</span>
                                 <select class="select-bar">
@@ -106,7 +106,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/city.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
@@ -121,7 +121,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/date.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
                                 <select class="select-bar">
@@ -133,7 +133,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/cinema.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">event</span>
                                 <select class="select-bar">
@@ -156,7 +156,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/city.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
@@ -171,7 +171,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/date.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
                                 <select class="select-bar">
@@ -183,7 +183,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/cinema.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">sports</span>
                                 <select class="select-bar">
@@ -207,489 +207,118 @@
     <!-- ==========Movie-Section========== -->
     <section class="movie-section padding-top padding-bottom">
         <div class="container">
-            <div class="row flex-wrap-reverse justify-content-center">
-                <div class="col-sm-10 col-md-8 col-lg-3">
-                    <div class="widget-1 widget-banner">
-                        <div class="widget-1-body">
-                            <a href="#0">
-                                <img src="{{ asset ('Frontend/images/sidebar/banner/banner01.jpg') }}" alt="banner">
-                            </a>
+            <form id="filters-form" method="GET">
+                <div class="row flex-wrap-reverse justify-content-center">
+                    {{-- left filter Section --}}
+
+                    <!-- Languages Filter -->
+                    <div class="col-sm-10 col-md-8 col-lg-3">
+                        <div class="widget-1 widget-check">
+                            <div class="widget-header">
+                                <h5 class="m-title">Filter By</h5>
+                            </div>
+                            <div class="widget-1-body">
+                                <h6 class="subtitle">Language</h6>
+                                <div class="check-area">
+                                    @foreach ($languages as $language)
+                                        <div class="form-group">
+                                            <input type="checkbox" name="languages[]" value="{{ $language->id }}"
+                                                class="filter-input" id="lang{{ $language->id }}">
+                                            <label for="lang{{ $language->id }}">{{ $language->name }}</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Genres Filter -->
+                        <div class="widget-1 widget-check">
+                            <div class="widget-1-body">
+                                <h6 class="subtitle">Genre</h6>
+                                <div class="check-area">
+                                    @foreach ($genres as $genre)
+                                        <div class="form-group">
+                                            <input type="checkbox" name="genres[]" value="{{ $genre->id }}"
+                                                class="filter-input" id="genre{{ $genre->id }}">
+                                            <label for="genre{{ $genre->id }}">{{ $genre->name }}</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Experience Filter (2D/3D) -->
+                        {{-- <div class="widget-1 widget-check">
+                            <div class="widget-1-body">
+                                <h6 class="subtitle">Experience</h6>
+                                <div class="check-area">
+                                    <div class="form-group">
+                                        <input type="checkbox" name="experience[]" value="2d" class="filter-input"
+                                            id="mode2d">
+                                        <label for="mode2d">2D</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="checkbox" name="experience[]" value="3d" class="filter-input"
+                                            id="mode3d">
+                                        <label for="mode3d">3D</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
+                    </div>
+            </form>
+
+            {{-- End left filter section --}}
+            <div class="col-lg-9 mb-50 mb-lg-0">
+                <div class="filter-tab tab">
+                    {{-- second Filter  --}}
+                    <div class="filter-area">
+                        <div class="filter-main">
+                            <div class="left">
+                                <div class="item">
+                                    <span class="show">Show :</span>
+                                    <select class="select-bar">
+                                        <option value="12">12</option>
+                                        <option value="15">15</option>
+                                        <option value="18">18</option>
+                                        <option value="21">21</option>
+                                        <option value="24">24</option>
+                                        <option value="27">27</option>
+                                        <option value="30">30</option>
+                                    </select>
+                                </div>
+                                <div class="item">
+                                    <span class="show">Sort By :</span>
+                                    <select class="select-bar">
+                                        <option value="showing">now showing</option>
+                                        <option value="exclusive">exclusive</option>
+                                        <option value="trending">trending</option>
+                                        <option value="most-view">most view</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <ul class="grid-button tab-menu">
+                                <li class="active">
+                                    <i class="fas fa-th"></i>
+                                </li>
+                                <li>
+                                    <i class="fas fa-bars"></i>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="widget-1 widget-check">
-                        <div class="widget-header">
-                            <h5 class="m-title">Filter By</h5> <a href="#0" class="clear-check">Clear All</a>
-                        </div>
-                        <div class="widget-1-body">
-                            <h6 class="subtitle">Language</h6>
-                            <div class="check-area">
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang1"><label for="lang1">Tamil</label>
+                    {{-- End Second filter --}}
+                    {{-- cards for movies --}}
+                    <div class="tab-area">
+                        <div class="tab-item active">
+                            <div class="row mb-10 justify-content-center">
+                                <div class="row">
+                                    @include('frontend.movies.partials.movies', ['movies' => $movies])
                                 </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang2"><label for="lang2">Telegu</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang3"><label for="lang3">Hindi</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang4"><label for="lang4">English</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang5"><label for="lang5">Multiple Language</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang6"><label for="lang6">Gujrati</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="lang" id="lang7"><label for="lang7">Bangla</label>
-                                </div>
+
                             </div>
                         </div>
-                    </div>
-                    <div class="widget-1 widget-check">
-                        <div class="widget-1-body">
-                            <h6 class="subtitle">experience</h6>
-                            <div class="check-area">
-                                <div class="form-group">
-                                    <input type="checkbox" name="mode" id="mode1"><label for="mode1">2d</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="mode" id="mode2"><label for="mode2">3d</label>
-                                </div>
-                            </div>
-                            <div class="add-check-area">
-                                <a href="#0">view more <i class="plus"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget-1 widget-check">
-                        <div class="widget-1-body">
-                            <h6 class="subtitle">genre</h6>
-                            <div class="check-area">
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre1"><label for="genre1">thriller</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre2"><label for="genre2">horror</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre3"><label for="genre3">drama</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre4"><label for="genre4">romance</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre5"><label for="genre5">action</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre6"><label for="genre6">comedy</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre7"><label for="genre7">romantic</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre8"><label for="genre8">animation</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre9"><label for="genre9">sci-fi</label>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="genre" id="genre10"><label for="genre10">adventure</label>
-                                </div>
-                            </div>
-                            <div class="add-check-area">
-                                <a href="#0">view more <i class="plus"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget-1 widget-banner">
-                        <div class="widget-1-body">
-                            <a href="#0">
-                                <img src="{{ asset ('Frontend/images/sidebar/banner/banner02.jpg') }}" alt="banner">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-9 mb-50 mb-lg-0">
-                    <div class="filter-tab tab">
-                        <div class="filter-area">
-                            <div class="filter-main">
-                                <div class="left">
-                                    <div class="item">
-                                        <span class="show">Show :</span>
-                                        <select class="select-bar">
-                                            <option value="12">12</option>
-                                            <option value="15">15</option>
-                                            <option value="18">18</option>
-                                            <option value="21">21</option>
-                                            <option value="24">24</option>
-                                            <option value="27">27</option>
-                                            <option value="30">30</option>
-                                        </select>
-                                    </div>
-                                    <div class="item">
-                                        <span class="show">Sort By :</span>
-                                        <select class="select-bar">
-                                            <option value="showing">now showing</option>
-                                            <option value="exclusive">exclusive</option>
-                                            <option value="trending">trending</option>
-                                            <option value="most-view">most view</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <ul class="grid-button tab-menu">
-                                    <li class="active">
-                                        <i class="fas fa-th"></i>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-bars"></i>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="tab-area">
-                            <div class="tab-item active">
-                                <div class="row mb-10 justify-content-center">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie01.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">alone</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie02.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">mars</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie03.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">venus</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie04.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">on watch</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie05.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">fury</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie06.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">trooper</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie07.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">horror night</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie08.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">the lost name</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie09.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">calm stedfast</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie10.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">criminal on party</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie11.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">halloween party</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="movie-grid">
-                                            <div class="movie-thumb c-thumb">
-                                                <a href="movie-details.html">
-                                                    <img src="{{ asset ('Frontend/images/movie/movie12.jpg') }}" alt="movie">
-                                                </a>
-                                            </div>
-                                            <div class="movie-content bg-one">
-                                                <h5 class="title m-0">
-                                                    <a href="movie-details.html">the most wanted</a>
-                                                </h5>
-                                                <ul class="movie-rating-percent">
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                    <li>
-                                                        <div class="thumb">
-                                                            <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                        </div>
-                                                        <span class="content">88%</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-item">
+                        {{--  <div class="tab-item">
                                 <div class="movie-area mb-10">
                                     <div class="movie-list">
                                         <div class="movie-thumb c-thumb">
@@ -1436,21 +1065,76 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="pagination-area text-center">
-                            <a href="#0"><i class="fas fa-angle-double-left"></i><span>Prev</span></a>
-                            <a href="#0">1</a>
-                            <a href="#0">2</a>
-                            <a href="#0" class="active">3</a>
-                            <a href="#0">4</a>
-                            <a href="#0">5</a>
-                            <a href="#0"><span>Next</span><i class="fas fa-angle-double-right"></i></a>
-                        </div>
+                            </div> --}}
+                    </div>
+
+                    <!-- Pagination Area -->
+                    <div class="pagination-area text-center">
+                        {!! $pagination !!}
                     </div>
                 </div>
             </div>
         </div>
+        </div>
     </section>
     <!-- ==========Movie-Section========== -->
+    <style>
+        .movie-thumb img {
+            width: 100%;
+            /* Ensures the image spans the width of the container */
+            height: 300px;
+            /* Set a fixed height for all images */
+            object-fit: cover;
+            /* Ensures the image covers the dimensions without distortion */
+            border-radius: 5px;
+            /* Optional: Adds rounded corners to the images */
+        }
+    </style>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Bind change events to filters
+            const filterInputs = document.querySelectorAll('.filter-input');
+            filterInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    updateMovieList();
+                });
+            });
+
+            // Handle pagination link click
+            const paginationLinks = document.querySelectorAll('.pagination-link');
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    updateMovieList(page);
+                });
+            });
+        });
+
+        function updateMovieList(page = 1) {
+            const formData = new FormData(document.getElementById('filters-form'));
+            formData.append('page', page); // Include the current page number
+
+            fetch('/movies/grid?' + new URLSearchParams(formData), {
+                    method: 'GET',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the movie list HTML
+                    document.getElementById('movie-list').innerHTML = data.moviesHtml;
+
+                    // Update pagination links (if necessary)
+                    updatePagination(data.pagination);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function updatePagination(pagination) {
+            const paginationArea = document.querySelector('.pagination-area');
+            paginationArea.innerHTML = pagination; // Update the pagination area with new links
+        }
+    </script>
+@endpush

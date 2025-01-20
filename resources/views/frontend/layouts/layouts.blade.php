@@ -254,6 +254,7 @@
     <script src="{{ asset ('Frontend/js/viewport.jquery.js') }}"></script>
     <script src="{{ asset ('Frontend/js/nice-select.js') }}"></script>
     <script src="{{ asset ('Frontend/js/main.js') }}"></script>
+    @stack('scripts')
 </body>
 
 
