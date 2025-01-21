@@ -19,7 +19,7 @@ class Movie extends Model
         'slider_image_id',
         'status',
         'trailler',
-        'istrending',
+        'isTrending',
         'isExclusive',
         'release_date',
         'duration',

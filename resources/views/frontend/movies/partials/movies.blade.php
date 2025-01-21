@@ -1,27 +1,30 @@
 @foreach ($movies as $movie)
-    <div class="col-sm-6 col-lg-4 @if($movies->count() == 1) col-lg-12 @endif @if($movies->count() == 2) col-lg-6  @endif">
-        <div class="movie-grid">
+    <div class="col-sm-6 col-lg-4 @if($movies->count() == 1) col-lg-12 @endif @if($movies->count() == 2) col-lg-6 @endif">
+        <!-- Changed id to class and added data-id -->
+        <div class="movie-grid" data-id="{{ $movie->id }}">
             <div class="movie-thumb c-thumb">
-                <a href="movie-details.html">
+                <!-- Removed hardcoded href -->
+                <a href="javascript:void(0);">
                     <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="{{ $movie->title }}">
                 </a>
             </div>
             <div class="movie-content bg-one">
                 <h5 class="title m-0">
-                    <a href="movie-details.html">{{ $movie->title }}</a>
+                    <!-- Removed hardcoded href -->
+                    <a href="javascript:void(0);">{{ $movie->title }}</a>
                 </h5>
                 <ul class="movie-rating-percent">
                     <li>
                         <div class="thumb">
                             <img src="{{ asset('Frontend/images/movie/tomato.png') }}" alt="rating">
                         </div>
-                        <span class="content">88%</span> {{-- Replace with dynamic rating if available --}}
+                        <span class="content">88%</span>
                     </li>
                     <li>
                         <div class="thumb">
                             <img src="{{ asset('Frontend/images/movie/cake.png') }}" alt="rating">
                         </div>
-                        <span class="content">88%</span> {{-- Replace with dynamic rating if available --}}
+                        <span class="content">88%</span>
                     </li>
                 </ul>
             </div>

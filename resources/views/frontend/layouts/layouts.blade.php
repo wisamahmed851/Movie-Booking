@@ -66,7 +66,7 @@
                                 <a href="{{route('movies.grid')}}">Movie Grid</a>
                             </li>
                             <li>
-                                <a href="{{route('movies.details')}}">Movie Details</a>
+                                <a href="">Movie Details</a>
                             </li>
                         </ul>
                     </li>

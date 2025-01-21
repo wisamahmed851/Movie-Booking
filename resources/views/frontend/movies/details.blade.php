@@ -2,31 +2,35 @@
 
 @section('content')
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner bg_img" data-background="{{asset ('frontend/images/banner/banner03.jpg') }}">
+    <section class="details-banner bg_img" data-background="{{asset ('storage/' . $movie->bannerImage->banner_image_path) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
-                    <img src="{{ asset ('Frontend/images/movie/venus.jpg') }}" alt="movie">
+                    <img src="{{ asset ('storage/' .$movie->coverImage->cover_image_path) }}" alt="{{$movie->title}}">
                     <a href="https://www.youtube.com/embed/KGeBMAgc46E" class="video-popup">
-                        <img src="{{ asset ('frontend/images/movie/video-button.jpg') }}" alt="movie">
+                        <img src="{{ asset ('frontend/images/movie/video-button.png') }}" alt="movie">
                     </a>
                 </div>
                 <div class="details-banner-content offset-lg-3">
-                    <h3 class="title">Venus</h3>
+                    <h3 class="title">{{$movie->title}}</h3>
                     <div class="tags">
-                        <a href="#0">English</a>
-                        <a href="#0">Hindi</a>
-                        <a href="#0">Telegu</a>
-                        <a href="#0">Tamil</a>
+                        @foreach ($genres as $genre)
+                            <a href="javascript:void(0);" class="genre-link">{{$genre->name}}</a>
+
+                        @endforeach
                     </div>
-                    <a href="#0" class="button">horror</a>
+                    @foreach ($languages as $laguage)
+                        <a href="#0" class="button">{{$laguage->name}}</a>
+
+                    @endforeach
+
                     <div class="social-and-duration">
                         <div class="duration-area">
                             <div class="item">
-                                <i class="fas fa-calendar-alt"></i><span>06 Dec, 2020</span>
+                                <i class="fas fa-calendar-alt"></i><span>{{$movie->release_date}}</span>
                             </div>
                             <div class="item">
-                                <i class="far fa-clock"></i><span>2 hrs 50 mins</span>
+                                <i class="far fa-clock"></i><span>{{$movie->duration}}</span>
                             </div>
                         </div>
                         <ul class="social-share">
@@ -122,7 +126,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="widget-1 widget-offer">
+                    {{-- <div class="widget-1 widget-offer">
                         <h3 class="title">Applicable offer</h3>
                         <div class="offer-body">
                             <div class="offer-item">
@@ -168,7 +172,7 @@
                                 <img src="{{ asset ('Frontend/images/sidebar/banner/banner01.jpg') }}" alt="banner">
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-lg-9 mb-50">
                     <div class="movie-details">

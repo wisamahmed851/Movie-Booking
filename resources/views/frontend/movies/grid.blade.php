@@ -278,11 +278,11 @@
                             <div class="left">
                                 <div class="item">
                                     <span class="show">Show :</span>
-                                    <select class="select-bar">
-                                        <option value="12">12</option>
+                                    <select class="select-bar " id="Pagination">
+                                        <option value="4">4</option>
                                         <option value="15">15</option>
                                         <option value="18">18</option>
-                                        <option value="21">21</option>
+                                        <option value="6">6</option>
                                         <option value="24">24</option>
                                         <option value="27">27</option>
                                         <option value="30">30</option>
@@ -290,11 +290,10 @@
                                 </div>
                                 <div class="item">
                                     <span class="show">Sort By :</span>
-                                    <select class="select-bar">
+                                    <select class="select-bar " id="sortDropdown">
                                         <option value="showing">now showing</option>
                                         <option value="exclusive">exclusive</option>
                                         <option value="trending">trending</option>
-                                        <option value="most-view">most view</option>
                                     </select>
                                 </div>
                             </div>
@@ -317,7 +316,7 @@
                                 <div class="row" id="movie-grid">
                                     @include('frontend.movies.partials.movies', ['movies' => $movies])
                                 </div>
-                                
+
                             </div>
                         </div>
                         {{--  <div class="tab-item">
@@ -1071,7 +1070,7 @@
                     </div>
 
                     <!-- Pagination Area -->
-                    <div class="pagination-area text-center">
+                    <div class="pagination-text-center" id="paginationControll">
                         {!! $pagination !!}
                     </div>
                 </div>
@@ -1082,10 +1081,11 @@
     <!-- ==========Movie-Section========== -->
     <style>
         .row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;  /* This ensures the items are centered */
-}
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            /* This ensures the items are centered */
+        }
 
         .movie-thumb img {
             width: 100%;
@@ -1103,83 +1103,172 @@
 @push('scripts')
     <script>
         /*  document.addEventListener("DOMContentLoaded", function() {
-                    // Bind change events to filters
-                    const filterInputs = document.querySelectorAll('.filter-input');
-                    filterInputs.forEach(input => {
-                        input.addEventListener('change', function() {
-                            updateMovieList();
-                        });
-                    });
+                                        // Bind change events to filters
+                                        const filterInputs = document.querySelectorAll('.filter-input');
+                                        filterInputs.forEach(input => {
+                                            input.addEventListener('change', function() {
+                                                updateMovieList();
+                                            });
+                                        });
 
-                    // Delegate pagination link clicks to a parent element
-                    document.querySelector('.pagination-area').addEventListener('click', function(e) {
-                        if (e.target.classList.contains('pagination-link')) {
-                            e.preventDefault();
-                            const page = e.target.getAttribute('data-page');
-                            updateMovieList(page);
-                        }
-                    });
+                                        // Delegate pagination link clicks to a parent element
+                                        document.querySelector('.pagination-area').addEventListener('click', function(e) {
+                                            if (e.target.classList.contains('pagination-link')) {
+                                                e.preventDefault();
+                                                const page = e.target.getAttribute('data-page');
+                                                updateMovieList(page);
+                                            }
+                                        });
+                                    });
+
+                                    function updateMovieList(page = 1) {
+                                        // Gather filters
+                                        const formData = new FormData(document.getElementById('filters-form'));
+                                        formData.append('page', page); // Include the page number
+
+                                        // Convert FormData to URLSearchParams for GET requests
+                                        const queryString = new URLSearchParams(formData).toString();
+
+                                        // Fetch filtered data
+                                        fetch(`/movies/loadmovies?${queryString}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                // Update the movie list HTML
+                                                document.getElementById('movie-list').innerHTML = data.moviesHtml;
+
+                                                // Update pagination
+                                                updatePagination(data.pagination);
+                                            })
+                                            .catch(error => console.error('Error:', error));
+                                    }
+
+                                    function updatePagination(pagination) {
+                                        const paginationArea = document.querySelector('.pagination-area');
+                                        paginationArea.innerHTML = pagination; // Update the pagination area with new links
+                                    } */
+
+        $(document).ready(function() {
+            $(document).on('change', '.filter-input', function() {
+                // Collect selected language IDs
+                let languages = [];
+                $('input[name="languages[]"]:checked').each(function() {
+                    languages.push($(this).val());
                 });
 
-                function updateMovieList(page = 1) {
-                    // Gather filters
-                    const formData = new FormData(document.getElementById('filters-form'));
-                    formData.append('page', page); // Include the page number
+                // Collect selected genre IDs
+                let genres = [];
+                $('input[name="genres[]"]:checked').each(function() {
+                    genres.push($(this).val());
+                });
 
-                    // Convert FormData to URLSearchParams for GET requests
-                    const queryString = new URLSearchParams(formData).toString();
+                // Make AJAX call
+                $.ajax({
+                    url: '/movies/loadmovies',
+                    method: 'GET',
+                    data: {
+                        languages: languages,
+                        genres: genres,
+                    },
+                    success: function(response) {
+                        // Update the movie grid
+                        console.log(response);
+                        $('#movie-grid').html(response.moviesHtml);
 
-                    // Fetch filtered data
-                    fetch(`/movies/loadmovies?${queryString}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            // Update the movie list HTML
-                            document.getElementById('movie-list').innerHTML = data.moviesHtml;
+                        // Update pagination
+                        $('#pagination').html(response.pagination);
 
-                            // Update pagination
-                            updatePagination(data.pagination);
-                        })
-                        .catch(error => console.error('Error:', error));
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
+            });
+            $('#sortDropdown').on('change', function() {
+                let selectedValue = $(this).val();
+
+
+                $.ajax({
+                    url: '/movies/loadmovies',
+                    method: 'GET',
+                    data: {
+                        sortBy: selectedValue
+                    },
+                    success: function(response) {
+                        // Update the movie grid
+                        $('#movie-grid').html(response.moviesHtml);
+
+                        // Update pagination
+                        $('#pagination').html(response.pagination);
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
+            })
+            $('#Pagination').on('change', function() {
+                let selectedValue = $(this).val();
+
+                $.ajax({
+                    url: '/movies/loadmovies',
+                    method: 'GET',
+                    data: {
+                        Pagination: selectedValue
+                    },
+                    success: function(response) {
+                        // Update the movie grid
+                        console.log(response);
+
+                        $('#movie-grid').html(response.moviesHtml);
+
+                        // Update pagination
+                        $('#paginationControll').html(response.pagination);
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
+            })
+            $(document).on('click', '#paginationControll a', function(e) {
+                e.preventDefault();
+                let url = $(this).attr('href');
+
+                let filters = {
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+
+                };
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    data: filters,
+                    success: function(response) {
+                        // Update the movie grid
+                        $('#movie-grid').html(response.moviesHtml);
+
+                        // Update pagination
+                        $('#paginationControll').html(response.pagination);
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    }
+                });
+            })
+            $(document).on('click', '.movie-grid', function(e) {
+                e.preventDefault();
+
+                let selectedMovie = $(this).data('id');
+
+                if (selectedMovie) {
+                    // Redirect to the movie details page with the selected movie ID
+                    window.location.href = `/movies/details/${selectedMovie}`;
                 }
-
-                function updatePagination(pagination) {
-                    const paginationArea = document.querySelector('.pagination-area');
-                    paginationArea.innerHTML = pagination; // Update the pagination area with new links
-                } */
-        $(document).on('change', '.filter-input', function() {
-            // Collect selected language IDs
-            let languages = [];
-            $('input[name="languages[]"]:checked').each(function() {
-                languages.push($(this).val());
             });
 
-            // Collect selected genre IDs
-            let genres = [];
-            $('input[name="genres[]"]:checked').each(function() {
-                genres.push($(this).val());
-            });
-
-            // Make AJAX call
-            $.ajax({
-                url: '/movies/loadmovies',
-                method: 'GET',
-                data: {
-                    languages: languages,
-                    genres: genres,
-                },
-                success: function(response) {
-                    // Update the movie grid
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#pagination').html(response.pagination);
-                    console.log({ languages: languages, genres: genres });
-
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                }
-            });
         });
     </script>
 @endpush

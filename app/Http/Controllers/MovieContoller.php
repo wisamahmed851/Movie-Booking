@@ -124,11 +124,13 @@ class MovieContoller extends Controller
     public function update(Request $request, $id)
     {
         $movie = Movie::findOrFail($id);
+        \Log::info($request->all());
+
 
         // Validate the incoming data
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'trailer_url' => 'required|string',
+            'trailer' => 'required|string', // Match the field name
             'description' => 'required|string',
             'release_date' => 'required|date',
             'duration' => 'required|integer',
@@ -175,14 +177,14 @@ class MovieContoller extends Controller
         // Update movie details
         $movie->update([
             'title' => $request->title,
-            'trailer' => $request->trailer_url,
+            'trailler' => $request->trailer, // Use correct key
             'description' => $request->description,
             'release_date' => $request->release_date,
             'duration' => $request->duration,
-            'isTrending' => $request->isTrending,
-            'isExclusive' => $request->isExclusive,
+            'isTrending' => $request->isTrending ? true : false, // Explicit boolean casting
+            'isExclusive' => $request->isExclusive ? true : false,
             'genre_ids' => $request->genre_ids,
-            'language_ids' => $request->language_ids
+            'language_ids' => $request->language_ids,
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Movie updated successfully!']);
@@ -225,9 +227,24 @@ class MovieContoller extends Controller
                 $query->orWhereJsonContains('genre_ids', $genre);
             }
         }
+        if ($request->has('sortBy') && !empty($request->sortBy)) {
+            switch ($request->sortBy) {
+                case 'exclusive':
+                    $query->where('isExclusive', 1);
+                    break;
+                case 'trending':
+                    $query->where('isTrending', 1);
+                    break;
+            }
+        }
 
+        if ($request->has('Pagination') && !empty($request->Pagination)) {
+            $movies = $query->paginate($request->Pagination);
+        } else {
+            $movies = $query->paginate(12);
+        }
         // Paginate the results
-        $movies = $query->paginate(12); // Adjust the number of movies per page as needed
+        // Adjust the number of movies per page as needed
 
         // Transform the movies to include additional data
         $movies->getCollection()->transform(function ($movie) {
@@ -240,7 +257,7 @@ class MovieContoller extends Controller
         });
 
         // Generate pagination HTML (if necessary for frontend)
-        $pagination = $movies->links()->toHtml();
+        $pagination = $movies->links('vendor.pagination.customePagination')->toHtml();
 
         // If it's an AJAX request, return JSON with movies and pagination
         if ($request->ajax()) {
@@ -286,7 +303,7 @@ class MovieContoller extends Controller
         });
 
         // Get pagination links (works on the Paginator object, not the collection)
-        $pagination = $movies->links()->toHtml();
+        $pagination = $movies->links('vendor.pagination.customePagination')->toHtml();
 
         // If the request is AJAX, return the filtered movie list and pagination
         if ($request->ajax()) {
@@ -301,27 +318,11 @@ class MovieContoller extends Controller
 
 
 
-
-    public function gridz()
+    public function details($id)
     {
-        $languages = Language::where('status', 1)->get();
-        $genres = Genre::where('status', 1)->get();
-        $movies = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->get();
-
-        // Transform movie data if needed
-        $movies = $movies->map(function ($movie) {
-            $movie->banner_image = $movie->bannerImage?->banner_image_path ?? null;
-            $movie->cover_image = $movie->coverImage?->cover_image_path ?? null;
-            return $movie;
-        });
-
-        return view('frontend.movies.grid', compact('movies', 'genres', 'languages'));
-    }
-
-
-
-    public function details()
-    {
-        return view('frontend.movies.details');
+        $movie = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->findOrFail($id);
+        $genres = Genre::where('status', 1)->whereIn('id', $movie->genre_ids)->get();
+        $languages = Language::whereIn('id', $movie->language_ids)->get();
+        return view('frontend.movies.details', compact('movie', 'genres', 'languages'));
     }
 }

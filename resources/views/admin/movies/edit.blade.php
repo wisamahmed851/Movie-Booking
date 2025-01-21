@@ -15,7 +15,7 @@
                 <!-- YouTube Trailer URL -->
                 <div class="mb-3">
                     <label for="trailer_url" class="form-label text-white">Trailer URL (YouTube)</label>
-                    <input type="url" class="form-control" id="trailer_url" name="trailer_url"
+                    <input type="url" class="form-control" id="trailer_url" name="trailer"
                         value="{{ $movie->trailler }}" placeholder="Enter YouTube trailer URL" required>
                 </div>
 
