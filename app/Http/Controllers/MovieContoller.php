@@ -175,14 +175,14 @@ class MovieContoller extends Controller
         // Update movie details
         $movie->update([
             'title' => $request->title,
-            'trailer' => 'required|string',
-            'description' => 'required|string',
-            'release_date' => 'required|date',
-            'duration' => 'required|integer',
-            'isTrending' => 'required|boolean',
-            'isExclusive' => 'required|boolean',
-            'genre_ids' => 'required|array',
-            'language_ids' => 'required|array',
+            'trailer' => $request->trailer_url,
+            'description' => $request->description,
+            'release_date' => $request->release_date,
+            'duration' => $request->duration,
+            'isTrending' => $request->isTrending,
+            'isExclusive' => $request->isExclusive,
+            'genre_ids' => $request->genre_ids,
+            'language_ids' => $request->language_ids
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Movie updated successfully!']);

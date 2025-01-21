@@ -15,8 +15,8 @@
                 <!-- YouTube Trailer URL -->
                 <div class="mb-3">
                     <label for="trailer_url" class="form-label text-white">Trailer URL (YouTube)</label>
-                    <input type="url" class="form-control" id="trailer_url" name="trailer_url" value="{{ $movie->trailler }}"
-                        placeholder="Enter YouTube trailer URL" required>
+                    <input type="url" class="form-control" id="trailer_url" name="trailer_url"
+                        value="{{ $movie->trailler }}" placeholder="Enter YouTube trailer URL" required>
                 </div>
 
                 <!-- Description -->
@@ -28,29 +28,33 @@
                 <!-- Release Date -->
                 <div class="mb-3">
                     <label for="release_date" class="form-label text-white">Release Date</label>
-                    <input type="date" class="form-control" id="release_date" name="release_date" value="{{$movie->release_date}}" required>
+                    <input type="date" class="form-control" id="release_date" name="release_date"
+                        value="{{ $movie->release_date }}" required>
                 </div>
 
                 <!-- Duration -->
                 <div class="mb-3">
                     <label for="duration" class="form-label text-white">Duration (in minutes)</label>
                     <input type="number" class="form-control" id="duration" name="duration"
-                        placeholder="Enter duration in minutes" value="{{$movie->duration}}" required>
+                        placeholder="Enter duration in minutes" value="{{ $movie->duration }}" required>
                 </div>
 
                 <!-- Is Trending Checkbox -->
                 <div class="mb-3">
-                    <input type="hidden" name="isTrending" value="0"> <!-- Hidden input -->
-                    <input type="checkbox" class="form-check-input" id="isTrending" name="isTrending" value="1">
-                    <label class="form-check-label text-white" for="isTrending" value="1" {{$movie->istrending == 1 ? 'checked' : ''}}>Is Trending</label>
+                    <input type="hidden" name="isTrending" value=0>
+                    <input type="checkbox" class="form-check-input" id="isTrending" name="isTrending" value="1"
+                        {{ $movie->isTrending == 1 ? 'checked' : '' }}>
+                    <label class="form-check-label text-white" for="isTrending">Is Trending</label>
                 </div>
 
                 <!-- Is Exclusive Checkbox -->
                 <div class="mb-3">
-                    <input type="hidden" name="isExclusive" value="0"> <!-- Hidden input -->
-                    <input type="checkbox" class="form-check-input" id="isExclusive" name="isExclusive" value="1">
-                    <label class="form-check-label text-white" value="1" {{$movie->isExclusive == 1 ? 'checked' : ''}} for="isExclusive">Is Exclusive</label>
+                    <input type="hidden" name="isExclusive" value=0>
+                    <input type="checkbox" class="form-check-input" id="isExclusive" name="isExclusive" value="1"
+                        {{ $movie->isExclusive == 1 ? 'checked' : '' }}>
+                    <label class="form-check-label text-white" for="isExclusive">Is Exclusive</label>
                 </div>
+
                 <!-- Dropdowns -->
                 <div class="row g-3">
                     <!-- Genres -->
@@ -133,13 +137,7 @@
             $('#movieEditForm').on('submit', function(e) {
                 e.preventDefault();
 
-                let formData = new FormData(this);
-                 if (!$('#isTrending').is(':checked')) {
-                    formData.append('isTrending', 0);
-                }
-                if (!$('#isExclusive').is(':checked')) {
-                    formData.append('isExclusive', 0);
-                }
+                let formData = new FormData(this); // Automatically includes checkbox values
 
                 $.ajax({
                     url: '{{ route('movies.update', ['id' => $movie->id]) }}',
@@ -156,11 +154,8 @@
                             }).showToast();
                             window.location.href = "{{ route('movies.index') }}";
                         } else if (response.status === 'error') {
-                            let errors = response.message;
-                            let errorMessages = '';
-                            for (let field in errors) {
-                                errorMessages += errors[field][0] + '\n';
-                            }
+                            let errorMessages = Object.values(response.message).map(msg => msg[
+                                0]).join('\n');
                             Toastify({
                                 text: errorMessages.trim(),
                                 backgroundColor: "red",
@@ -169,13 +164,10 @@
                         }
                     },
                     error: function(xhr) {
-                        let errors = xhr.responseJSON.errors;
-                        let errorMessage = '';
-                        for (const key in errors) {
-                            errorMessage += errors[key].join(' ') + '\n';
-                        }
+                        let errorMessages = Object.values(xhr.responseJSON.errors).flat().join(
+                            '\n');
                         Toastify({
-                            text: errorMessage.trim(),
+                            text: errorMessages.trim(),
                             backgroundColor: "red",
                             duration: 5000
                         }).showToast();
