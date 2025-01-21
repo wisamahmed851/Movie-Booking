@@ -128,12 +128,17 @@ class MovieContoller extends Controller
         // Validate the incoming data
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'trailer_url' => 'required|string',
             'description' => 'required|string',
+            'release_date' => 'required|date',
+            'duration' => 'required|integer',
+            'isTrending' => 'required|boolean',
+            'isExclusive' => 'required|boolean',
             'genre_ids' => 'required|array',
             'language_ids' => 'required|array',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'slider_images' => 'nullable|array',
+            'cover_image' => '|image|mimes:jpeg,png,jpg,gif',
+            'banner_image' => '|image|mimes:jpeg,png,jpg,gif',
+            'slider_images' => '|array|min:1',
             'slider_images.*' => 'image|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -170,9 +175,14 @@ class MovieContoller extends Controller
         // Update movie details
         $movie->update([
             'title' => $request->title,
-            'description' => $request->description,
-            'genre_ids' => $request->genre_ids,
-            'language_ids' => $request->language_ids,
+            'trailer' => 'required|string',
+            'description' => 'required|string',
+            'release_date' => 'required|date',
+            'duration' => 'required|integer',
+            'isTrending' => 'required|boolean',
+            'isExclusive' => 'required|boolean',
+            'genre_ids' => 'required|array',
+            'language_ids' => 'required|array',
         ]);
 
         return response()->json(['status' => 'success', 'message' => 'Movie updated successfully!']);
@@ -198,9 +208,9 @@ class MovieContoller extends Controller
         // Build the query for movies with relationships
         $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages']);
 
-        // Debug log for languages and genres received from the AJAX request
-        \Log::info('Selected Languages: ', $request->languages ?? []);
-        \Log::info('Selected Genres: ', $request->genres ?? []);
+        //  Debug log for languages and genres received from the AJAX request
+        // \Log::info('Selected Languages: ', $request->languages ?? []);
+        // \Log::info('Selected Genres: ', $request->genres ?? []);
 
         // Apply filters for languages
         if ($request->has('languages') && !empty($request->languages)) {
