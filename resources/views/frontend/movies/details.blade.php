@@ -2,35 +2,33 @@
 
 @section('content')
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner bg_img" data-background="{{asset ('storage/' . $movie->bannerImage->banner_image_path) }}">
+    <section class="details-banner bg_img" data-background="{{ asset('storage/' . $movie->bannerImage->banner_image_path) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
-                    <img src="{{ asset ('storage/' .$movie->coverImage->cover_image_path) }}" alt="{{$movie->title}}">
-                    <a href="https://www.youtube.com/embed/KGeBMAgc46E" class="video-popup">
-                        <img src="{{ asset ('frontend/images/movie/video-button.png') }}" alt="movie">
+                    <img src="{{ asset('storage/' . $movie->coverImage->cover_image_path) }}" alt="{{ $movie->title }}">
+                    <a href="{{$movie->trailler}}" class="video-popup">
+                        <img src="{{ asset('frontend/images/movie/video-button.png') }}" alt="movie">
                     </a>
                 </div>
                 <div class="details-banner-content offset-lg-3">
-                    <h3 class="title">{{$movie->title}}</h3>
+                    <h3 class="title">{{ $movie->title }}</h3>
                     <div class="tags">
                         @foreach ($genres as $genre)
-                            <a href="javascript:void(0);" class="genre-link">{{$genre->name}}</a>
-
+                            <a href="javascript:void(0);" class="genre-link">{{ $genre->name }}</a>
                         @endforeach
                     </div>
                     @foreach ($languages as $laguage)
-                        <a href="#0" class="button">{{$laguage->name}}</a>
-
+                        <a href="#0" class="button">{{ $laguage->name }}</a>
                     @endforeach
 
                     <div class="social-and-duration">
                         <div class="duration-area">
                             <div class="item">
-                                <i class="fas fa-calendar-alt"></i><span>{{$movie->release_date}}</span>
+                                <i class="fas fa-calendar-alt"></i><span>{{ $movie->release_date }}</span>
                             </div>
                             <div class="item">
-                                <i class="far fa-clock"></i><span>{{$movie->duration}}</span>
+                                <i class="far fa-clock"></i><span>{{ $movie->duration }}</span>
                             </div>
                         </div>
                         <ul class="social-share">
@@ -56,7 +54,7 @@
                     <div class="item">
                         <div class="item-header">
                             <div class="thumb">
-                                <img src="{{ asset ('Frontend/images/movie/tomato2.png') }}" alt="movie">
+                                <img src="{{ asset('Frontend/images/movie/tomato2.png') }}" alt="movie">
                             </div>
                             <div class="counter-area">
                                 <span class="counter-item odometer" data-odometer-final="88">0</span>
@@ -67,7 +65,7 @@
                     <div class="item">
                         <div class="item-header">
                             <div class="thumb">
-                                <img src="{{ asset ('Frontend/images/movie/cake2.png') }}" alt="movie">
+                                <img src="{{ asset('Frontend/images/movie/cake2.png') }}" alt="movie">
                             </div>
                             <div class="counter-area">
                                 <span class="counter-item odometer" data-odometer-final="88">0</span>
@@ -178,36 +176,19 @@
                     <div class="movie-details">
                         <h3 class="title">photos</h3>
                         <div class="details-photos owl-carousel">
-                            <div class="thumb">
-                                <a href="assets/images/movie/movie-details01.jpg') }}" class="img-pop">
-                                    <img src="{{ asset ('Frontend/images/movie/movie-details01.jpg') }}" alt="movie">
-                                </a>
-                            </div>
-                            <div class="thumb">
-                                <a href="assets/images/movie/movie-details02.jpg') }}" class="img-pop">
-                                    <img src="{{ asset ('Frontend/images/movie/movie-details02.jpg') }}" alt="movie">
-                                </a>
-                            </div>
-                            <div class="thumb">
-                                <a href="assets/images/movie/movie-details03.jpg') }}" class="img-pop">
-                                    <img src="{{ asset ('Frontend/images/movie/movie-details03.jpg') }}" alt="movie">
-                                </a>
-                            </div>
-                            <div class="thumb">
-                                <a href="assets/images/movie/movie-details01.jpg') }}" class="img-pop">
-                                    <img src="{{ asset ('Frontend/images/movie/movie-details01.jpg') }}" alt="movie">
-                                </a>
-                            </div>
-                            <div class="thumb">
-                                <a href="assets/images/movie/movie-details02.jpg') }}" class="img-pop">
-                                    <img src="{{ asset ('Frontend/images/movie/movie-details02.jpg') }}" alt="movie">
-                                </a>
-                            </div>
-                            <div class="thumb">
-                                <a href="assets/images/movie/movie-details03.jpg') }}" class="img-pop">
-                                    <img src="{{ asset ('Frontend/images/movie/movie-details03.jpg') }}" alt="movie">
-                                </a>
-                            </div>
+                             @if ($movie->slider_images)
+                                @foreach ($movie->slider_images as $slider)
+                                    <div class="thumb">
+                                    <a href="" class="img-pop">
+                                        <img src="{{ asset('storage/' . $slider) }}" alt="movie">
+                                    </a>
+                                </div>
+                                @endforeach
+                            @else
+                                No images available
+                            @endif
+
+
                         </div>
                         <div class="tab summery-review">
                             <ul class="tab-menu">
@@ -221,22 +202,25 @@
                             <div class="tab-area">
                                 <div class="tab-item active">
                                     <div class="item">
-                                        <h5 class="sub-title">Synopsis</h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vehicula eros sit amet est tincidunt aliquet. Fusce laoreet ligula ac ultrices eleifend. Donec hendrerit fringilla odio, ut feugiat mi convallis nec. Fusce elit ex, blandit vitae mattis sit amet, iaculis ac elit. Ut diam mauris, viverra sit amet dictum vel, aliquam ac quam. Ut mi nisl, fringilla sit amet erat et, convallis porttitor ligula. Sed auctor, orci id luctus venenatis, dui dolor euismod risus, et pharetra orci lectus quis sapien. Duis blandit ipsum ac consectetur scelerisque. </p>
+                                        <h5 class="sub-title">Description</h5>
+                                        <p>{{ $movie->description }}</p>
                                     </div>
                                     <div class="item">
                                         <div class="header">
                                             <h5 class="sub-title">cast</h5>
                                             <div class="navigation">
-                                                <div class="cast-prev"><i class="flaticon-double-right-arrows-angles"></i></div>
-                                                <div class="cast-next"><i class="flaticon-double-right-arrows-angles"></i></div>
+                                                <div class="cast-prev"><i class="flaticon-double-right-arrows-angles"></i>
+                                                </div>
+                                                <div class="cast-next"><i class="flaticon-double-right-arrows-angles"></i>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="casting-slider owl-carousel">
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast01.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast01.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -248,7 +232,8 @@
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast02.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast02.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -260,7 +245,8 @@
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast03.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast03.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -272,7 +258,8 @@
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast04.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast04.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -287,15 +274,18 @@
                                         <div class="header">
                                             <h5 class="sub-title">crew</h5>
                                             <div class="navigation">
-                                                <div class="cast-prev-2"><i class="flaticon-double-right-arrows-angles"></i></div>
-                                                <div class="cast-next-2"><i class="flaticon-double-right-arrows-angles"></i></div>
+                                                <div class="cast-prev-2"><i
+                                                        class="flaticon-double-right-arrows-angles"></i></div>
+                                                <div class="cast-next-2"><i
+                                                        class="flaticon-double-right-arrows-angles"></i></div>
                                             </div>
                                         </div>
                                         <div class="casting-slider-two owl-carousel">
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast05.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast05.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -306,7 +296,8 @@
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast06.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast06.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -317,7 +308,8 @@
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast07.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast07.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -328,7 +320,8 @@
                                             <div class="cast-item">
                                                 <div class="cast-thumb">
                                                     <a href="#0">
-                                                        <img src="{{ asset ('Frontend/images/cast/cast08.jpg') }}" alt="cast">
+                                                        <img src="{{ asset('Frontend/images/cast/cast08.jpg') }}"
+                                                            alt="cast">
                                                     </a>
                                                 </div>
                                                 <div class="cast-content">
@@ -344,7 +337,8 @@
                                         <div class="author">
                                             <div class="thumb">
                                                 <a href="#0">
-                                                    <img src="{{ asset ('Frontend/images/cast/cast02.jpg') }}" alt="cast">
+                                                    <img src="{{ asset('Frontend/images/cast/cast02.jpg') }}"
+                                                        alt="cast">
                                                 </a>
                                             </div>
                                             <div class="movie-review-info">
@@ -362,7 +356,9 @@
                                                 <i class="flaticon-favorite-heart-button"></i>
                                             </div>
                                             <h6 class="cont-title">Awesome Movie</h6>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat
+                                                enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada
+                                                fringilla lectus venenatis porttitor. </p>
                                             <div class="review-meta">
                                                 <a href="#0">
                                                     <i class="flaticon-hand"></i><span>8</span>
@@ -380,7 +376,8 @@
                                         <div class="author">
                                             <div class="thumb">
                                                 <a href="#0">
-                                                    <img src="{{ asset ('Frontend/images/cast/cast04.jpg') }}" alt="cast">
+                                                    <img src="{{ asset('Frontend/images/cast/cast04.jpg') }}"
+                                                        alt="cast">
                                                 </a>
                                             </div>
                                             <div class="movie-review-info">
@@ -398,7 +395,9 @@
                                                 <i class="flaticon-favorite-heart-button"></i>
                                             </div>
                                             <h6 class="cont-title">Awesome Movie</h6>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat
+                                                enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada
+                                                fringilla lectus venenatis porttitor. </p>
                                             <div class="review-meta">
                                                 <a href="#0">
                                                     <i class="flaticon-hand"></i><span>8</span>
@@ -416,7 +415,8 @@
                                         <div class="author">
                                             <div class="thumb">
                                                 <a href="#0">
-                                                    <img src="{{ asset ('Frontend/images/cast/cast01.jpg') }}" alt="cast">
+                                                    <img src="{{ asset('Frontend/images/cast/cast01.jpg') }}"
+                                                        alt="cast">
                                                 </a>
                                             </div>
                                             <div class="movie-review-info">
@@ -434,7 +434,9 @@
                                                 <i class="flaticon-favorite-heart-button"></i>
                                             </div>
                                             <h6 class="cont-title">Awesome Movie</h6>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat
+                                                enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada
+                                                fringilla lectus venenatis porttitor. </p>
                                             <div class="review-meta">
                                                 <a href="#0">
                                                     <i class="flaticon-hand"></i><span>8</span>
@@ -452,7 +454,8 @@
                                         <div class="author">
                                             <div class="thumb">
                                                 <a href="#0">
-                                                    <img src="{{ asset ('Frontend/images/cast/cast03.jpg') }}" alt="cast">
+                                                    <img src="{{ asset('Frontend/images/cast/cast03.jpg') }}"
+                                                        alt="cast">
                                                 </a>
                                             </div>
                                             <div class="movie-review-info">
@@ -470,7 +473,9 @@
                                                 <i class="flaticon-favorite-heart-button"></i>
                                             </div>
                                             <h6 class="cont-title">Awesome Movie</h6>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada fringilla lectus venenatis porttitor. </p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer volutpat
+                                                enim non ante egestas vehicula. Suspendisse potenti. Fusce malesuada
+                                                fringilla lectus venenatis porttitor. </p>
                                             <div class="review-meta">
                                                 <a href="#0">
                                                     <i class="flaticon-hand"></i><span>8</span>

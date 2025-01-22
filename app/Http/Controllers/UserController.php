@@ -76,4 +76,7 @@ class UserController extends Controller
             ]
         ]);
     }
+    public function loginform(){
+        return view('frontend.user.userlogin');
+    }
 }

@@ -323,6 +323,8 @@ class MovieContoller extends Controller
         $movie = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->findOrFail($id);
         $genres = Genre::where('status', 1)->whereIn('id', $movie->genre_ids)->get();
         $languages = Language::whereIn('id', $movie->language_ids)->get();
+        $movie->slider_images = $movie->sliderImages?->slider_images ?? [];
+
         return view('frontend.movies.details', compact('movie', 'genres', 'languages'));
     }
 }

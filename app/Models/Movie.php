@@ -27,7 +27,7 @@ class Movie extends Model
 
     protected $casts = [
         'genre_ids' => 'array', // Cast genre IDs to an array
-        'language_ids' => 'array', // Cast language IDs to an array
+        'language_ids' => 'array',
     ];
 
     public function bannerImage()

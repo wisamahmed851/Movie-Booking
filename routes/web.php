@@ -71,6 +71,11 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                     Route::get('loadmovies', 'loadmovies')->name('movies.loadmovies');
                     Route::get('/details/{id}', 'details')->name('movies.details');
                 });
+                Route::controller(UserController::class)->prefix('user')->group(function (){
+                    Route::get('/login', 'loginform')->name('user.login');
+                    Route::post('/loginstore', 'login')->name('user.login.store');
+                    Route::get('/register', 'registerForm')->name('user.register');
+                });
             }
         );
     }

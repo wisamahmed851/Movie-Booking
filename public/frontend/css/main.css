@@ -7,7 +7,7 @@ Author URI: https: //themeforest.net/user/pixelaxis
 Description: Boleto | Online Ticket Booking Website HTML Template. Boleto is a Pixel-Perfect Powerful,
 Online Ticket Booking Website HTML Template for all types of Cinema Hall and Online Premium TV Channel.
 Version: 1.0.0
-Text Domain: 
+Text Domain:
 */
 /*
 ///// CSS Index \\
@@ -1443,12 +1443,13 @@ input[type="submit"] {
   }
 }
 
-.header-wrapper .menu li.header-button a {
+.signupRegiste {
   background-image: -webkit-linear-gradient(169deg, #5560ff 17%, #aa52a1 63%, #ff4343 100%);
   padding: 10px 49px;
   font-weight: 600;
   border-radius: 25px;
   display: inline-block;
+  color: white;
 }
 
 .header-wrapper .menu li.header-button a:hover {
