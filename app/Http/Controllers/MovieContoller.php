@@ -239,7 +239,7 @@ class MovieContoller extends Controller
         }
 
         if ($request->has('Pagination') && !empty($request->Pagination)) {
-            $movies = $query->paginate($request->Pagination);
+            $movies = $query->paginate($request->Pagination, ['*'], 'page', $request->page);
         } else {
             $movies = $query->paginate(12);
         }

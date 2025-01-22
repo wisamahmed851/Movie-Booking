@@ -74,16 +74,6 @@ class AuthController extends Controller
             ]); // 422 Unprocessable Entity
         }
 
-
-        // If validation fails, return to the login page with errors
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'warning',
-                'message' => $validator->errors()->first(),
-                'data' => null
-            ]);
-        }
-
         // Get credentials from the request
         $credentials = $request->only('email', 'password');
 

@@ -2,7 +2,12 @@
 
 @section('content')
     <div class="container mt-5">
-        <h2 class="mb-4">Add New Movie</h2>
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
+            <h4 class="card-title flex-grow-1">All Users List</h4>
+            <a href="{{ route('movies.index') }}" class="btn btn-sm btn-primary">
+                Movies List
+            </a>
+        </div>
         <div class="p-4 rounded" style="background-color: #3f424c;">
             <form id="movieCreateForm" method="POST" enctype="multipart/form-data">
                 @csrf

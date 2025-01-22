@@ -1103,72 +1103,69 @@
 @push('scripts')
     <script>
         /*  document.addEventListener("DOMContentLoaded", function() {
-                                        // Bind change events to filters
-                                        const filterInputs = document.querySelectorAll('.filter-input');
-                                        filterInputs.forEach(input => {
-                                            input.addEventListener('change', function() {
-                                                updateMovieList();
-                                            });
-                                        });
+                                                    // Bind change events to filters
+                                                    const filterInputs = document.querySelectorAll('.filter-input');
+                                                    filterInputs.forEach(input => {
+                                                        input.addEventListener('change', function() {
+                                                            updateMovieList();
+                                                        });
+                                                    });
 
-                                        // Delegate pagination link clicks to a parent element
-                                        document.querySelector('.pagination-area').addEventListener('click', function(e) {
-                                            if (e.target.classList.contains('pagination-link')) {
-                                                e.preventDefault();
-                                                const page = e.target.getAttribute('data-page');
-                                                updateMovieList(page);
-                                            }
-                                        });
-                                    });
+                                                    // Delegate pagination link clicks to a parent element
+                                                    document.querySelector('.pagination-area').addEventListener('click', function(e) {
+                                                        if (e.target.classList.contains('pagination-link')) {
+                                                            e.preventDefault();
+                                                            const page = e.target.getAttribute('data-page');
+                                                            updateMovieList(page);
+                                                        }
+                                                    });
+                                                });
 
-                                    function updateMovieList(page = 1) {
-                                        // Gather filters
-                                        const formData = new FormData(document.getElementById('filters-form'));
-                                        formData.append('page', page); // Include the page number
+                                                function updateMovieList(page = 1) {
+                                                    // Gather filters
+                                                    const formData = new FormData(document.getElementById('filters-form'));
+                                                    formData.append('page', page); // Include the page number
 
-                                        // Convert FormData to URLSearchParams for GET requests
-                                        const queryString = new URLSearchParams(formData).toString();
+                                                    // Convert FormData to URLSearchParams for GET requests
+                                                    const queryString = new URLSearchParams(formData).toString();
 
-                                        // Fetch filtered data
-                                        fetch(`/movies/loadmovies?${queryString}`)
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                // Update the movie list HTML
-                                                document.getElementById('movie-list').innerHTML = data.moviesHtml;
+                                                    // Fetch filtered data
+                                                    fetch(`/movies/loadmovies?${queryString}`)
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            // Update the movie list HTML
+                                                            document.getElementById('movie-list').innerHTML = data.moviesHtml;
 
-                                                // Update pagination
-                                                updatePagination(data.pagination);
-                                            })
-                                            .catch(error => console.error('Error:', error));
-                                    }
+                                                            // Update pagination
+                                                            updatePagination(data.pagination);
+                                                        })
+                                                        .catch(error => console.error('Error:', error));
+                                                }
 
-                                    function updatePagination(pagination) {
-                                        const paginationArea = document.querySelector('.pagination-area');
-                                        paginationArea.innerHTML = pagination; // Update the pagination area with new links
-                                    } */
+                                                function updatePagination(pagination) {
+                                                    const paginationArea = document.querySelector('.pagination-area');
+                                                    paginationArea.innerHTML = pagination; // Update the pagination area with new links
+                                                } */
 
         $(document).ready(function() {
             $(document).on('change', '.filter-input', function() {
                 // Collect selected language IDs
-                let languages = [];
-                $('input[name="languages[]"]:checked').each(function() {
-                    languages.push($(this).val());
-                });
-
-                // Collect selected genre IDs
-                let genres = [];
-                $('input[name="genres[]"]:checked').each(function() {
-                    genres.push($(this).val());
-                });
+                 let filters = {
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+                    Pagination: $('#Pagination').val(),
+                };
 
                 // Make AJAX call
                 $.ajax({
                     url: '/movies/loadmovies',
                     method: 'GET',
-                    data: {
-                        languages: languages,
-                        genres: genres,
-                    },
+                    data: filters,
                     success: function(response) {
                         // Update the movie grid
                         console.log(response);
@@ -1184,15 +1181,22 @@
                 });
             });
             $('#sortDropdown').on('change', function() {
-                let selectedValue = $(this).val();
+                let filters = {
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+                    Pagination: $('#Pagination').val(),
+                };
 
 
                 $.ajax({
                     url: '/movies/loadmovies',
                     method: 'GET',
-                    data: {
-                        sortBy: selectedValue
-                    },
+                    data: filters,
                     success: function(response) {
                         // Update the movie grid
                         $('#movie-grid').html(response.moviesHtml);
@@ -1206,14 +1210,21 @@
                 });
             })
             $('#Pagination').on('change', function() {
-                let selectedValue = $(this).val();
+                let filters = {
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+                    Pagination: $('#Pagination').val(),
+                };
 
                 $.ajax({
                     url: '/movies/loadmovies',
                     method: 'GET',
-                    data: {
-                        Pagination: selectedValue
-                    },
+                    data: filters,
                     success: function(response) {
                         // Update the movie grid
                         console.log(response);
@@ -1231,7 +1242,6 @@
             $(document).on('click', '#paginationControll a', function(e) {
                 e.preventDefault();
                 let url = $(this).attr('href');
-
                 let filters = {
                     languages: $('input[name="languages[]"]:checked').map(function() {
                         return $(this).val();
@@ -1240,7 +1250,7 @@
                         return $(this).val();
                     }).get(),
                     sortBy: $('#sortDropdown').val(),
-
+                    Pagination: $('#Pagination').val(),
                 };
                 $.ajax({
                     url: url,

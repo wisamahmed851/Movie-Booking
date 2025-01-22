@@ -75,6 +75,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                     Route::get('/login', 'loginform')->name('user.login');
                     Route::post('/loginstore', 'login')->name('user.login.store');
                     Route::get('/register', 'registerForm')->name('user.register');
+                    Route::post('/loginstore', 'store')->name('user.register.store');
                 });
             }
         );
