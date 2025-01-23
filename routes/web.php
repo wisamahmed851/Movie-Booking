@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MovieContoller;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\Guest;
@@ -65,6 +66,10 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             function () {
                 Route::controller(FrontController::class)->prefix('')->group(function () {
                     Route::get('/', 'index')->name('front.index');
+                });
+                Route::controller((PageController::class))->prefix('')->group(function () {
+                    Route::get('/about-Us', 'about')->name('pages.about');
+                    Route::get('/contact', 'contact')->name('pages.contact');
                 });
                 Route::controller(MovieContoller::class)->prefix('movies')->group(function () {
                     Route::get('/list', 'list')->name('movies.grid');

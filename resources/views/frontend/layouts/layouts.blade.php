@@ -71,7 +71,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="about.html">About Us</a>
+                        <a href="{{route('pages.about')}}">About Us</a>
                     </li>
                     <li>
                                 <a href="blog.html">Blog</a>
