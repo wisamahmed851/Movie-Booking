@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
-class MovieContoller extends Controller
+class MovieController extends Controller
 {
     //
     public function index()

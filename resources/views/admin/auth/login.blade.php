@@ -144,7 +144,7 @@
                                 backgroundColor: "green",
                                 duration: 3000
                             }).showToast();
-                            window.location.href = "/admin";
+                            window.location.href = "{{ route('dashboard.index') }}";
                         } else {
                             Toastify({
                                 text: response.message,

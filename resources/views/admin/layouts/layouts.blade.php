@@ -80,41 +80,85 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="{{ route('dashboard.index') }}" class="nav-item nav-link active"><i
-                            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="far fa-file-alt me-2"></i>User</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('users.index') }}" class="dropdown-item">List</a>
-                            <a href="{{ route('users.create') }}" class="dropdown-item">Create</a>
+                    <a href="{{ route('dashboard.index') }}"
+                        class="nav-item nav-link {{ Request::routeIs('dashboard.index') ? 'active' : '' }}">
+                        <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    
+                    <div class="nav-item dropdown ">
+                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('users.index') || Request::routeIs('users.create') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>User
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0"  style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('users.index') }}"
+                                class="dropdown-item {{ Request::routeIs('users.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                            <a href="{{ route('users.create') }}"
+                                class="dropdown-item {{ Request::routeIs('users.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="far fa-file-alt me-2"></i>Movies</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('movies.index') }}" class="dropdown-item">List</a>
-                            <a href="{{ route('movies.create') }}" class="dropdown-item">Create</a>
+                    
+                    <div class="nav-item dropdown ">
+                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('movies.index') || Request::routeIs('movies.create') || Request::routeIs('movies.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Movies
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a  href="{{ route('movies.index') }}"
+                                class="dropdown-item {{ Request::routeIs('movies.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                            <a href="{{ route('movies.create') }}"
+                                class="dropdown-item {{ Request::routeIs('movies.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
                         </div>
                     </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="far fa-file-alt me-2"></i>Languages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('languages.index') }}" class="dropdown-item">List</a>
-                            <a href="{{ route('languages.create') }}" class="dropdown-item">Create</a>
+                    
+                    <div class="nav-item dropdown ">
+                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('cinemas.index') || Request::routeIs('cinemas.create') || Request::routeIs('cinemas.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Cinemas
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('cinemas.index') }}"
+                                class="dropdown-item {{ Request::routeIs('cinemas.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                            <a href="{{ route('cinemas.create') }}"
+                                class="dropdown-item {{ Request::routeIs('cinemas.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
                         </div>
                     </div>
+                    
+                    <div class="nav-item dropdown ">
+                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('languages.index') || Request::routeIs('languages.create') || Request::routeIs('languages.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Languages
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('languages.index') }}"
+                                class="dropdown-item {{ Request::routeIs('languages.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                            <a href="{{ route('languages.create') }}"
+                                class="dropdown-item {{ Request::routeIs('languages.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-item dropdown ">
+                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('genres.index') || Request::routeIs('genres.create') || Request::routeIs('genres.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Genres
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('genres.index') }}"
+                                class="dropdown-item {{ Request::routeIs('genres.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                            <a href="{{ route('genres.create') }}"
+                                class="dropdown-item {{ Request::routeIs('genres.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                        </div>
+                    </div>
+                    
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="far fa-file-alt me-2"></i>Genres</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('genres.index') }}" class="dropdown-item">List</a>
-                            <a href="{{ route('genres.create') }}" class="dropdown-item">Create</a>
+                        <a href="#" class="nav-link dropdown-toggle  {{ Request::routeIs('city.index') || Request::routeIs('city.create') || Request::routeIs('city.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Cities
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('city.index') }}"
+                                class="dropdown-item {{ Request::routeIs('city.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                            <a href="{{ route('city.create') }}"
+                                class="dropdown-item {{ Request::routeIs('city.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
                         </div>
                     </div>
                 </div>
+                
+
             </nav>
         </div>
         <!-- Sidebar End -->
@@ -204,8 +248,8 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{{ asset('Backend/img/user.jpg') }}" alt=""
-                                style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src="{{ asset('Backend/img/user.jpg') }}"
+                                alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex">John Doe</span>
                         </a>
                         <div
