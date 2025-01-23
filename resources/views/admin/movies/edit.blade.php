@@ -134,45 +134,10 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#movieEditForm').on('submit', function(e) {
-                e.preventDefault();
-
-                let formData = new FormData(this); // Automatically includes checkbox values
-
-                $.ajax({
-                    url: '{{ route('movies.update', ['id' => $movie->id]) }}',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Toastify({
-                                text: response.message,
-                                backgroundColor: "green",
-                                duration: 3000
-                            }).showToast();
-                            window.location.href = "{{ route('movies.index') }}";
-                        } else if (response.status === 'error') {
-                            let errorMessages = Object.values(response.message).map(msg => msg[
-                                0]).join('\n');
-                            Toastify({
-                                text: errorMessages.trim(),
-                                backgroundColor: "red",
-                                duration: 5000
-                            }).showToast();
-                        }
-                    },
-                    error: function(xhr) {
-                        let errorMessages = Object.values(xhr.responseJSON.errors).flat().join(
-                            '\n');
-                        Toastify({
-                            text: errorMessages.trim(),
-                            backgroundColor: "red",
-                            duration: 5000
-                        }).showToast();
-                    }
-                });
+            handleEditFormSubmission('#movieEditForm', {
+                url: '{{ route('movies.update', ['id' => $movie->id]) }}',
+                useFormData: false, // Serialize form data as no files are included
+                redirectUrl: "{{ route('movies.index') }}" // Redirect after success
             });
         });
     </script>

@@ -2,14 +2,16 @@
 
 @section('content')
     <div class="container-fluid pt-4 px-4">
-        <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
-            <h4 class="card-title flex-grow-1">All Language List</h4>
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white"
+            style="background-color: #3f424c; padding-top: 25px; border-radius: 10px 10px 0 0;">
+            <h4 class="card-title flex-grow-1">All Languages List</h4>
             <a href="{{ route('languages.create') }}" class="btn btn-sm btn-primary">
                 Add Language
             </a>
         </div>
-        <table id="languageTable" class="table table-striped">
-            <thead class="bg-light-subtle">
+        <table id="languageTable" class="table table-striped text-white"
+            style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>

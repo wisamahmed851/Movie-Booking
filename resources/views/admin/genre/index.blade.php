@@ -2,14 +2,16 @@
 
 @section('content')
     <div class="container-fluid pt-4 px-4">
-        <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white"
+            style="background-color: #3f424c; padding-top: 25px; border-radius: 10px 10px 0 0;">
             <h4 class="card-title flex-grow-1">All Genre List</h4>
             <a href="{{ route('genres.create') }}" class="btn btn-sm btn-primary">
                 Add Genre
             </a>
         </div>
-        <table id="genreTable" class="table table-striped">
-            <thead class="bg-light-subtle">
+        <table id="genreTable" class="table table-striped text-white"
+            style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>
@@ -46,11 +48,11 @@
                                             </button>
                                         </li>
                                     @else
-                                    <li>
-                                        <button class="dropdown-item change-status" data-id="{{ $genre->id }}"
-                                            data-status="1">
-                                            <i class="fas fa-toggle-on"></i> Mark as Active
-                                        </button>
+                                        <li>
+                                            <button class="dropdown-item change-status" data-id="{{ $genre->id }}"
+                                                data-status="1">
+                                                <i class="fas fa-toggle-on"></i> Mark as Active
+                                            </button>
                                         </li>
                                     @endif
                                 </ul>

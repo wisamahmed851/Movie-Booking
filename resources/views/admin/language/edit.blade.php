@@ -6,7 +6,7 @@
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-secondary rounded p-4">
                     <h4 class="mb-4">Edit Language</h4>
-                    <form id="genereCreate" method="POST">
+                    <form id="languageCreate" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="genreName" class="form-label">Language Name</label>
@@ -23,43 +23,13 @@
 @push('scripts')
     <!-- Sign Up End -->
     <script>
-      $(document).ready(function() {
-          $('#genereCreate').on('submit', function(e) {
-              e.preventDefault();
-              var formData = $(this).serialize();
-
-              $.ajax({
-                  url: '{{ route('languages.update', ['id' => $language->id]) }}',
-                  method: 'POST',
-                  data: formData,
-                  headers: {
-                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                  },
-                  success: function(response) {
-                      if (response.status === 'success') {
-                          Toastify({
-                              text: response.message,
-                              backgroundColor: "green",
-                              duration: 3000
-                          }).showToast();
-                          window.location.href = "{{ route('languages.index') }}";
-                      } else if (response.status === 'error') {
-                          let errors = response.message;
-                          let errorMessages = '';
-                          for (let field in errors) {
-                              if (errors.hasOwnProperty(field)) {
-                                  errorMessages += errors[field][0] + '\n';
-                              }
-                          }
-                          Toastify({
-                              text: errorMessages.trim(),
-                              backgroundColor: "red",
-                              duration: 5000
-                          }).showToast();
-                      }
-                  },
-              });
-          });
-      });
+     $(document).ready(function() {
+            handleEditFormSubmission('#languageCreate', {
+                url: '{{ route('languages.update', ['id' => $language->id]) }}',
+                useFormData: false, // Serialize form data as no files are included
+                redirectUrl: "{{ route('languages.index') }}" // Redirect after success
+                
+            });
+        });
   </script>
 @endpush

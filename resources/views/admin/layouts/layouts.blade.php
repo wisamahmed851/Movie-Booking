@@ -84,80 +84,110 @@
                         class="nav-item nav-link {{ Request::routeIs('dashboard.index') ? 'active' : '' }}">
                         <i class="fa fa-tachometer-alt me-2"></i>Dashboard
                     </a>
-                    
+
                     <div class="nav-item dropdown ">
-                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('users.index') || Request::routeIs('users.create') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('users.index') || Request::routeIs('users.create') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>User
                         </a>
-                        <div class="dropdown-menu bg-transparent border-0"  style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
                             <a href="{{ route('users.index') }}"
-                                class="dropdown-item {{ Request::routeIs('users.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                                class="dropdown-item {{ Request::routeIs('users.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
                             <a href="{{ route('users.create') }}"
-                                class="dropdown-item {{ Request::routeIs('users.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                                class="dropdown-item {{ Request::routeIs('users.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-                    
+
                     <div class="nav-item dropdown ">
-                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('movies.index') || Request::routeIs('movies.create') || Request::routeIs('movies.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('movies.index') || Request::routeIs('movies.create') || Request::routeIs('movies.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Movies
                         </a>
-                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
-                            <a  href="{{ route('movies.index') }}"
-                                class="dropdown-item {{ Request::routeIs('movies.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('movies.index') }}"
+                                class="dropdown-item {{ Request::routeIs('movies.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
                             <a href="{{ route('movies.create') }}"
-                                class="dropdown-item {{ Request::routeIs('movies.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                                class="dropdown-item {{ Request::routeIs('movies.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-                    
+
                     <div class="nav-item dropdown ">
-                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('cinemas.index') || Request::routeIs('cinemas.create') || Request::routeIs('cinemas.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('cinemas.index') || Request::routeIs('cinemas.create') || Request::routeIs('cinemas.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Cinemas
                         </a>
-                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
                             <a href="{{ route('cinemas.index') }}"
-                                class="dropdown-item {{ Request::routeIs('cinemas.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                                class="dropdown-item {{ Request::routeIs('cinemas.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
                             <a href="{{ route('cinemas.create') }}"
-                                class="dropdown-item {{ Request::routeIs('cinemas.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                                class="dropdown-item {{ Request::routeIs('cinemas.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-                    
+
                     <div class="nav-item dropdown ">
-                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('languages.index') || Request::routeIs('languages.create') || Request::routeIs('languages.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('languages.index') || Request::routeIs('languages.create') || Request::routeIs('languages.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Languages
                         </a>
-                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
                             <a href="{{ route('languages.index') }}"
-                                class="dropdown-item {{ Request::routeIs('languages.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                                class="dropdown-item {{ Request::routeIs('languages.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
                             <a href="{{ route('languages.create') }}"
-                                class="dropdown-item {{ Request::routeIs('languages.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                                class="dropdown-item {{ Request::routeIs('languages.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-                    
+
                     <div class="nav-item dropdown ">
-                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('genres.index') || Request::routeIs('genres.create') || Request::routeIs('genres.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('genres.index') || Request::routeIs('genres.create') || Request::routeIs('genres.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Genres
                         </a>
-                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
                             <a href="{{ route('genres.index') }}"
-                                class="dropdown-item {{ Request::routeIs('genres.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                                class="dropdown-item {{ Request::routeIs('genres.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
                             <a href="{{ route('genres.create') }}"
-                                class="dropdown-item {{ Request::routeIs('genres.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                                class="dropdown-item {{ Request::routeIs('genres.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-                    
+
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle  {{ Request::routeIs('city.index') || Request::routeIs('city.create') || Request::routeIs('city.edit') ? 'active' : '' }}" data-bs-toggle="dropdown">
+                        <a href="#"
+                            class="nav-link dropdown-toggle  {{ Request::routeIs('city.index') || Request::routeIs('city.create') || Request::routeIs('city.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Cities
                         </a>
-                        <div class="dropdown-menu bg-transparent border-0" style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
                             <a href="{{ route('city.index') }}"
-                                class="dropdown-item {{ Request::routeIs('city.index') ? 'active' : '' }}" style="padding-left: 75px">List</a>
+                                class="dropdown-item {{ Request::routeIs('city.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
                             <a href="{{ route('city.create') }}"
-                                class="dropdown-item {{ Request::routeIs('city.create') ? 'active' : '' }}" style="padding-left: 75px" >Create</a>
+                                class="dropdown-item {{ Request::routeIs('city.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
                         </div>
                     </div>
                 </div>
-                
+
 
             </nav>
         </div>
@@ -305,6 +335,136 @@
     <!-- Template Javascript -->
     <script src="{{ asset('Backend/js/main.js') }}"></script>
     @stack('scripts')
+    <script>
+        // Define a reusable AJAX submission function
+        function handleAjaxFormSubmit(formId, url, redirectUrl = null) {
+            $(document).ready(function() {
+                $(formId).on('submit', function(e) {
+                    e.preventDefault(); // Prevent default form submission
+
+                    let formData;
+                    if ($(this).attr('enctype') === 'multipart/form-data') {
+                        formData = new FormData(this); // Handle file uploads
+                    } else {
+                        formData = $(this).serialize(); // Serialize for non-file forms
+                    }
+
+                    // Add specific data if necessary (e.g., unchecked checkboxes)
+                    if (!$('#isTrending').is(':checked')) {
+                        formData instanceof FormData && formData.append('isTrending', 0);
+                    }
+                    if (!$('#isExclusive').is(':checked')) {
+                        formData instanceof FormData && formData.append('isExclusive', 0);
+                    }
+
+                    $.ajax({
+                        url: url, // Dynamic URL
+                        type: 'POST',
+                        data: formData,
+                        processData: !(formData instanceof FormData), // Required for FormData
+                        contentType: !(formData instanceof FormData) ?
+                            'application/x-www-form-urlencoded' : false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Toastify({
+                                    text: response.message,
+                                    backgroundColor: "green",
+                                    duration: 3000
+                                }).showToast();
+                                if (redirectUrl) {
+                                    window.location.href = redirectUrl;
+                                }
+                            } else if (response.status === 'error') {
+                                let errors = response.message;
+                                let errorMessages = '';
+                                for (let field in errors) {
+                                    if (errors.hasOwnProperty(field)) {
+                                        errorMessages += errors[field][0] + '\n';
+                                    }
+                                }
+                                Toastify({
+                                    text: errorMessages.trim(),
+                                    backgroundColor: "red",
+                                    duration: 5000
+                                }).showToast();
+                            }
+                        },
+                        error: function(xhr) {
+                            let errors = xhr.responseJSON.errors;
+                            let errorMessage = '';
+                            for (const key in errors) {
+                                errorMessage += errors[key].join(' ') + '\n';
+                            }
+                            Toastify({
+                                text: errorMessage.trim(),
+                                backgroundColor: "red",
+                                duration: 5000
+                            }).showToast();
+                        }
+                    });
+                });
+            });
+        }
+
+        function handleEditFormSubmission(formSelector, config) {
+            $(document).on('submit', formSelector, function(e) {
+                e.preventDefault();
+
+                let form = $(this);
+                let formData = config.useFormData ? new FormData(this) : form.serialize();
+                let ajaxOptions = {
+                    url: config.url,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Toastify({
+                                text: response.message,
+                                backgroundColor: "green",
+                                duration: 4000
+                            }).showToast();
+
+                            if (config.redirectUrl) {
+                                window.location.href = config.redirectUrl;
+                            }
+                        } else if (response.status === 'error') {
+                            let errorMessages = Object.values(response.message).flat().join('\n');
+                            Toastify({
+                                text: errorMessages.trim(),
+                                backgroundColor: "red",
+                                duration: 5000
+                            }).showToast();
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessages = Object.values(xhr.responseJSON.errors || {}).flat().join('\n');
+                        Toastify({
+                            text: errorMessages.trim(),
+                            backgroundColor: "red",
+                            duration: 5000
+                        }).showToast();
+                    }
+                };
+
+                if (config.useFormData) {
+                    ajaxOptions.processData = false;
+                    ajaxOptions.contentType = false;
+                }
+
+                // Include CSRF token header for serialized data
+                if (!config.useFormData) {
+                    ajaxOptions.headers = {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    };
+                }
+
+                $.ajax(ajaxOptions);
+            });
+        }
+    </script>
 </body>
 
 </html>

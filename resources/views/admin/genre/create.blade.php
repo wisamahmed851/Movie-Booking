@@ -28,43 +28,9 @@
 @push('scripts')
     <!-- Sign Up End -->
     <script>
+        
         $(document).ready(function() {
-            $('#genereCreate').on('submit', function(e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-
-                $.ajax({
-                    url: '{{ route('genres.store') }}',
-                    method: 'POST',
-                    data: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Toastify({
-                                text: response.message,
-                                backgroundColor: "green",
-                                duration: 3000
-                            }).showToast();
-                            window.location.href = "{{ route('genres.index') }}";
-                        } else if (response.status === 'error') {
-                            let errors = response.message;
-                            let errorMessages = '';
-                            for (let field in errors) {
-                                if (errors.hasOwnProperty(field)) {
-                                    errorMessages += errors[field][0] + '\n';
-                                }
-                            }
-                            Toastify({
-                                text: errorMessages.trim(),
-                                backgroundColor: "red",
-                                duration: 5000
-                            }).showToast();
-                        }
-                    },
-                });
-            });
+            handleAjaxFormSubmit('#genereCreate', '{{ route('genres.store') }}', '{{ route('genres.index') }}');
         });
     </script>
 @endpush

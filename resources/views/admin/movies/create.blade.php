@@ -2,27 +2,29 @@
 
 @section('content')
     <div class="container mt-5">
-        <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
-            <h4 class="card-title flex-grow-1">All Users List</h4>
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white"
+            style="background-color: #3f424c; padding-top: 25px;">
+            <h4 class="card-title flex-grow-1">Create a Movie</h4>
             <a href="{{ route('movies.index') }}" class="btn btn-sm btn-primary">
                 Movies List
             </a>
         </div>
-        <div class="p-4 rounded" style="background-color: #3f424c;">
+        <div class="p-4" style="background-color: #3f424c;">
             <form id="movieCreateForm" method="POST" enctype="multipart/form-data">
                 @csrf
-                <!-- Title -->
-                <div class="mb-3">
-                    <label for="title" class="form-label text-white">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter title"
-                        required>
-                </div>
 
-                <!-- YouTube Trailer URL -->
-                <div class="mb-3">
-                    <label for="trailer_url" class="form-label text-white">Trailer URL (YouTube)</label>
-                    <input type="url" class="form-control" id="trailer_url" name="trailer_url"
-                        placeholder="Enter YouTube trailer URL" required>
+                <!-- Title and YouTube Trailer URL -->
+                <div class="row g-3">
+                    <div class="mb-3 col-md-6">
+                        <label for="title" class="form-label text-white">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title"
+                            required>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="trailer_url" class="form-label text-white">Trailer URL (YouTube)</label>
+                        <input type="url" class="form-control" id="trailer_url" name="trailer_url"
+                            placeholder="Enter YouTube trailer URL" required>
+                    </div>
                 </div>
 
                 <!-- Description -->
@@ -32,37 +34,41 @@
                         required></textarea>
                 </div>
 
-                <!-- Release Date -->
-                <div class="mb-3">
-                    <label for="release_date" class="form-label text-white">Release Date</label>
-                    <input type="date" class="form-control" id="release_date" name="release_date" required>
-                </div>
-
-                <!-- Duration -->
-                <div class="mb-3">
-                    <label for="duration" class="form-label text-white">Duration (in minutes)</label>
-                    <input type="number" class="form-control" id="duration" name="duration"
-                        placeholder="Enter duration in minutes" required>
-                </div>
-
-                <!-- Is Trending Checkbox -->
-                <div class="mb-3">
-                    <input type="hidden" name="isTrending" value="0"> <!-- Hidden input -->
-                    <input type="checkbox" class="form-check-input" id="isTrending" name="isTrending" value="1">
-                    <label class="form-check-label text-white" for="isTrending">Is Trending</label>
-                </div>
-
-                <!-- Is Exclusive Checkbox -->
-                <div class="mb-3">
-                    <input type="hidden" name="isExclusive" value="0"> <!-- Hidden input -->
-                    <input type="checkbox" class="form-check-input" id="isExclusive" name="isExclusive" value="1">
-                    <label class="form-check-label text-white" for="isExclusive">Is Exclusive</label>
-                </div>
-
-
-                <!-- Dropdowns -->
+                <!-- Release Date and Duration -->
                 <div class="row g-3">
-                    <!-- Genres -->
+                    <div class="mb-3 col-md-6">
+                        <label for="release_date" class="form-label text-white">Release Date</label>
+                        <input type="date" class="form-control" id="release_date" name="release_date" required>
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="duration" class="form-label text-white">Duration (in minutes)</label>
+                        <input type="number" class="form-control" id="duration" name="duration"
+                            placeholder="Enter duration in minutes" required>
+                    </div>
+                </div>
+
+                <!-- Checkboxes -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <input type="hidden" name="isTrending" value="0">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="isTrending" name="isTrending"
+                                value="1">
+                            <label class="form-check-label text-white" for="isTrending">Is Trending</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="hidden" name="isExclusive" value="0">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="isExclusive" name="isExclusive"
+                                value="1">
+                            <label class="form-check-label text-white" for="isExclusive">Is Exclusive</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Genres and Languages -->
+                <div class="row g-3">
                     <div class="mb-3 col-md-6">
                         <label class="form-label text-white">Genres</label>
                         <div class="dropdown">
@@ -82,8 +88,6 @@
                             </ul>
                         </div>
                     </div>
-
-                    <!-- Languages -->
                     <div class="mb-3 col-md-6">
                         <label class="form-label text-white">Languages</label>
                         <div class="dropdown">
@@ -106,19 +110,18 @@
                 </div>
 
                 <!-- File Uploads -->
-                <div class="mt-4">
-                    <label class="form-label text-white">Upload Images</label>
-                    <div class="mb-3">
+                <div class="row g-3 mt-4">
+                    <div class="mb-3 col-md-4">
                         <label for="coverImage" class="form-label text-white">Cover Image</label>
                         <input type="file" class="form-control" id="coverImage" name="cover_image" accept="image/*"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-4">
                         <label for="bannerImage" class="form-label text-white">Banner Image</label>
                         <input type="file" class="form-control" id="bannerImage" name="banner_image"
                             accept="image/*" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-4">
                         <label for="sliderImages" class="form-label text-white">Slider Images</label>
                         <input type="file" class="form-control" id="sliderImages" name="slider_images[]"
                             accept="image/*" multiple required>
@@ -130,14 +133,15 @@
                     <button type="submit" id="submitMovie" class="btn btn-primary">Submit</button>
                 </div>
             </form>
-
         </div>
+
+
     </div>
 @endsection
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
+        /* $(document).ready(function() {
             $('#movieCreateForm').on('submit', function(e) {
                 e.preventDefault(); // Prevent form from submitting normally
 
@@ -192,6 +196,9 @@
                     }
                 });
             });
+        }); */
+        $(document).ready(function() {
+            handleAjaxFormSubmit('#movieCreateForm', '{{ route('movies.store') }}', '{{ route('movies.index') }}');
         });
     </script>
 @endpush

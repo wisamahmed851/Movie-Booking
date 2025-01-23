@@ -2,12 +2,14 @@
 
 @section('content')
     <div class="container-fluid pt-4 px-4">
-        <div class="card-header d-flex justify-content-between align-items-center gap-1 bg-secondary text-white">
+        
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white" style="background-color: #3f424c; padding-top: 25px; border-radius: 10px 10px 0 0;">
             <h4 class="card-title flex-grow-1">All Movies List</h4>
             <a href="{{ route('movies.create') }}" class="btn btn-sm btn-primary">Add Movie</a>
         </div>
-        <table id="moviesTable" class="table table-striped">
-            <thead class="bg-light-subtle">
+        <table id="moviesTable" class="table table-striped text-white"
+            style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Title</th>
@@ -119,7 +121,12 @@
                 "ordering": true, // Enable column sorting
                 "info": true, // Show table info (e.g., "Showing 1 to 10 of 20 entries")
                 "autoWidth": false, // Prevent auto column width
-                "responsive": true
+                "responsive": true,
+                "language": {
+                    "search": "Search:", // Customize search bar label
+                    "lengthMenu": "Show _MENU_ entries", // Customize the length menu label
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries", // Customize table info
+                }
             });
             // Initialize Bootstrap dropdown
             $(document).on('click', '.dropdown-toggle', function(e) {

@@ -152,6 +152,8 @@
                     }
                 });
             });
+            handleAjaxFormSubmit('#cinemaCreateForm', '{{ route('cinemas.store') }}', '{{ route('cinemas.index') }}');
+
         });
     </script>
 @endpush
