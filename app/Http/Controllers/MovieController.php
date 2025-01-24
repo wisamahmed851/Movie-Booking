@@ -210,10 +210,6 @@ class MovieController extends Controller
         // Build the query for movies with relationships
         $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages']);
 
-        //  Debug log for languages and genres received from the AJAX request
-        // \Log::info('Selected Languages: ', $request->languages ?? []);
-        // \Log::info('Selected Genres: ', $request->genres ?? []);
-
         // Apply filters for languages
         if ($request->has('languages') && !empty($request->languages)) {
             foreach ($request->languages as $language) {
@@ -259,9 +255,11 @@ class MovieController extends Controller
         // Generate pagination HTML (if necessary for frontend)
         $pagination = $movies->links('vendor.pagination.customePagination')->toHtml();
 
+        $layout = $request->get('layouts', 'grid');
+    $moviesHtml = view("frontend.movies.partials.{$layout}", compact('movies'))->render();
+
         // If it's an AJAX request, return JSON with movies and pagination
         if ($request->ajax()) {
-            $moviesHtml = view('frontend.movies.partials.movies', ['movies' => $movies])->render();
             return response()->json([
                 'moviesHtml' => $moviesHtml,
                 'pagination' => $pagination,
@@ -283,7 +281,7 @@ class MovieController extends Controller
         $genres = Genre::where('status', 1)->get();
 
         // Build the query for movies based on the filters
-        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages']);
+        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->where('status', 1 );
 
         if ($request->has('languages')) {
             $query->whereIn('language_id', $request->languages);

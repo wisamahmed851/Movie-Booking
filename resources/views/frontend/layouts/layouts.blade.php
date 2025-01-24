@@ -57,30 +57,25 @@
                 </div>
                 <ul class="menu">
                     <li>
-                        <a href="{{ route('front.index') }}" class="active">Home</a>
+                        <a href="{{ route('front.index') }}"
+                            class="{{ Request::routeIs('front.index') ? 'active' : '' }}">Home</a>
                     </li>
                     <li>
-                        <a href="#0">movies</a>
-                        <ul class="submenu">
-                            <li>
-                                <a href="{{ route('movies.grid') }}">Movie Grid</a>
-                            </li>
-                            <li>
-                                <a href="">Movie Details</a>
-                            </li>
-                        </ul>
+                        <a href="{{ route('movies.grid') }}"
+                            class="{{ Request::routeIs('movies.grid') ? 'active' : '' }}">Movie Grid</a>
                     </li>
                     <li>
-                        <a href="{{route('pages.about')}}">About Us</a>
+                        <a href="{{ route('pages.about') }}"
+                            class="{{ Request::routeIs('pages.about') ? 'active' : '' }}">About Us</a>
                     </li>
                     <li>
-                                <a href="blog.html">Blog</a>
-                            </li>
+                        <a href="" >Blog</a>
+                    </li>
                     <li>
-                        <a href="contact.html">contact</a>
+                        <a href="{{route('pages.contact')}}" class="{{ Request::routeIs('pages.contact') ? 'active' : '' }}">contact</a>
                     </li>
                 </ul>
-                <a href="{{route('user.login')}} " class="signupRegiste">Sign in</a>
+                <a href="{{ route('user.login') }} " class="signupRegiste">Sign in</a>
                 <div class="header-bar d-lg-none">
                     <span></span>
                     <span></span>
@@ -116,7 +111,7 @@
             <div class="footer-top">
                 <div class="logo">
                     <a href="index-1.html">
-                        <img src="{{ asset('frontend/images/footer/footer-logo.png') }}" alt="footer">
+                        <img src="{{ asset('frontend/images/footer/logo.png') }}" alt="footer">
                     </a>
                 </div>
                 <ul class="social-icons">

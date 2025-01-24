@@ -279,13 +279,13 @@
                                 <div class="item">
                                     <span class="show">Show :</span>
                                     <select class="select-bar " id="Pagination">
-                                        <option value="4">4</option>
-                                        <option value="15">15</option>
+                                        <option value="8">8</option>
+                                        <option value="10">10</option>
+                                        <option value="12">12</option>
+                                        <option value="14">12</option>
+                                        <option value="14">14</option>
+                                        <option value="16">16</option>
                                         <option value="18">18</option>
-                                        <option value="6">6</option>
-                                        <option value="24">24</option>
-                                        <option value="27">27</option>
-                                        <option value="30">30</option>
                                     </select>
                                 </div>
                                 <div class="item">
@@ -297,11 +297,11 @@
                                     </select>
                                 </div>
                             </div>
-                            <ul class="grid-button tab-menu">
-                                <li class="active">
+                            <ul class="grid-button">
+                                <li class="active" data-layout="grid">
                                     <i class="fas fa-th"></i>
                                 </li>
-                                <li>
+                                <li data-layout="list">
                                     <i class="fas fa-bars"></i>
                                 </li>
                             </ul>
@@ -310,763 +310,8 @@
                     {{-- End Second filter --}}
 
                     {{-- cards for movies --}}
-                    <div class="tab-area">
-                        <div class="tab-item active">
-                            <div class="row mb-10 justify-content-center">
-                                <div class="row" id="movie-grid">
-                                    @include('frontend.movies.partials.movies', ['movies' => $movies])
-                                </div>
-
-                            </div>
-                        </div>
-                        {{--  <div class="tab-item">
-                                <div class="movie-area mb-10">
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie01.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie01.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">alone</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                        <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie02.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie02.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">mars</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie03.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie03.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">venus</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie04.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie04.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">on watch</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie05.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie05.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">fury</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie06.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie06.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">trooper</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie07.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie07.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">horror night</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie08.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie08.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">the lost name</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie09.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie09.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">calm stedfast</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie10.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie10.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">criminal on party</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie11.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie11.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">halloween party</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="movie-list">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="movie-details.html" class="w-100 bg_img h-100" data-background="assets/images/movie/movie12.jpg') }}">
-                                                <img class="d-sm-none" src="{{ asset ('Frontend/images/movie/movie12.jpg') }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title">
-                                                <a href="movie-details.html">the most wanted</a>
-                                            </h5>
-                                            <p class="duration">2hrs 50 min</p>
-                                            <div class="movie-tags">
-                                                <a href="#0">action</a>
-                                                <a href="#0">adventure</a>
-                                                <a href="#0">fantasy</a>
-                                            </div>
-                                            <div class="release">
-                                                <span>Release Date : </span> <a href="#0"> November 8 , 2020</a>
-                                            </div>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                            <div class="book-area">
-                                                <div class="book-ticket">
-                                                    <div class="react-item">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/heart.png') }}" alt="icons">
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item mr-auto">
-                                                        <a href="#0">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/book.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>book ticket</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="react-item">
-                                                            <a href="#0" class="popup-video">
-                                                            <div class="thumb">
-                                                                <img src="{{ asset ('Frontend/images/icons/play-button.png') }}" alt="icons">
-                                                            </div>
-                                                            <span>watch trailer</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                    <div class="tab-area" id="movie-grid">
+                        @include('frontend.movies.partials.grid', ['movies' => $movies])
                     </div>
 
                     <!-- Pagination Area -->
@@ -1102,55 +347,25 @@
 
 @push('scripts')
     <script>
-        /*  document.addEventListener("DOMContentLoaded", function() {
-                                                    // Bind change events to filters
-                                                    const filterInputs = document.querySelectorAll('.filter-input');
-                                                    filterInputs.forEach(input => {
-                                                        input.addEventListener('change', function() {
-                                                            updateMovieList();
-                                                        });
-                                                    });
-
-                                                    // Delegate pagination link clicks to a parent element
-                                                    document.querySelector('.pagination-area').addEventListener('click', function(e) {
-                                                        if (e.target.classList.contains('pagination-link')) {
-                                                            e.preventDefault();
-                                                            const page = e.target.getAttribute('data-page');
-                                                            updateMovieList(page);
-                                                        }
-                                                    });
-                                                });
-
-                                                function updateMovieList(page = 1) {
-                                                    // Gather filters
-                                                    const formData = new FormData(document.getElementById('filters-form'));
-                                                    formData.append('page', page); // Include the page number
-
-                                                    // Convert FormData to URLSearchParams for GET requests
-                                                    const queryString = new URLSearchParams(formData).toString();
-
-                                                    // Fetch filtered data
-                                                    fetch(`{{route('movies.loadmovies')}}?${queryString}`)
-                                                        .then(response => response.json())
-                                                        .then(data => {
-                                                            // Update the movie list HTML
-                                                            document.getElementById('movie-list').innerHTML = data.moviesHtml;
-
-                                                            // Update pagination
-                                                            updatePagination(data.pagination);
-                                                        })
-                                                        .catch(error => console.error('Error:', error));
-                                                }
-
-                                                function updatePagination(pagination) {
-                                                    const paginationArea = document.querySelector('.pagination-area');
-                                                    paginationArea.innerHTML = pagination; // Update the pagination area with new links
-                                                } */
-
         $(document).ready(function() {
+            let currentLayout = 'grid'; // Default layout
+
+            // Handle layout change
+            $(document).on('click', '.grid-button li', function(e) {
+                e.preventDefault();
+
+                // Get the selected layout type
+                currentLayout = $(this).data('layout');
+
+                // Add 'active' class to the selected button and remove from others
+                $('.grid-button li').removeClass('active');
+                $(this).addClass('active');
+
+                // Trigger any necessary updates if needed
+            });
             $(document).on('change', '.filter-input', function() {
                 // Collect selected language IDs
-                 let filters = {
+                let filters = {
                     languages: $('input[name="languages[]"]:checked').map(function() {
                         return $(this).val();
                     }).get(),
@@ -1159,11 +374,12 @@
                     }).get(),
                     sortBy: $('#sortDropdown').val(),
                     Pagination: $('#Pagination').val(),
+                    layouts: currentLayout,
                 };
 
                 // Make AJAX call
                 $.ajax({
-                    url: '{{route('movies.loadmovies')}}',
+                    url: '{{ route('movies.loadmovies') }}',
                     method: 'GET',
                     data: filters,
                     success: function(response) {
@@ -1190,11 +406,12 @@
                     }).get(),
                     sortBy: $('#sortDropdown').val(),
                     Pagination: $('#Pagination').val(),
+                    layouts: currentLayout,
                 };
 
 
                 $.ajax({
-                    url: '{{route('movies.loadmovies')}}',
+                    url: '{{ route('movies.loadmovies') }}',
                     method: 'GET',
                     data: filters,
                     success: function(response) {
@@ -1219,10 +436,11 @@
                     }).get(),
                     sortBy: $('#sortDropdown').val(),
                     Pagination: $('#Pagination').val(),
+                    layouts: currentLayout,
                 };
 
                 $.ajax({
-                    url: '{{route('movies.loadmovies')}}',
+                    url: '{{ route('movies.loadmovies') }}',
                     method: 'GET',
                     data: filters,
                     success: function(response) {
@@ -1251,6 +469,7 @@
                     }).get(),
                     sortBy: $('#sortDropdown').val(),
                     Pagination: $('#Pagination').val(),
+                    layouts: currentLayout,
                 };
                 $.ajax({
                     url: url,
@@ -1275,9 +494,99 @@
 
                 if (selectedMovie) {
                     // Redirect to the movie details page with the selected movie ID
+                    window.location.href = "{{ route('movies.details', ':id') }}".replace(':id', selectedMovie);;
+                }
+            });
+            $(document).on('click', '.card-style', function(e) {
+                e.preventDefault();
+
+                let selectedMovie = $(this).data('id');
+
+                if (selectedMovie) {
+                    // Redirect to the movie details page with the selected movie ID
                     window.location.href = `/movies/details/${selectedMovie}`;
                 }
             });
+            $(document).on('click', '.grid-button li', function(e) {
+                e.preventDefault();
+
+                // Get the selected layout type
+                const layout = $(this).data('layout');
+
+                // Add 'active' class to the selected button and remove from others
+                $('.grid-button li').removeClass('active');
+                $(this).addClass('active');
+
+                // Collect filters
+                let filters = {
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+                    Pagination: $('#Pagination').val(),
+                    layouts: layout, // Include layout type
+                };
+
+                // AJAX request to fetch updated movies and pagination
+                $.ajax({
+                    url: '{{ route('movies.loadmovies') }}', // Replace with your route for loading movies
+                    method: 'GET',
+                    data: filters,
+                    success: function(response) {
+                        // Update the movie grid with new layout
+                        $('#movie-grid').html(response.moviesHtml);
+
+                        // Update pagination
+                        $('#paginationControll').html(response.pagination);
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    },
+                });
+            });
+
+            // Handle pagination clicks
+            $(document).on('click', '#paginationControll a', function(e) {
+                e.preventDefault();
+
+                // Get the URL for pagination
+                let url = $(this).attr('href');
+
+                // Collect filters
+                let filters = {
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return $(this).val();
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+                    Pagination: $('#Pagination').val(),
+                    layouts: currentLayout,
+                    // Use the current active layout
+                };
+
+                // AJAX request to fetch paginated results
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    data: filters,
+                    success: function(response) {
+                        // Update the movie grid
+                        $('#movie-grid').html(response.moviesHtml);
+
+                        // Update pagination
+                        $('#paginationControll').html(response.pagination);
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    },
+                });
+            });
+
 
         });
     </script>

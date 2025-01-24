@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <!-- Responsive Table Wrapper -->
                             <div class="table-responsive">
-                                <table id="userTable" class="table table-striped"
+                                <table id="userTable" class="table "
                                     style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
                                     <thead class="bg-light-subtle">
                                         <tr>

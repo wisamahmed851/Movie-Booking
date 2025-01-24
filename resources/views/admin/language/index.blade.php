@@ -9,7 +9,7 @@
                 Add Language
             </a>
         </div>
-        <table id="languageTable" class="table table-striped text-white"
+        <table id="languageTable" class="table  text-white"
             style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
             <thead>
                 <tr>

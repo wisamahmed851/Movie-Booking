@@ -3,7 +3,7 @@
 @section('content')
     <!-- ==========Banner-Section========== -->
     <section class="banner-section">
-        <div class="banner-bg bg_img bg-fixed" data-background="assets/images/banner/banner01.jpg') }}"></div>
+        <div class="banner-bg bg_img bg-fixed" data-background="{{ asset ('frontend/images/banner/banner01.jpg') }}"></div>
         <div class="container">
             <div class="banner-content">
                 <h1 class="title  cd-headline clip"><span class="d-block">book your</span> tickets for
@@ -22,7 +22,7 @@
     <!-- ==========Ticket-Search========== -->
     <section class="search-ticket-section padding-top pt-lg-0">
         <div class="container">
-            <div class="search-tab bg_img" data-background="assets/images/ticket/ticket-bg01.jpg') }}">
+            <div class="search-tab bg_img" data-background="{{ asset ('frontend/images/ticket/ticket-bg01.jpg') }}">
                 <div class="row align-items-center mb--20">
                     <div class="col-lg-6 mb-20">
                         <div class="search-ticket-header">
@@ -34,19 +34,19 @@
                         <ul class="tab-menu ticket-tab-menu">
                             <li class="active">
                                 <div class="tab-thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/ticket-tab01.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/ticket-tab01.png') }}" alt="ticket">
                                 </div>
                                 <span>movie</span>
                             </li>
                             <li>
                                 <div class="tab-thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/ticket-tab02.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/ticket-tab02.png') }}" alt="ticket">
                                 </div>
                                 <span>events</span>
                             </li>
                             <li>
                                 <div class="tab-thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/ticket-tab03.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/ticket-tab03.png') }}" alt="ticket">
                                 </div>
                                 <span>sports</span>
                             </li>
@@ -62,22 +62,18 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/city.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
-                                    <option value="london">London</option>
-                                    <option value="dhaka">dhaka</option>
-                                    <option value="rosario">rosario</option>
-                                    <option value="madrid">madrid</option>
-                                    <option value="koltaka">kolkata</option>
-                                    <option value="rome">rome</option>
-                                    <option value="khoksa">khoksa</option>
+                                    @foreach($cities as $city)
+                                    <option value="{{$city->id}}" >{{$city->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/date.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
                                 <select class="select-bar">
@@ -89,17 +85,13 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/cinema.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">cinema</span>
                                 <select class="select-bar">
-                                    <option value="Awaken">Awaken</option>
-                                    <option value="dhaka">dhaka</option>
-                                    <option value="rosario">rosario</option>
-                                    <option value="madrid">madrid</option>
-                                    <option value="koltaka">kolkata</option>
-                                    <option value="rome">rome</option>
-                                    <option value="khoksa">khoksa</option>
+                                    @foreach($cinemas as $cinema)
+                                    <option value="{{$cinema->id}}">{{$cinema->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </form>
@@ -112,7 +104,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/city.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
@@ -127,7 +119,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/date.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
                                 <select class="select-bar">
@@ -139,7 +131,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/cinema.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">event</span>
                                 <select class="select-bar">
@@ -162,7 +154,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/city.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
@@ -177,7 +169,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/date.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
                                 <select class="select-bar">
@@ -189,7 +181,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="thumb">
-                                    <img src="{{ asset ('Frontend/images/ticket/cinema.png') }}" alt="ticket">
+                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">sports</span>
                                 <select class="select-bar">
@@ -220,21 +212,24 @@
                             <ul>
                                 <li>
                                     <a href="#0">
-                                        <span class="img"><img src="{{ asset ('Frontend/images/sidebar/icons/sidebar01.png') }}"
+                                        <span class="img"><img
+                                                src="{{ asset('Frontend/images/sidebar/icons/sidebar01.png') }}"
                                                 alt="sidebar"></span>
                                         <span class="cate">24X7 Care</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#0">
-                                        <span class="img"><img src="{{ asset ('Frontend/images/sidebar/icons/sidebar02.png') }}"
+                                        <span class="img"><img
+                                                src="{{ asset('Frontend/images/sidebar/icons/sidebar02.png') }}"
                                                 alt="sidebar"></span>
                                         <span class="cate">100% Assurance</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#0">
-                                        <span class="img"><img src="{{ asset ('Frontend/images/sidebar/icons/sidebar03.png') }}"
+                                        <span class="img"><img
+                                                src="{{ asset('Frontend/images/sidebar/icons/sidebar03.png') }}"
                                                 alt="sidebar"></span>
                                         <span class="cate">Our Promise</span>
                                     </a>
@@ -245,7 +240,7 @@
                     <div class="widget-1 widget-banner">
                         <div class="widget-1-body">
                             <a href="#0">
-                                <img src="{{ asset ('Frontend/images/sidebar/banner/banner01.jpg') }}" alt="banner">
+                                <img src="{{ asset('Frontend/images/sidebar/banner/banner01.jpg') }}" alt="banner">
                             </a>
                         </div>
                     </div>
@@ -283,7 +278,7 @@
                     <div class="widget-1 widget-banner">
                         <div class="widget-1-body">
                             <a href="#0">
-                                <img src="{{ asset ('Frontend/images/sidebar/banner/banner02.jpg') }}" alt="banner">
+                                <img src="{{ asset('Frontend/images/sidebar/banner/banner02.jpg') }}" alt="banner">
                             </a>
                         </div>
                     </div>
@@ -292,93 +287,42 @@
                     <div class="article-section padding-bottom">
                         <div class="section-header-1">
                             <h2 class="title">movies</h2>
-                            <a class="view-all" href="movie-grid.html">View All</a>
+                            <a class="view-all" href="{{ route('movies.grid') }}">View All</a>
                         </div>
                         <div class="row mb-30-none justify-content-center">
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="movie-grid">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/movie/movie01.jpg') }}" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title m-0">
-                                            <a href="#0">alone</a>
-                                        </h5>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="movie-grid">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/movie/movie02.jpg') }}" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title m-0">
-                                            <a href="#0">mars</a>
-                                        </h5>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
+                            @foreach ($movies as $movie)
+                                <div class="col-sm-6 col-lg-4">
+                                    <div class="movie-grid">
+                                        <div class="movie-thumb c-thumb">
+                                            <a href="#0">
+                                                <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="movie">
+                                            </a>
+                                        </div>
+                                        <div class="movie-content bg-one">
+                                            <h5 class="title m-0">
+                                                <a href="#0">{{ $movie->title }}</a>
+                                            </h5>
+                                            <ul class="movie-rating-percent">
+                                                <li>
+                                                    <div class="thumb">
+                                                        <img src="{{ asset('Frontend/images/movie/tomato.png') }}"
+                                                            alt="movie">
+                                                    </div>
+                                                    <span class="content">88%</span>
+                                                </li>
+                                                <li>
+                                                    <div class="thumb">
+                                                        <img src="{{ asset('Frontend/images/movie/cake.png') }}"
+                                                            alt="movie">
+                                                    </div>
+                                                    <span class="content">88%</span>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="movie-grid">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/movie/movie03.jpg') }}" alt="movie">
-                                        </a>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title m-0">
-                                            <a href="#0">venus</a>
-                                        </h5>
-                                        <ul class="movie-rating-percent">
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="{{ asset ('Frontend/images/movie/tomato.png') }}" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                            <li>
-                                                <div class="thumb">
-                                                    <img src="{{ asset ('Frontend/images/movie/cake.png') }}" alt="movie">
-                                                </div>
-                                                <span class="content">88%</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
+
                         </div>
                     </div>
                     <div class="article-section padding-bottom">
@@ -391,7 +335,7 @@
                                 <div class="event-grid">
                                     <div class="movie-thumb c-thumb">
                                         <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/event/event01.jpg') }}" alt="event">
+                                            <img src="{{ asset('Frontend/images/event/event01.jpg') }}" alt="event">
                                         </a>
                                         <div class="event-date">
                                             <h6 class="date-title">28</h6>
@@ -412,7 +356,7 @@
                                 <div class="event-grid">
                                     <div class="movie-thumb c-thumb">
                                         <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/event/event02.jpg') }}" alt="event">
+                                            <img src="{{ asset('Frontend/images/event/event02.jpg') }}" alt="event">
                                         </a>
                                         <div class="event-date">
                                             <h6 class="date-title">28</h6>
@@ -433,7 +377,7 @@
                                 <div class="event-grid">
                                     <div class="movie-thumb c-thumb">
                                         <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/event/event03.jpg') }}" alt="event">
+                                            <img src="{{ asset('Frontend/images/event/event03.jpg') }}" alt="event">
                                         </a>
                                         <div class="event-date">
                                             <h6 class="date-title">28</h6>
@@ -462,7 +406,7 @@
                                 <div class="sports-grid">
                                     <div class="movie-thumb c-thumb">
                                         <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/sports/sports01.jpg') }}" alt="sports">
+                                            <img src="{{ asset('Frontend/images/sports/sports01.jpg') }}" alt="sports">
                                         </a>
                                         <div class="event-date">
                                             <h6 class="date-title">28</h6>
@@ -483,7 +427,7 @@
                                 <div class="sports-grid">
                                     <div class="movie-thumb c-thumb">
                                         <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/sports/sports02.jpg') }}" alt="sports">
+                                            <img src="{{ asset('Frontend/images/sports/sports02.jpg') }}" alt="sports">
                                         </a>
                                         <div class="event-date">
                                             <h6 class="date-title">28</h6>
@@ -504,7 +448,7 @@
                                 <div class="sports-grid">
                                     <div class="movie-thumb c-thumb">
                                         <a href="#0">
-                                            <img src="{{ asset ('Frontend/images/sports/sports03.jpg') }}" alt="sports">
+                                            <img src="{{ asset('Frontend/images/sports/sports03.jpg') }}" alt="sports">
                                         </a>
                                         <div class="event-date">
                                             <h6 class="date-title">28</h6>
@@ -528,4 +472,10 @@
         </div>
     </section>
     <!-- ==========Movie-Main-Section========== -->
+    <style>
+        .c-thumb img{
+            width: 100%;
+            height: 300px;
+        }
+    </style>
 @endsection

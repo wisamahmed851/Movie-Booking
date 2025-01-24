@@ -113,45 +113,7 @@
             });
 
             // Handle form submission
-            $('#cinemaCreateForm').on('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                $.ajax({
-                    url: "{{ route('cinemas.store') }}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Toastify({
-                                text: response.message,
-                                backgroundColor: "green",
-                                duration: 3000
-                            }).showToast();
-                            window.location.href = "{{ route('cinemas.index') }}";
-                        } else {
-                            Toastify({
-                                text: response.message,
-                                backgroundColor: "red",
-                                duration: 5000
-                            }).showToast();
-                        }
-                    },
-                    error: function(xhr) {
-                        let errors = xhr.responseJSON.errors;
-                        let errorMessages = '';
-                        for (let key in errors) {
-                            errorMessages += errors[key].join(' ') + '\n';
-                        }
-                        Toastify({
-                            text: errorMessages.trim(),
-                            backgroundColor: "red",
-                            duration: 5000
-                        }).showToast();
-                    }
-                });
-            });
+           
             handleAjaxFormSubmit('#cinemaCreateForm', '{{ route('cinemas.store') }}', '{{ route('cinemas.index') }}');
 
         });

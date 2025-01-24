@@ -2,12 +2,13 @@
 
 @section('content')
     <div class="container-fluid pt-4 px-4">
-        
-        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white" style="background-color: #3f424c; padding-top: 25px; border-radius: 10px 10px 0 0;">
+
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white"
+            style="background-color: #3f424c; padding-top: 25px; border-radius: 10px 10px 0 0;">
             <h4 class="card-title flex-grow-1">All Movies List</h4>
             <a href="{{ route('movies.create') }}" class="btn btn-sm btn-primary">Add Movie</a>
         </div>
-        <table id="moviesTable" class="table table-striped text-white"
+        <table id="moviesTable" class="table  text-white"
             style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
             <thead>
                 <tr>
@@ -112,22 +113,25 @@
     <script>
         $(document).ready(function() {
             // Attach the event to all forms with the class 'statusUpdate'
-            if ($.fn.DataTable.isDataTable('#genreTable')) {
-                $('#userTgenreTableable').DataTable().destroy();
+            if ($.fn.DataTable.isDataTable('#moviesTable')) {
+                $('#moviesTable').DataTable().destroy();
             }
+
             $('#moviesTable').DataTable({
                 "paging": true, // Enable pagination
                 "searching": true, // Enable search bar
                 "ordering": true, // Enable column sorting
                 "info": true, // Show table info (e.g., "Showing 1 to 10 of 20 entries")
                 "autoWidth": false, // Prevent auto column width
-                "responsive": true,
+                "responsive": false, // Disable responsive to use horizontal scroll
+                "scrollX": true, // Enable horizontal scrolling
                 "language": {
                     "search": "Search:", // Customize search bar label
                     "lengthMenu": "Show _MENU_ entries", // Customize the length menu label
                     "info": "Showing _START_ to _END_ of _TOTAL_ entries", // Customize table info
                 }
             });
+
             // Initialize Bootstrap dropdown
             $(document).on('click', '.dropdown-toggle', function(e) {
                 var $el = $(this).next('.dropdown-menu');
@@ -170,7 +174,7 @@
                             const row = button.closest(
                                 'tr'); // Find the closest row to the button
                             const statusCell = row.find(
-                                'td:nth-child(8)'); // Find the status cell (3rd column)
+                                'td:nth-child(9)'); // Find the status cell (3rd column)
 
                             // Update the status text and button dynamically
                             if (newStatus == 1) {

@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FrontController;
@@ -91,6 +92,10 @@ Route::prefix('')->group(
         Route::controller((PageController::class))->prefix('')->group(function () {
             Route::get('/about-Us', 'about')->name('pages.about');
             Route::get('/contact', 'contact')->name('pages.contact');
+        });
+        Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
+            Route::get('/list', 'list')->name('blogs.list');
+            Route::get('/details/{id}', 'details')->name('blogs.details');
         });
         Route::controller(MovieController::class)->prefix('movies')->group(function () {
             Route::get('/list', 'list')->name('movies.grid');
