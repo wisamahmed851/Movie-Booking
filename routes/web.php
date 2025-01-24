@@ -79,9 +79,9 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::put('/update/{id}', 'update')->name('cinemas.update'); // Added update route
             });
         });
-        
+
     }
-    
+
 );
 Route::prefix('')->group(
     function () {
@@ -94,7 +94,7 @@ Route::prefix('')->group(
         });
         Route::controller(MovieController::class)->prefix('movies')->group(function () {
             Route::get('/list', 'list')->name('movies.grid');
-            Route::get('loadmovies', 'loadmovies')->name('movies.loadmovies');
+            Route::get('/loadmovies', 'loadmovies')->name('movies.loadmovies');
             Route::get('/details/{id}', 'details')->name('movies.details');
         });
         Route::controller(UserController::class)->prefix('user')->group(function (){

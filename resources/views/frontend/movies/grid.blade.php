@@ -1130,7 +1130,7 @@
                                                     const queryString = new URLSearchParams(formData).toString();
 
                                                     // Fetch filtered data
-                                                    fetch(`/movies/loadmovies?${queryString}`)
+                                                    fetch(`{{route('movies.loadmovies')}}?${queryString}`)
                                                         .then(response => response.json())
                                                         .then(data => {
                                                             // Update the movie list HTML
@@ -1163,7 +1163,7 @@
 
                 // Make AJAX call
                 $.ajax({
-                    url: '/movies/loadmovies',
+                    url: '{{route('movies.loadmovies')}}',
                     method: 'GET',
                     data: filters,
                     success: function(response) {
@@ -1172,7 +1172,7 @@
                         $('#movie-grid').html(response.moviesHtml);
 
                         // Update pagination
-                        $('#pagination').html(response.pagination);
+                        $('#paginationControll').html(response.pagination);
 
                     },
                     error: function(xhr) {
@@ -1194,7 +1194,7 @@
 
 
                 $.ajax({
-                    url: '/movies/loadmovies',
+                    url: '{{route('movies.loadmovies')}}',
                     method: 'GET',
                     data: filters,
                     success: function(response) {
@@ -1202,7 +1202,7 @@
                         $('#movie-grid').html(response.moviesHtml);
 
                         // Update pagination
-                        $('#pagination').html(response.pagination);
+                        $('#paginationControll').html(response.pagination);
                     },
                     error: function(xhr) {
                         console.error('Error:', xhr.responseText);
@@ -1222,7 +1222,7 @@
                 };
 
                 $.ajax({
-                    url: '/movies/loadmovies',
+                    url: '{{route('movies.loadmovies')}}',
                     method: 'GET',
                     data: filters,
                     success: function(response) {
