@@ -136,7 +136,6 @@ class GenreController extends Controller
     public function status(string $id)
     {
         try{
-
             $genre = Genre::find($id);
             $genre->status = ($genre->status == 1) ? 0 : 1;
             $genre->save();

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\CinemaController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ComentBlogController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\LanguageController;
@@ -13,9 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\Guest;
 use App\Http\Middleware\ValidUser;
-
-
-
+use App\Models\ComentBlog;
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::get('/logout', 'logout')->name('auth.logout');
@@ -55,6 +54,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::get('/edit/{id}', 'edit')->name('languages.edit'); // Added edit route
                 Route::post('/update/{id}', 'update')->name('languages.update'); // Added update route
             });
+
             Route::controller(CityController::class)->prefix('city')->group(function () {
                 Route::get('/', 'index')->name('city.index');
                 Route::post('/status/{id}', 'status')->name('city.status'); // Changed {user} to {id}
@@ -79,6 +79,21 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::get('/edit/{id}', 'edit')->name('cinemas.edit'); // Added edit route
                 Route::put('/update/{id}', 'update')->name('cinemas.update'); // Added update route
             });
+            Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
+                Route::get('/', 'index')->name('blogs.index');
+                Route::post('/status/{id}', 'status')->name('blogs.status'); // Changed {user} to {id}
+                Route::get('/create', 'create')->name('blogs.create');
+                Route::post('/store', 'store')->name('blogs.store');
+                Route::get('/edit/{id}', 'edit')->name('blogs.edit'); // Added edit route
+                Route::put('/update/{id}', 'update')->name('blogs.update'); // Added update route
+            });
+            Route::controller(ComentBlogController::class)->prefix('comments')->group(function () {
+                Route::get('/', 'index')->name('comments.index');
+                Route::post('/status/{id}', 'status')->name('comments.status'); // Changed {user} to {id}
+                Route::get('/create', 'create')->name('comments.create');
+                Route::get('/edit/{id}', 'edit')->name('comments.edit'); // Added edit route
+                Route::put('/update/{id}', 'update')->name('comments.update'); // Added update route
+            });
         });
 
     }
@@ -89,9 +104,13 @@ Route::prefix('')->group(
         Route::controller(FrontController::class)->prefix('')->group(function () {
             Route::get('/', 'index')->name('front.index');
         });
+        Route::controller(ComentBlogController::class)->prefix('comments')->group(function () {
+            Route::post('/store', 'store')->name('comments.store');
+        });
         Route::controller((PageController::class))->prefix('')->group(function () {
             Route::get('/about-Us', 'about')->name('pages.about');
             Route::get('/contact', 'contact')->name('pages.contact');
+            Route::post('/contact/store', 'store')->name('pages.contact.store');
         });
         Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
             Route::get('/list', 'list')->name('blogs.list');

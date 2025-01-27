@@ -27,7 +27,7 @@ class CheckRole
         }
 
         if ($role === 1) { // User role restrictions
-            if ($request->is('admin')) {
+            if ($request->is('admin/*') || $request->is('admin')) {
                 return redirect(route('front.index'))->with('error', 'Unauthorized access.');
             }
 

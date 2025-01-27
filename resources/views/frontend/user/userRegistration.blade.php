@@ -20,6 +20,11 @@
     <link rel="stylesheet" href="{{ asset ('frontend/css/main.css') }}">
 
     <link rel="shortcut icon" href="{{ asset ('frontend/images/favicon.png" type="image/x-icon') }}">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <title>Boleto  - Online Ticket Booking Website HTML Template</title>
 
@@ -134,7 +139,7 @@
                                 backgroundColor: "green",
                                 duration: 3000
                             }).showToast();
-                            window.location.href = "/auth/login";
+                            window.location.href = "{{route('user.login')}}";
                         } else if (response.status === 'error') {
                             let errors = response.message;
                             let errorMessages = '';

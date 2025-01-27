@@ -279,7 +279,7 @@
                                 <div class="item">
                                     <span class="show">Show :</span>
                                     <select class="select-bar " id="Pagination">
-                                        <option value="8">8</option>
+                                        <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="12">12</option>
                                         <option value="14">12</option>

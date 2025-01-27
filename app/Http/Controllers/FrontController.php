@@ -11,20 +11,21 @@ use Illuminate\Http\Request;
 class FrontController extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
 
         $cinemas = Cinema::where('status', 1)->get();
         $cities = City::where('status', 1)->get();
         $movies = Movie::with('coverImage')
-        ->where('status', 1)
-        ->take(3)
-        ->get();
+            ->where('status', 1)
+            ->take(3)
+            ->get();
 
-        $movies->transform(function($movie){
+        $movies->transform(function ($movie) {
             $movie->cover_image = $movie->coverImage?->cover_image_path ?? null;
             return $movie;
         });
 
-        return view('frontend.dashboard.index' , compact('movies', 'cinemas', 'cities'));
+        return view('frontend.dashboard.index', compact('movies', 'cinemas', 'cities'));
     }
 }

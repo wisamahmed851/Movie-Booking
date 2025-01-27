@@ -45,6 +45,7 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('Backend/css/style.css') }}" rel="stylesheet">
+    @stack('styles')
 </head>
 
 
@@ -84,7 +85,7 @@
                         class="nav-item nav-link {{ Request::routeIs('dashboard.index') ? 'active' : '' }}">
                         <i class="fa fa-tachometer-alt me-2"></i>Dashboard
                     </a>
-
+                    {{-- user --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
                             class="nav-link dropdown-toggle {{ Request::routeIs('users.index') || Request::routeIs('users.create') ? 'active' : '' }}"
@@ -101,7 +102,7 @@
                                 style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-
+                    {{-- Movies --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
                             class="nav-link dropdown-toggle {{ Request::routeIs('movies.index') || Request::routeIs('movies.create') || Request::routeIs('movies.edit') ? 'active' : '' }}"
@@ -118,7 +119,7 @@
                                 style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-
+                    {{-- Cinemas --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
                             class="nav-link dropdown-toggle {{ Request::routeIs('cinemas.index') || Request::routeIs('cinemas.create') || Request::routeIs('cinemas.edit') ? 'active' : '' }}"
@@ -135,7 +136,27 @@
                                 style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-
+                    {{-- Blogs --}}
+                    <div class="nav-item dropdown ">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('blogs.index') || Request::routeIs('cinemas.create') || Request::routeIs('cinemas.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Blogs
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('blogs.index') }}"
+                                class="dropdown-item {{ Request::routeIs('blogs.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
+                            <a href="{{ route('coments.index') }}"
+                                class="dropdown-item {{ Request::routeIs('coments.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">Blogs Coments</a>
+                            <a href="{{ route('blogs.create') }}"
+                                class="dropdown-item {{ Request::routeIs('blogs.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
+                        </div>
+                    </div>
+                    {{-- Languages --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
                             class="nav-link dropdown-toggle {{ Request::routeIs('languages.index') || Request::routeIs('languages.create') || Request::routeIs('languages.edit') ? 'active' : '' }}"
@@ -152,7 +173,7 @@
                                 style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-
+                    {{-- Genres --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
                             class="nav-link dropdown-toggle {{ Request::routeIs('genres.index') || Request::routeIs('genres.create') || Request::routeIs('genres.edit') ? 'active' : '' }}"
@@ -169,7 +190,7 @@
                                 style="padding-left: 75px">Create</a>
                         </div>
                     </div>
-
+                    {{-- Cities --}}
                     <div class="nav-item dropdown">
                         <a href="#"
                             class="nav-link dropdown-toggle  {{ Request::routeIs('city.index') || Request::routeIs('city.create') || Request::routeIs('city.edit') ? 'active' : '' }}"

@@ -22,8 +22,13 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}">
 
     <link rel="shortcut icon" href="{{ asset('frontend/images/favicon.png') }}" type="image/x-icon') }}">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <title>Movie Bookinlay</title>
+    <!-- Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <title>Movie Booking</title>
 
 
 </head>
@@ -51,7 +56,7 @@
         <div class="container">
             <div class="header-wrapper">
                 <div class="logo">
-                    <a href="index.html">
+                    <a href="{{route('front.index')}}">
                         <img src="{{ asset('frontend/images/logo/logo.png') }}" alt="logo">
                     </a>
                 </div>
@@ -69,10 +74,12 @@
                             class="{{ Request::routeIs('pages.about') ? 'active' : '' }}">About Us</a>
                     </li>
                     <li>
-                        <a href="" >Blog</a>
+                        <a href="{{ route('blogs.list') }}"
+                            class="{{ Request::routeIs('blogs.list') ? 'active' : '' }}">Blog</a>
                     </li>
                     <li>
-                        <a href="{{route('pages.contact')}}" class="{{ Request::routeIs('pages.contact') ? 'active' : '' }}">contact</a>
+                        <a href="{{ route('pages.contact') }}"
+                            class="{{ Request::routeIs('pages.contact') ? 'active' : '' }}">contact</a>
                     </li>
                 </ul>
                 <a href="{{ route('user.login') }} " class="signupRegiste">Sign in</a>
@@ -185,7 +192,74 @@
     <script src="{{ asset('frontend/js/viewport.jquery.js') }}"></script>
     <script src="{{ asset('frontend/js/nice-select.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+    <script>
+         function handleAjaxFormSubmit(formId, url, redirectUrl = null) {
+            $(document).ready(function() {
+                $(formId).on('submit', function(e) {
+                    e.preventDefault(); // Prevent default form submission
+
+                    let formData;
+                    if ($(this).attr('enctype') === 'multipart/form-data') {
+                        formData = new FormData(this); // Handle file uploads
+                    } else {
+                        formData = $(this).serialize(); // Serialize for non-file forms
+                    }
+
+                    // Add specific data if necessary (e.g., unchecked checkboxes)
+                    if (!$('#isTrending').is(':checked')) {
+                        formData instanceof FormData && formData.append('isTrending', 0);
+                    }
+                    if (!$('#isExclusive').is(':checked')) {
+                        formData instanceof FormData && formData.append('isExclusive', 0);
+                    }
+
+                    $.ajax({
+                        url: url, // Dynamic URL
+                        type: 'POST',
+                        data: formData,
+                        processData: !(formData instanceof FormData), // Required for FormData
+                        contentType: !(formData instanceof FormData) ?
+                            'application/x-www-form-urlencoded' : false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Toastify({
+                                    text: response.message,
+                                    backgroundColor: "green",
+                                    duration: 3000
+                                }).showToast();
+                                if (redirectUrl) {
+                                    window.location.href = redirectUrl;
+                                }
+                            } else if (response.status === 'error') {
+                                Toastify({
+                                    text: response.message,
+                                    backgroundColor: "red",
+                                    duration: 5000
+                                }).showToast();
+                            }
+                        },
+                        error: function(xhr) {
+                            let errors = xhr.responseJSON.errors;
+                            let errorMessage = '';
+                            for (const key in errors) {
+                                errorMessage += errors[key].join(' ') + '\n';
+                            }
+                            Toastify({
+                                text: errorMessage.trim(),
+                                backgroundColor: "red",
+                                duration: 5000
+                            }).showToast();
+                        }
+                    });
+                });
+            });
+        }
+    </script>
     @stack('scripts')
+
 </body>
 
 

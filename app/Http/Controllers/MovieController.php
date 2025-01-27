@@ -20,7 +20,6 @@ class MovieController extends Controller
         $movies = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->get();
 
         $movies = $movies->map(function ($movie) {
-
             $movie->genres = $movie->genre_ids ?? [];
             $movie->languages = $movie->language_ids ?? [];
 
