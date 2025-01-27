@@ -38,6 +38,6 @@ class ComentBlog extends Model
      */
     public function blog()
     {
-        return $this->belongsTo(Blogs::class);
+        return $this->belongsTo(Blogs::class, 'blog_id');
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->text('coment');
+            $table->integer('status')->default(1)->comment('0 for InActive, 1 for Active');
             $table->integer('approved')->default(1)->comment('0 for UnAproved, 1 for Aproved');
             $table->timestamps();
         });

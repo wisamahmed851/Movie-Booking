@@ -103,10 +103,10 @@ class BlogsController extends Controller
         $blogDetails->save();
 
         return response()->json([
-                'status' => 'success',
-                'message' => 'Blog updated successfully!',
-                'blog' => $blog,
-            ]);
+            'status' => 'success',
+            'message' => 'Blog updated successfully!',
+            'blog' => $blog,
+        ]);
     }
 
 
@@ -127,14 +127,19 @@ class BlogsController extends Controller
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
     }
+
     public function list()
     {
         $blogs = Blogs::with('blogDetails')->where('status', 1)->get();
         return view('frontend.blogs.blogs', compact('blogs'));
     }
+
     public function details($id)
     {
-        $blog = Blogs::with('blogDetails')->find($id);
+        $blog = Blogs::with(['blogDetails', 'comments' => function ($query) {
+            $query->where('approved', "1")->where('status', "1"); // Updated condition
+        }])->find($id);
+
         return view('frontend.blogs.blogDetail', compact('blog'));
     }
 }

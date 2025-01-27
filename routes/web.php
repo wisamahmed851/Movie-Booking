@@ -88,6 +88,15 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::put('/update/{id}', 'update')->name('blogs.update'); // Added update route
             });
             Route::controller(ComentBlogController::class)->prefix('comments')->group(function () {
+                Route::post('/index', 'index')->name('comments.index');
+                Route::post('/status{id}', 'status')->name('comments.status');
+                Route::post('/approved{id}', 'approved')->name('comments.approved');
+                Route::post('/edit{id}', 'edit')->name('comments.edit');
+                Route::post('/update{id}', 'update')->name('comments.update');
+                Route::get('/{id}', 'show')->name('comments.show');
+                Route::post('/approve{id}', 'approve')->name('comments.approve');
+            });
+            Route::controller(ComentBlogController::class)->prefix('comments')->group(function () {
                 Route::get('/', 'index')->name('comments.index');
                 Route::post('/status/{id}', 'status')->name('comments.status'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('comments.create');

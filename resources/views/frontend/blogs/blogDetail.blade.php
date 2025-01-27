@@ -152,57 +152,30 @@
                         <div class="blog-comment">
                             <h5 class="title">comments</h5>
                             <ul class="comment-area">
-                                <li>
-                                    <div class="blog-thumb">
-                                        <a href="#0">
-                                            <img src="{{ asset('frontend/images/blog/author.jpg') }}" alt="blog">
-                                        </a>
-                                    </div>
-                                    <div class="blog-thumb-info">
-                                        <span>13 days ago</span>
-                                        <h6 class="title"><a href="#0">carl morgan</a></h6>
-                                    </div>
-                                    <div class="blog-content">
-                                        <p>
-                                            Maecenas at velit eu erat egestas vestibulum id ut tellus. Sed et semper mauris.
-                                            Quisque eu lorem libero. Donec finibus metus tellus, eget rutrum est mattis non.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="blog-thumb">
-                                        <a href="#0">
-                                            <img src="{{ asset('frontend/images/blog/author.jpg') }}" alt="blog">
-                                        </a>
-                                    </div>
-                                    <div class="blog-thumb-info">
-                                        <span>13 days ago</span>
-                                        <h6 class="title"><a href="#0">john flores</a></h6>
-                                    </div>
-                                    <div class="blog-content">
-                                        <p>
-                                            Maecenas at velit eu erat egestas vestibulum id ut tellus. Sed et semper mauris.
-                                            Quisque eu lorem libero. Donec finibus metus tellus, eget rutrum est mattis non.
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="blog-thumb">
-                                        <a href="#0">
-                                            <img src="{{ asset('frontend/images/blog/author.jpg') }}" alt="blog">
-                                        </a>
-                                    </div>
-                                    <div class="blog-thumb-info">
-                                        <span>13 days ago</span>
-                                        <h6 class="title"><a href="#0">carl morgan</a></h6>
-                                    </div>
-                                    <div class="blog-content">
-                                        <p>
-                                            Maecenas at velit eu erat egestas vestibulum id ut tellus. Sed et semper mauris.
-                                            Quisque eu lorem libero. Donec finibus metus tellus, eget rutrum est mattis non.
-                                        </p>
-                                    </div>
-                                </li>
+                                @if ($blog && $blog->comments->count() > 0)
+                                    <ul class="blog-comments">
+                                        @foreach ($blog->comments as $comment)
+                                            <li>
+                                                <div class="blog-thumb">
+                                                    <a href="#0">
+                                                        <img src="{{ asset('frontend/images/blog/author.jpg') }}"
+                                                            alt="author">
+                                                    </a>
+                                                </div>
+                                                <div class="blog-thumb-info">
+                                                    <span>{{ $comment->created_at->diffForHumans() }}</span>
+                                                    <h6 class="title"><a href="#0">{{ $comment->name }}</a></h6>
+                                                </div>
+                                                <div class="blog-content">
+                                                    <p>{{ $comment->coment }}</p>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p>No comments available for this blog.</p>
+                                @endif
+                                
                             </ul>
                             <div class="leave-comment">
                                 <h5 class="title">Leave a Comment</h5>
@@ -381,59 +354,59 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-             $("#commentForm").on('submit', function(e) {
-                    e.preventDefault(); // Prevent default form submission
+            $("#commentForm").on('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission
 
-                    let formData = $(this).serialize(); // Serialize form data
-                    let url = '{{ route('comments.store') }}'; // Form action URL
-                    $.ajax({
-                        url: url, // Dynamic URL
-                        type: 'POST',
-                        data: formData,
-                        processData: !(formData instanceof FormData), // Required for FormData
-                        contentType: !(formData instanceof FormData) ?
-                            'application/x-www-form-urlencoded' : false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                Toastify({
-                                    text: response.message,
-                                    backgroundColor: "green",
-                                    duration: 3000
-                                }).showToast();
-                                    $("#commentForm")[0].reset();
+                let formData = $(this).serialize(); // Serialize form data
+                let url = '{{ route('comments.store') }}'; // Form action URL
+                $.ajax({
+                    url: url, // Dynamic URL
+                    type: 'POST',
+                    data: formData,
+                    processData: !(formData instanceof FormData), // Required for FormData
+                    contentType: !(formData instanceof FormData) ?
+                        'application/x-www-form-urlencoded' : false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Toastify({
+                                text: response.message,
+                                backgroundColor: "green",
+                                duration: 3000
+                            }).showToast();
+                            $("#commentForm")[0].reset();
 
-                            } else if (response.status === 'error') {
-                                let errors = response.message;
-                                let errorMessages = '';
-                                for (let field in errors) {
-                                    if (errors.hasOwnProperty(field)) {
-                                        errorMessages += errors[field][0] + '\n';
-                                    }
+                        } else if (response.status === 'error') {
+                            let errors = response.message;
+                            let errorMessages = '';
+                            for (let field in errors) {
+                                if (errors.hasOwnProperty(field)) {
+                                    errorMessages += errors[field][0] + '\n';
                                 }
-                                Toastify({
-                                    text: response.message,
-                                    backgroundColor: "red",
-                                    duration: 5000
-                                }).showToast();
-                            }
-                        },
-                        error: function(xhr) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessage = '';
-                            for (const key in errors) {
-                                errorMessage += errors[key].join(' ') + '\n';
                             }
                             Toastify({
-                                text: errorMessage.trim(),
+                                text: response.message,
                                 backgroundColor: "red",
                                 duration: 5000
                             }).showToast();
                         }
-                    });
+                    },
+                    error: function(xhr) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMessage = '';
+                        for (const key in errors) {
+                            errorMessage += errors[key].join(' ') + '\n';
+                        }
+                        Toastify({
+                            text: errorMessage.trim(),
+                            backgroundColor: "red",
+                            duration: 5000
+                        }).showToast();
+                    }
                 });
+            });
         });
     </script>
 @endpush

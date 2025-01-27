@@ -139,7 +139,7 @@
                     {{-- Blogs --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
-                            class="nav-link dropdown-toggle {{ Request::routeIs('blogs.index') || Request::routeIs('cinemas.create') || Request::routeIs('cinemas.edit') ? 'active' : '' }}"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('blogs.index') }}"
                             data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Blogs
                         </a>
@@ -148,8 +148,8 @@
                             <a href="{{ route('blogs.index') }}"
                                 class="dropdown-item {{ Request::routeIs('blogs.index') ? 'active' : '' }}"
                                 style="padding-left: 75px">List</a>
-                            <a href="{{ route('coments.index') }}"
-                                class="dropdown-item {{ Request::routeIs('coments.index') ? 'active' : '' }}"
+                            <a href="{{ route('comments.index') }}"
+                                class="dropdown-item {{ Request::routeIs('comments.index') ? 'active' : '' }}"
                                 style="padding-left: 75px">Blogs Coments</a>
                             <a href="{{ route('blogs.create') }}"
                                 class="dropdown-item {{ Request::routeIs('blogs.create') ? 'active' : '' }}"

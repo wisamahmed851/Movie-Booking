@@ -13,7 +13,12 @@ class Blogs extends Model
         'status'
     ];
 
-    public function blogDetails(){
+    public function blogDetails()
+    {
         return $this->hasOne(BlogDetails::class, 'blog_id');
+    }
+    public function comments()
+    {
+        return $this->hasMany(ComentBlog::class, 'blog_id');
     }
 }
