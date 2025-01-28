@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendOtpMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -77,7 +79,8 @@ class UserController extends Controller
             ]
         ]);
     }
-    public function loginform(){
+    public function loginform()
+    {
         return view('frontend.user.userlogin');
     }
     public function login(Request $request)
@@ -129,10 +132,117 @@ class UserController extends Controller
             'data' => null
         ]);
     }
-    public function registerForm(){
+    public function registerForm()
+    {
         return view('frontend.user.userRegistration');
     }
-    public function profile(){
-        return view('frontend.profile.profile');
+    public function profile()
+    {
+
+        $user = Auth::user();
+        return view('frontend.profile.profile', compact('user'));
+    }
+    public function forgotpassword()
+    {
+        return view('frontend.user.forgotpassword');
+    }
+    public function sendOTP(Request $request)
+    {
+        // Validate email input
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->errors()->first()], 400);
+        }
+
+        // Generate OTP
+        $otp = rand(100000, 999999);
+
+        // Store OTP in session or database
+        session(['otp' => $otp]); // Option 1: Store in session
+        // User::where('email', $request->email)->update(['otp' => $otp]); // Option 2: Store in DB
+
+        // Send OTP via email
+        Mail::to($request->email)->send(new SendOtpMail($otp));
+
+        return response()->json(['status' => 'success', 'message' => 'OTP sent to your email']);
+    }
+    public function showVerifyOTPForm()
+    {
+        return view('frontend.user.verify-otp');
+    }
+    public function verifyOTP(Request $request)
+    {
+        $request->validate(['otp' => 'required|numeric']);
+
+        if ($request->otp == session('otp')) {
+            session()->forget('otp'); // Clear OTP after verification
+            return response()->json([
+                'status' => 'success',
+                'message' => 'OTP verified! Set a new password.',
+                'redirect' => route('user.password.reset')
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Invalid OTP!'
+        ]);
+    }
+    public function resendOTP()
+    {
+        $otp = rand(100000, 999999); // Generate a random 6-digit OTP
+        session(['otp' => $otp]);
+
+        // Ensure email exists in session
+        if (!session('email')) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email session expired. Please start the reset process again.'
+            ]);
+        }
+
+        Mail::raw("Your new OTP for password reset is: $otp", function ($message) {
+            $message->to(session('email'))->subject('New Password Reset OTP');
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'New OTP sent to your email!'
+        ]);
+    }
+
+    public function resetpasswordForm()
+    {
+        return view('frontend.user.resetPin');
+    }
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:6|confirmed',
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found!'
+            ]);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        session()->forget(['otp', 'email']);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Password updated successfully!',
+            'redirect' => route('user.login')
+        ]);
     }
 }

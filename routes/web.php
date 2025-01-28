@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogsController;
@@ -104,7 +105,6 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::put('/update/{id}', 'update')->name('comments.update'); // Added update route
             });
         });
-
     }
 
 );
@@ -113,7 +113,8 @@ Route::middleware([ValidUser::class])->group(
         Route::controller(UserController::class)->prefix('')->group(function () {
             Route::get('/profile', 'profile')->name('user.profile');
         });
-    });
+    }
+);
 Route::prefix('')->group(
     function () {
         Route::controller(FrontController::class)->prefix('')->group(function () {
@@ -136,9 +137,21 @@ Route::prefix('')->group(
             Route::get('/loadmovies', 'loadmovies')->name('movies.loadmovies');
             Route::get('/details/{id}', 'details')->name('movies.details');
         });
-        Route::controller(UserController::class)->prefix('user')->group(function (){
-            Route::get('/login', 'loginform')->name('user.login');
-            Route::post('/loginstore', 'login')->name('user.login.store');
+        Route::controller(UserController::class)->prefix('user')->group(function () {
+            Route::get('/login', 'loginform')->name('user.login')->middleware(Guest::class);
+            Route::post('/loginstore', 'login')->name('user.login.store')->middleware(Guest::class);
+            Route::get('/logout', 'logout')->name('user.logout');
+
+            Route::get('/forgotpassword', 'forgotpassword')->name('user.forgotpassword');
+            Route::post('/send-otp', 'sendOTP')->name('user.send.otp');
+            Route::get('/verify-otp', 'showVerifyOTPForm')->name('user.otp.form');
+            Route::post('/verify-otp', 'verifyOTP')->name('user.verify.otp');
+
+            Route::get('/resend-otp', 'resendOTP')->name('user.resend.otp');
+
+            Route::get('/resetpassword', 'resetpasswordForm')->name('user.password.reset');
+            Route::post('/reset-password', 'resetPassword')->name('user.password.update');
+
             Route::get('/register', 'registerForm')->name('user.register');
             Route::post('/registerstore', 'store')->name('user.register.store');
         });

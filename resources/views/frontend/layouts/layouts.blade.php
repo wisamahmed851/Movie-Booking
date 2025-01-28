@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/nice-select.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.animatedheadline.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}">
-    <link rel="icon" href="{{ asset ('frontend/css/img/mdb-favicon.ico" type="image/x-icon') }}" />
+    <link rel="icon" href="{{ asset('frontend/css/img/mdb-favicon.ico" type="image/x-icon') }}" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
     <!-- Google Fonts Roboto -->
@@ -90,7 +90,10 @@
                             class="{{ Request::routeIs('pages.contact') ? 'active' : '' }}">contact</a>
                     </li>
                 </ul>
-                <a href="{{ route('user.login') }} " class="signupRegiste">
+                <a @if (Auth::check()) href="{{ route('user.profile') }} "
+                @else
+                href="{{ route('user.login') }} " @endif
+                    class="signupRegiste">
                     @if (Auth::check())
                         <i class="fas fa-user"></i>
                         <span>{{ Auth::user()->name }}</span>
@@ -273,8 +276,71 @@
                 });
             });
         }
+
+        function submitAjaxForm(formSelector, url, redirectUrl = null) {
+            $(document).ready(function() {
+                $(formSelector).on('submit', function(e) {
+                    e.preventDefault(); // Prevent default form submission
+
+                    var formData = $(this).serialize(); // Serialize form data
+
+                    $.ajax({
+                        url: url, // Dynamic URL passed as a parameter
+                        method: 'POST',
+                        data: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === "success") {
+                                Toastify({
+                                    text: response.message,
+                                    backgroundColor: "green",
+                                    duration: 3000
+                                }).showToast();
+
+                                // Redirect if redirectUrl is provided
+                                if (redirectUrl) {
+                                    window.location.href = redirectUrl;
+                                }
+                            } else {
+                                Toastify({
+                                    text: response.message,
+                                    backgroundColor: "red",
+                                    duration: 3000
+                                }).showToast();
+                            }
+                        },
+                        error: function(xhr) {
+                            var errors = xhr.responseJSON?.errors; // Check if errors exist
+                            var errorMessages = '';
+
+                            if (errors) {
+                                for (var field in errors) {
+                                    errorMessages += errors[field][0] + '\n';
+                                }
+                            } else if (xhr.responseJSON?.message) {
+                                errorMessages = xhr.responseJSON.message;
+                            } else {
+                                errorMessages = "An unexpected error occurred.";
+                            }
+
+                            console.log(errorMessages); // Log errors for debugging
+                            Toastify({
+                                text: errorMessages,
+                                duration: 5000,
+                                gravity: "top",
+                                position: "center",
+                                backgroundColor: "#ff5f6d",
+                            }).showToast();
+                        }
+                    });
+                });
+            });
+        }
     </script>
     @stack('scripts')
+
 
 </body>
 
