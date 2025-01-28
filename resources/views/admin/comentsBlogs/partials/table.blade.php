@@ -2,8 +2,8 @@
     <tr>
         <th scope="row">{{ $ComentBlog->id }}</th>
         <td class="truncate-text">{{ $ComentBlog->blog->title ?? 'No Blog Title' }}</td> <!-- Show blog title -->
-        <td>{{ $ComentBlog->name }}</td>
         <td>{{ $ComentBlog->email }}</td>
+        <td class="truncate-text">{{ $ComentBlog->coment }}</td>
         <td>{{ $ComentBlog->status == 1 ? 'Active' : 'Inactive' }}</td>
         <td>{{ $ComentBlog->approved == 1 ? 'Approved' : 'Unapproved' }}</td>
         <td>

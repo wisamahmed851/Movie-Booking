@@ -132,4 +132,7 @@ class UserController extends Controller
     public function registerForm(){
         return view('frontend.user.userRegistration');
     }
+    public function profile(){
+        return view('frontend.profile.profile');
+    }
 }

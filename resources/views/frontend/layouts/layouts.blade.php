@@ -20,6 +20,14 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/nice-select.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.animatedheadline.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}">
+    <link rel="icon" href="{{ asset ('frontend/css/img/mdb-favicon.ico" type="image/x-icon') }}" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="{{ asset('frontendcss/bootstrap-profiles.min.css') }}" />
 
     <link rel="shortcut icon" href="{{ asset('frontend/images/favicon.png') }}" type="image/x-icon') }}">
     <!-- Toastify CSS -->
@@ -56,7 +64,7 @@
         <div class="container">
             <div class="header-wrapper">
                 <div class="logo">
-                    <a href="{{route('front.index')}}">
+                    <a href="{{ route('front.index') }}">
                         <img src="{{ asset('frontend/images/logo/logo.png') }}" alt="logo">
                     </a>
                 </div>
@@ -82,7 +90,15 @@
                             class="{{ Request::routeIs('pages.contact') ? 'active' : '' }}">contact</a>
                     </li>
                 </ul>
-                <a href="{{ route('user.login') }} " class="signupRegiste">Sign in</a>
+                <a href="{{ route('user.login') }} " class="signupRegiste">
+                    @if (Auth::check())
+                        <i class="fas fa-user"></i>
+                        <span>{{ Auth::user()->name }}</span>
+                    @else
+                        <i class="fas fa-user"></i>
+                        <span>Sign in</span>
+                    @endif
+                </a>
                 <div class="header-bar d-lg-none">
                     <span></span>
                     <span></span>
@@ -193,7 +209,7 @@
     <script src="{{ asset('frontend/js/nice-select.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     <script>
-         function handleAjaxFormSubmit(formId, url, redirectUrl = null) {
+        function handleAjaxFormSubmit(formId, url, redirectUrl = null) {
             $(document).ready(function() {
                 $(formId).on('submit', function(e) {
                     e.preventDefault(); // Prevent default form submission

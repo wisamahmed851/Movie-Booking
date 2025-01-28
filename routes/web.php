@@ -108,6 +108,12 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
     }
 
 );
+Route::middleware([ValidUser::class])->group(
+    function () {
+        Route::controller(UserController::class)->prefix('')->group(function () {
+            Route::get('/profile', 'profile')->name('user.profile');
+        });
+    });
 Route::prefix('')->group(
     function () {
         Route::controller(FrontController::class)->prefix('')->group(function () {

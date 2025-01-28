@@ -20,6 +20,6 @@ class ValidUser
             return $next($request); // Proceed if authenticated
         }
 
-        return redirect(route('auth.login'))->with('error', 'You must be logged in to access this page.');
+        return redirect(route('user.login'))->with('error', 'You must be logged in to access this page.');
     }
 }

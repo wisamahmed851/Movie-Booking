@@ -26,6 +26,7 @@
                     <th>#</th>
                     <th>Blog</th>
                     <th>Email</th>
+                    <th>Coment</th>
                     <th>Status</th>
                     <th>Approve</th>
                     <th>Action</th>
@@ -38,6 +39,7 @@
                         <td class="truncate-text">{{ $ComentBlog->blog->title ?? 'No Blog Title' }}</td>
                         <!-- Show blog title -->
                         <td>{{ $ComentBlog->email }}</td>
+                        <td class="truncate-text">{{ $ComentBlog->coment }}</td>
                         <td>{{ $ComentBlog->status == 1 ? 'Active' : 'Inactive' }}</td>
                         <td>{{ $ComentBlog->approved == 1 ? 'Approved' : 'Unapproved' }}</td>
                         <td>
