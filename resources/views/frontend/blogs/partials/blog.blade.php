@@ -19,7 +19,7 @@
                     Comments</a>
                 <a href="#0"><i class="flaticon-view"></i>466 View</a>
             </div>
-            <p>
+            <p class="description">
                 {{ $blog->blogDetails->short_description }}
             </p>
         </div>

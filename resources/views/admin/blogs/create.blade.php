@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="container mt-5">
-        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white" style="background-color: #3f424c; padding-top: 25px;">
+        <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white"
+            style="background-color: #3f424c; padding-top: 25px;">
             <h4 class="card-title flex-grow-1">Create a Blog</h4>
             <a href="{{ route('blogs.index') }}" class="btn btn-sm btn-primary">
                 Blog List
@@ -16,26 +17,31 @@
                     <!-- Title -->
                     <div class="mb-3 col-md-6">
                         <label for="title" class="form-label text-white">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title"
+                            required>
                     </div>
 
                     <!-- Cover Image -->
                     <div class="mb-3 col-md-6">
                         <label for="cover_image" class="form-label text-white">Cover Image</label>
-                        <input type="file" class="form-control" id="cover_image" name="cover_image" accept="image/*" required>
+                        <input type="file" class="form-control" id="cover_image" name="cover_image" accept="image/*"
+                            required>
                     </div>
                 </div>
 
                 <!-- Short Description -->
                 <div class="mb-3">
                     <label for="short_description" class="form-label text-white">Short Description</label>
-                    <textarea class="form-control" id="short_description" name="short_description" rows="2" placeholder="Enter a brief description" required></textarea>
+                    <textarea class="form-control" id="short_description" name="short_description" rows="2"
+                        placeholder="Enter a brief description" required></textarea>
                 </div>
 
                 <!-- Long Description -->
                 <div class="mb-3">
                     <label for="long_description" class="form-label text-white">Long Description</label>
-                    <textarea class="form-control" id="long_description" name="long_description" rows="5" placeholder="Enter detailed content" required></textarea>
+                    <textarea class="form-control" id="long_description" name="long_description" rows="5"
+                        placeholder="Enter detailed content" required></textarea>
+
                 </div>
 
                 <!-- Submit Button -->
@@ -51,12 +57,21 @@
     <style>
         /* Ensure the file input icon is visible on dark backgrounds */
         input[type="file"]::-webkit-file-upload-button {
-            filter: invert(1); /* Makes the icon visible on dark backgrounds */
+            filter: invert(1);
+            /* Makes the icon visible on dark backgrounds */
         }
     </style>
 @endpush
 
 @push('scripts')
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('long_description', {
+            allowedContent: true,
+            entities: false,
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             // Handle form submission

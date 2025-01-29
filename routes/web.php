@@ -153,6 +153,8 @@ Route::prefix('')->group(
             Route::get('/resetpassword/{token}', 'resetpasswordForm')->name('user.password.reset');
             Route::post('/reset-password', 'resetPassword')->name('user.password.update');
 
+            Route::post('/update-password', 'updatePassword')->name('user.updatePassword');
+
             Route::get('/register', 'registerForm')->name('user.register');
             Route::post('/registerstore', 'store')->name('user.register.store');
         });

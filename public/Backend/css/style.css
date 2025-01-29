@@ -13,7 +13,10 @@
     bottom: 45px;
     z-index: 99;
 }
-
+.cke_editable {
+    background: #1e1e1e !important;
+    color: #bdbdbd !important;
+}
 
 /*** Spinner ***/
 #spinner {

@@ -255,7 +255,7 @@ class MovieController extends Controller
         $pagination = $movies->links('vendor.pagination.customePagination')->toHtml();
 
         $layout = $request->get('layouts', 'grid');
-    $moviesHtml = view("frontend.movies.partials.{$layout}", compact('movies'))->render();
+        $moviesHtml = view("frontend.movies.partials.{$layout}", compact('movies'))->render();
 
         // If it's an AJAX request, return JSON with movies and pagination
         if ($request->ajax()) {
@@ -280,7 +280,7 @@ class MovieController extends Controller
         $genres = Genre::where('status', 1)->get();
 
         // Build the query for movies based on the filters
-        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->where('status', 1 );
+        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->where('status', 1);
 
         if ($request->has('languages')) {
             $query->whereIn('language_id', $request->languages);

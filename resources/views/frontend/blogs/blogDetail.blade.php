@@ -59,10 +59,10 @@
                                         </div>
                                     </div>
                                     <div class="post-header">
-                                        <h4 class="m-title">
+                                        <h4 class="m-title blogTitle">
                                             {{ $blog->title }}
                                         </h4>
-                                        <p>
+                                        <p class="description">
                                             {{-- Short Description --}}
                                             {{ $blog->blogDetails->short_description ?? 'Short description not available.' }}
                                         </p>
@@ -74,19 +74,9 @@
                                         </blockquote>
                                         <p>
                                             {{-- Long Description --}}
-                                            {{ $blog->blogDetails->long_description ?? 'Long description not available.' }}
+                                            {!! $blog->blogDetails->long_description ?? 'Long description not available.' !!}
                                         </p>
-                                        <h4 class="title">
-                                            Bring Your Loved Ones to See New Releases
-                                        </h4>
-                                        <p>
-                                            {{-- Reusing Short Description if needed --}}
-                                            {{ $blog->blogDetails->short_description ?? 'Short description not available.' }}
-                                        </p>
-                                        <p>
-                                            {{-- Reusing Long Description if needed --}}
-                                            {{ $blog->blogDetails->long_description ?? 'Long description not available.' }}
-                                        </p>
+                                        
                                     </div>
 
                                     <div class="tags-area">
@@ -175,7 +165,7 @@
                                 @else
                                     <p>No comments available for this blog.</p>
                                 @endif
-                                
+
                             </ul>
                             <div class="leave-comment">
                                 <h5 class="title">Leave a Comment</h5>
@@ -351,6 +341,22 @@
     </section>
     <!-- ==========Blog-Section========== -->
 @endsection
+@push('styles')
+    <style>
+        .blogTitle,
+        .description {
+            display: block;
+            /* Ensures the text behaves as a block element */
+            word-wrap: break-word;
+            /* Break long words if necessary */
+            overflow-wrap: break-word;
+            white-space: normal;
+            /* Ensures the text wraps */
+            max-width: 100%;
+            /* Prevents it from overflowing */
+        }
+    </style>
+@endpush
 @push('scripts')
     <script>
         $(document).ready(function() {

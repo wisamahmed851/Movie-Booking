@@ -41,7 +41,7 @@
                         <td>{{ $ComentBlog->email }}</td>
                         <td class="truncate-text">{{ $ComentBlog->coment }}</td>
                         <td>{{ $ComentBlog->status == 1 ? 'Active' : 'Inactive' }}</td>
-                        <td>{{ $ComentBlog->approved == 1 ? 'Approved' : 'Unapproved' }}</td>
+                        <td id="approved">{{ $ComentBlog->approved == 1 ? 'Approved' : 'Unapproved' }}</td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-secondary dropdown-toggle"
@@ -89,9 +89,6 @@
 
         </table>
     </div>
-
-
-    <!-- Comment Details Modal -->
     <!-- Comment Details Modal -->
     <div class="modal fade" id="commentDetailsModal" tabindex="-1" aria-labelledby="commentDetailsModalLabel"
         aria-hidden="true">
@@ -266,7 +263,7 @@
                             const row = button.closest(
                                 'tr'); // Find the closest row to the button
                             const statusCell = row.find(
-                                'td:nth-child(4)'); // Find the status cell (3rd column)
+                                'td:nth-child(5)');
 
                             // Update the status text and button dynamically
                             if (newStatus == 1) {
@@ -283,35 +280,35 @@
                                 '.dropdown-menu'); // Locate dropdown menu
                             if (newStatus == 1) {
                                 actionsDropdown.html(`
-                        <li>
-                    <a href="/movies/edit/${button.data('id')}" class="dropdown-item">
-                        <i class="fas fa-edit"></i> Edit
-                    </a>
-                   </li>
-                               <li>
-                    <button class="dropdown-item change-status" data-id="${button.data('id')}" data-status="0">
-                        <i class="fas fa-toggle-off"></i> Mark as Inactive
-                    </button>
-                           </li>
-                           <li>
+                                   <li>
+                                         <a href="/movies/edit/${button.data('id')}" class="dropdown-item">
+                                  <i class="fas fa-edit"></i> Edit
+                                               </a>
+                               </li>
+                                             <li>
+                                 <button class="dropdown-item change-status" data-id="${button.data('id')}" data-status="0">
+                                             <i class="fas fa-toggle-off"></i> Mark as Inactive
+                                 </button>
+                                   </li>
+                                       <li>
                                         <button class="dropdown-item view-details" data-id="{{ $ComentBlog->id }}">
                                             <i class="fas fa-eye"></i> View Details
                                         </button>
                                     </li>
-                        `);
+                                  `);
                             } else {
                                 actionsDropdown.html(`
-                <li>
-                    <button class="dropdown-item change-status" data-id="${button.data('id')}" data-status="1">
-                        <i class="fas fa-toggle-on"></i> Mark as Active
-                    </button>
-                </li>
-                <li>
+                                     <li>
+                                                          <button class="dropdown-item change-status" data-id="${button.data('id')}" data-status="1">
+                                    <i class="fas fa-toggle-on"></i> Mark as Active
+                                       </button>
+                                        </li>
+                                                   <li>
                                         <button class="dropdown-item view-details" data-id="{{ $ComentBlog->id }}">
                                             <i class="fas fa-eye"></i> View Details
                                         </button>
                                     </li>
-                       `);
+                                           `);
                             }
                         } else {
                             Toastify({
@@ -391,23 +388,25 @@
                                 duration: 3000
                             }).showToast();
 
-                            // Find the closest table row
-                            const row = button.closest('tr');
-
-                            // Update the Approved column dynamically
-                            const approvedCell = row.find('td:nth-child(5)');
+                            const row = button.closest(
+                                'tr'); // Find the closest row to the button
+                            const approvedCell = row.find('#approved'); // Find the status cell
+                            const newApprove = response.newApprove;
+                            $('#commentDetailsModal').modal('hide');
                             if (newApprove == 1) {
-                                statusCell.text('Active'); // Update status text
-                                button.data('status', 0); // Update button data-status
+                                approvedCell.text('Approved'); // Update status text
+                                button.data('approved', 1); // Update button data
+                                console.log('Approving comment');
 
                             } else {
-                                statusCell.text('InActive'); // Update status text
-                                button.data('status', 1); // Update button data-status
+                                approvedCell.text('Unapproved'); // Update status text
+                                button.data('approved', 0); // Update button data
+                                console.log('Unapproving comment');
 
                             }
 
                             // Optionally hide the modal
-                            $('#commentDetailsModal').modal('hide');
+
                         }
                     },
                     error: function() {

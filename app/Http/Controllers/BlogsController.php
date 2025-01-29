@@ -128,10 +128,33 @@ class BlogsController extends Controller
         }
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $blogs = Blogs::with('blogDetails')->where('status', 1)->get();
-        return view('frontend.blogs.blogs', compact('blogs'));
+        // Build the query with relationships
+        $query = Blogs::with('blogDetails')->where('status', 1);
+
+        // Check if pagination parameters exist
+        $perPage = $request->get('Pagination', 2); // Default to 10 blogs per page
+        $page = $request->get('page', 1);
+
+        // Fetch paginated results
+        $blogs = $query->paginate($perPage, ['*'], 'page', $page);
+
+        // Generate pagination HTML using the custom pagination view
+        $pagination = $blogs->links('vendor.pagination.customePagination')->toHtml();
+
+        // If the request is AJAX, return JSON with paginated blogs and pagination HTML
+        if ($request->ajax()) {
+            $blogsHtml = view('frontend.blogs.partials.blogs', compact('blogs'))->render();
+
+            return response()->json([
+                'blogsHtml' => $blogsHtml,
+                'pagination' => $pagination,
+            ]);
+        }
+
+        // For non-AJAX requests, return the view with blogs and pagination
+        return view('frontend.blogs.blogs', compact('blogs', 'pagination'));
     }
 
     public function details($id)

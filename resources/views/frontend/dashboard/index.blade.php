@@ -3,7 +3,7 @@
 @section('content')
     <!-- ==========Banner-Section========== -->
     <section class="banner-section">
-        <div class="banner-bg bg_img bg-fixed" data-background="{{ asset ('frontend/images/banner/banner01.jpg') }}"></div>
+        <div class="banner-bg bg_img bg-fixed" data-background="{{ asset('frontend/images/banner/banner01.jpg') }}"></div>
         <div class="container">
             <div class="banner-content">
                 <h1 class="title  cd-headline clip"><span class="d-block">book your</span> tickets for
@@ -22,7 +22,7 @@
     <!-- ==========Ticket-Search========== -->
     <section class="search-ticket-section padding-top pt-lg-0">
         <div class="container">
-            <div class="search-tab bg_img" data-background="{{ asset ('frontend/images/ticket/ticket-bg01.jpg') }}">
+            <div class="search-tab bg_img" data-background="{{ asset('frontend/images/ticket/ticket-bg01.jpg') }}">
                 <div class="row align-items-center mb--20">
                     <div class="col-lg-6 mb-20">
                         <div class="search-ticket-header">
@@ -66,8 +66,8 @@
                                 </div>
                                 <span class="type">city</span>
                                 <select class="select-bar">
-                                    @foreach($cities as $city)
-                                    <option value="{{$city->id}}" >{{$city->name}}</option>
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city->id }}">{{ $city->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -89,8 +89,8 @@
                                 </div>
                                 <span class="type">cinema</span>
                                 <select class="select-bar">
-                                    @foreach($cinemas as $cinema)
-                                    <option value="{{$cinema->id}}">{{$cinema->name}}</option>
+                                    @foreach ($cinemas as $cinema)
+                                        <option value="{{ $cinema->id }}">{{ $cinema->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -211,7 +211,7 @@
                         <div class="widget-1-body">
                             <ul>
                                 <li>
-                                    <a href="#0">
+                                    <a href="">
                                         <span class="img"><img
                                                 src="{{ asset('Frontend/images/sidebar/icons/sidebar01.png') }}"
                                                 alt="sidebar"></span>
@@ -219,7 +219,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#0">
+                                    <a href="">
                                         <span class="img"><img
                                                 src="{{ asset('Frontend/images/sidebar/icons/sidebar02.png') }}"
                                                 alt="sidebar"></span>
@@ -227,7 +227,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#0">
+                                    <a href="">
                                         <span class="img"><img
                                                 src="{{ asset('Frontend/images/sidebar/icons/sidebar03.png') }}"
                                                 alt="sidebar"></span>
@@ -239,7 +239,7 @@
                     </div>
                     <div class="widget-1 widget-banner">
                         <div class="widget-1-body">
-                            <a href="#0">
+                            <a href="">
                                 <img src="{{ asset('Frontend/images/sidebar/banner/banner01.jpg') }}" alt="banner">
                             </a>
                         </div>
@@ -250,25 +250,25 @@
                             <ul>
                                 <li>
                                     <h6 class="sub-title">
-                                        <a href="#0">mars</a>
+                                        <a href="">mars</a>
                                     </h6>
                                     <p>Movies</p>
                                 </li>
                                 <li>
                                     <h6 class="sub-title">
-                                        <a href="#0">alone</a>
+                                        <a href="">alone</a>
                                     </h6>
                                     <p>Movies</p>
                                 </li>
                                 <li>
                                     <h6 class="sub-title">
-                                        <a href="#0">music event</a>
+                                        <a href="">music event</a>
                                     </h6>
                                     <p>event</p>
                                 </li>
                                 <li>
                                     <h6 class="sub-title">
-                                        <a href="#0">NBA Games 2020</a>
+                                        <a href="">NBA Games 2020</a>
                                     </h6>
                                     <p>Sports</p>
                                 </li>
@@ -277,7 +277,7 @@
                     </div>
                     <div class="widget-1 widget-banner">
                         <div class="widget-1-body">
-                            <a href="#0">
+                            <a href="">
                                 <img src="{{ asset('Frontend/images/sidebar/banner/banner02.jpg') }}" alt="banner">
                             </a>
                         </div>
@@ -291,16 +291,17 @@
                         </div>
                         <div class="row mb-30-none justify-content-center">
                             @foreach ($movies as $movie)
-                                <div class="col-sm-6 col-lg-4">
-                                    <div class="movie-grid">
+                                <div class="col-sm-6 col-lg-4 ">
+                                    <div class="movie-grid" data-id="{{ $movie->id }}">
                                         <div class="movie-thumb c-thumb">
-                                            <a href="#0">
+                                            <a href="{{ route('movies.details', $movie->id) }}">
                                                 <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="movie">
                                             </a>
                                         </div>
                                         <div class="movie-content bg-one">
                                             <h5 class="title m-0">
-                                                <a href="#0">{{ $movie->title }}</a>
+                                                <a
+                                                    href="{{ route('movies.details', $movie->id) }}">{{ $movie->title }}</a>
                                             </h5>
                                             <ul class="movie-rating-percent">
                                                 <li>
@@ -334,7 +335,7 @@
                             <div class="col-sm-6 col-lg-4">
                                 <div class="event-grid">
                                     <div class="movie-thumb c-thumb">
-                                        <a href="#0">
+                                        <a href="">
                                             <img src="{{ asset('Frontend/images/event/event01.jpg') }}" alt="event">
                                         </a>
                                         <div class="event-date">
@@ -344,7 +345,7 @@
                                     </div>
                                     <div class="movie-content bg-one">
                                         <h5 class="title m-0">
-                                            <a href="#0">Digital Economy Conference 2020</a>
+                                            <a href="">Digital Economy Conference 2020</a>
                                         </h5>
                                         <div class="movie-rating-percent">
                                             <span>327 Montague Street</span>
@@ -355,7 +356,7 @@
                             <div class="col-sm-6 col-lg-4">
                                 <div class="event-grid">
                                     <div class="movie-thumb c-thumb">
-                                        <a href="#0">
+                                        <a href="">
                                             <img src="{{ asset('Frontend/images/event/event02.jpg') }}" alt="event">
                                         </a>
                                         <div class="event-date">
@@ -365,7 +366,7 @@
                                     </div>
                                     <div class="movie-content bg-one">
                                         <h5 class="title m-0">
-                                            <a href="#0">web design conference 2020</a>
+                                            <a href="">web design conference 2020</a>
                                         </h5>
                                         <div class="movie-rating-percent">
                                             <span>327 Montague Street</span>
@@ -376,7 +377,7 @@
                             <div class="col-sm-6 col-lg-4">
                                 <div class="event-grid">
                                     <div class="movie-thumb c-thumb">
-                                        <a href="#0">
+                                        <a href="">
                                             <img src="{{ asset('Frontend/images/event/event03.jpg') }}" alt="event">
                                         </a>
                                         <div class="event-date">
@@ -386,7 +387,7 @@
                                     </div>
                                     <div class="movie-content bg-one">
                                         <h5 class="title m-0">
-                                            <a href="#0">digital thinkers meetup</a>
+                                            <a href="">digital thinkers meetup</a>
                                         </h5>
                                         <div class="movie-rating-percent">
                                             <span>327 Montague Street</span>
@@ -405,7 +406,7 @@
                             <div class="col-sm-6 col-lg-4">
                                 <div class="sports-grid">
                                     <div class="movie-thumb c-thumb">
-                                        <a href="#0">
+                                        <a href="">
                                             <img src="{{ asset('Frontend/images/sports/sports01.jpg') }}" alt="sports">
                                         </a>
                                         <div class="event-date">
@@ -415,7 +416,7 @@
                                     </div>
                                     <div class="movie-content bg-one">
                                         <h5 class="title m-0">
-                                            <a href="#0">football league tournament</a>
+                                            <a href="">football league tournament</a>
                                         </h5>
                                         <div class="movie-rating-percent">
                                             <span>327 Montague Street</span>
@@ -426,7 +427,7 @@
                             <div class="col-sm-6 col-lg-4">
                                 <div class="sports-grid">
                                     <div class="movie-thumb c-thumb">
-                                        <a href="#0">
+                                        <a href="">
                                             <img src="{{ asset('Frontend/images/sports/sports02.jpg') }}" alt="sports">
                                         </a>
                                         <div class="event-date">
@@ -436,7 +437,7 @@
                                     </div>
                                     <div class="movie-content bg-one">
                                         <h5 class="title m-0">
-                                            <a href="#0">world cricket league 2020</a>
+                                            <a href="">world cricket league 2020</a>
                                         </h5>
                                         <div class="movie-rating-percent">
                                             <span>327 Montague Street</span>
@@ -447,7 +448,7 @@
                             <div class="col-sm-6 col-lg-4">
                                 <div class="sports-grid">
                                     <div class="movie-thumb c-thumb">
-                                        <a href="#0">
+                                        <a href="">
                                             <img src="{{ asset('Frontend/images/sports/sports03.jpg') }}" alt="sports">
                                         </a>
                                         <div class="event-date">
@@ -457,7 +458,7 @@
                                     </div>
                                     <div class="movie-content bg-one">
                                         <h5 class="title m-0">
-                                            <a href="#0">basket ball tournament 2020</a>
+                                            <a href="">basket ball tournament 2020</a>
                                         </h5>
                                         <div class="movie-rating-percent">
                                             <span>327 Montague Street</span>
@@ -473,9 +474,26 @@
     </section>
     <!-- ==========Movie-Main-Section========== -->
     <style>
-        .c-thumb img{
+        .c-thumb img {
             width: 100%;
             height: 300px;
         }
     </style>
 @endsection
+@push('scipts')
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.movie-grid', function(e) {
+                
+
+                let selectedMovie = $(this).data('id');
+
+                if (selectedMovie) {
+                    // Redirect to the movie details page with the selected movie ID
+                    window.location.href = "{{ route('movies.details', ':id') }}".replace(':id',
+                        selectedMovie);
+                }
+            });
+        });
+    </script>
+@endpush

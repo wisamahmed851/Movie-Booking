@@ -5,7 +5,7 @@
         <td>{{ $ComentBlog->email }}</td>
         <td class="truncate-text">{{ $ComentBlog->coment }}</td>
         <td>{{ $ComentBlog->status == 1 ? 'Active' : 'Inactive' }}</td>
-        <td>{{ $ComentBlog->approved == 1 ? 'Approved' : 'Unapproved' }}</td>
+        <td id="approved">{{ $ComentBlog->approved == 1 ? 'Approved' : 'Unapproved' }}</td>
         <td>
             <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
