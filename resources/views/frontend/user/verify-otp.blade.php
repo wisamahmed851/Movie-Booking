@@ -103,7 +103,7 @@
                     $('#show_hide_password i').addClass("bi-eye-fill");
                 }
             });
-            submitAjaxForm('#verifyPin', "{{ route('user.verify.otp') }}", "{{ route('user.password.reset')}}");
+            submitAjaxForm('#verifyPin', "{{ route('user.verify.otp') }}", "{{ route('user.password.reset', ['token' => Str::random(60)]) }}");
 
         });
     </script>

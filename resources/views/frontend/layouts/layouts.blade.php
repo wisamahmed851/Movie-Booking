@@ -36,8 +36,9 @@
     <!-- Toastify JS -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <title>Movie Booking</title>
 
+    <title>Movie Booking</title>
+    @stack('styles')
 
 </head>
 
@@ -211,6 +212,7 @@
     <script src="{{ asset('frontend/js/viewport.jquery.js') }}"></script>
     <script src="{{ asset('frontend/js/nice-select.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function handleAjaxFormSubmit(formId, url, redirectUrl = null) {
             $(document).ready(function() {

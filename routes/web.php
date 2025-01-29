@@ -110,8 +110,9 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
 );
 Route::middleware([ValidUser::class])->group(
     function () {
-        Route::controller(UserController::class)->prefix('')->group(function () {
-            Route::get('/profile', 'profile')->name('user.profile');
+        Route::controller(UserController::class)->prefix('profile')->group(function () {
+            Route::get('/', 'profile')->name('user.profile');
+            Route::post('/update-info', 'updateInfo')->name('user.updateInfo');
         });
     }
 );
@@ -149,7 +150,7 @@ Route::prefix('')->group(
 
             Route::get('/resend-otp', 'resendOTP')->name('user.resend.otp');
 
-            Route::get('/resetpassword', 'resetpasswordForm')->name('user.password.reset');
+            Route::get('/resetpassword/{token}', 'resetpasswordForm')->name('user.password.reset');
             Route::post('/reset-password', 'resetPassword')->name('user.password.update');
 
             Route::get('/register', 'registerForm')->name('user.register');

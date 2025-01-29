@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class UserController extends Controller
 {
@@ -161,10 +163,10 @@ class UserController extends Controller
         $otp = rand(100000, 999999);
 
         // Store OTP in session or database
-        session(['otp' => $otp]); // Option 1: Store in session
-        // User::where('email', $request->email)->update(['otp' => $otp]); // Option 2: Store in DB
-
-        // Send OTP via email
+        session([
+            'otp' => $otp,
+            'email' => $request->email
+        ]); // Option 1: Store in session (temporary)
         Mail::to($request->email)->send(new SendOtpMail($otp));
 
         return response()->json(['status' => 'success', 'message' => 'OTP sent to your email']);
@@ -178,13 +180,14 @@ class UserController extends Controller
         $request->validate(['otp' => 'required|numeric']);
 
         if ($request->otp == session('otp')) {
-            session()->forget('otp'); // Clear OTP after verification
-            return response()->json([
-                'status' => 'success',
-                'message' => 'OTP verified! Set a new password.',
-                'redirect' => route('user.password.reset')
-            ]);
-        }
+       session()->forget('otp'); // Clear OTP after verification
+        return response()->json([
+        'status' => 'success',
+        'message' => 'OTP verified! Set a new password.',
+        'redirect' => route('user.password.reset', ['token' => Str::random(60)]) // Now it will work
+       ]);
+       }
+
 
         return response()->json([
             'status' => 'error',
@@ -214,10 +217,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function resetpasswordForm()
-    {
-        return view('frontend.user.resetPin');
+    public function resetpasswordForm($token)
+{
+    if (!session()->has('email')) {
+        return redirect()->route('user.forgotpassword')->withErrors(['email' => 'Email session expired. Please request a new reset link.']);
     }
+    return view('frontend.user.resetPin', compact('token'));
+}
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -245,4 +251,31 @@ class UserController extends Controller
             'redirect' => route('user.login')
         ]);
     }
+    public function updateInfo(Request $request)
+    {
+        $user = Auth::user(); // Get the logged-in user
+
+        $field = $request->input('infoType'); // Determine which field to update
+        $allowedFields = ['phone', 'address', 'image']; // Allowed fields to update
+
+        if (!in_array($field, $allowedFields)) {
+            return response()->json(['message' => 'Invalid field type.'], 400);
+        }
+
+        // Handle file upload separately if updating the image
+        if ($field === 'image' && $request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('public/user_images', $filename);
+            $user->image = 'storage/user_images/' . $filename; // Save path in DB
+        } else {
+            $user->$field = $request->$field; // Update normal fields
+        }
+
+        $user->save();
+
+        return response()->json(['message' => ucfirst($field) . ' updated successfully!']);
+    }
+
+
 }

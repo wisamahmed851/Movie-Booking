@@ -23,11 +23,11 @@
                                 style="background: linear-gradient(45deg, #9455B9, #FF9E77); -webkit-background-clip: text; color: transparent;">
                                 {{ $user->name }}</h5>
 
-                            @if (!$user->imag)
-                                <a class="btn btn-sm"
+                            @if (!$user->img)
+                                <button class="update-info-btn " data-type="image"
                                     style="background: linear-gradient(45deg, #9455B9, #FF9E77); color: white; border-radius: 10px; padding: 15px 25px;">
                                     Add Image
-                                </a>
+                                </button>
                             @endif
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                                         @endif
                                     </p>
                                     @if (!$user->phone)
-                                        <a class="btn btn-sm"
+                                        <a class="btn btn-sm update-info-btn" data-type="phone"
                                             style="background: linear-gradient(45deg, #9455B9, #FF9E77); color: white; border-radius: 20px;">
                                             Add Phone
                                         </a>
@@ -100,7 +100,7 @@
                                         @endif
                                     </p>
                                     @if (!$user->address)
-                                        <a class="btn btn-sm"
+                                        <a class="btn btn-sm update-info-btn" data-type="address"
                                             style="background: linear-gradient(45deg, #9455B9, #FF9E77); color: white; border-radius: 20px;">
                                             Add Address
                                         </a>
@@ -116,4 +116,93 @@
             </div>
         </div>
     </section>
+    <!-- Update Info Modal -->
+    <div class="modal fade" id="modaaaaal" tabindex="-1" aria-labelledby="updateInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: #001232; color: white;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateInfoModalLabel">Update Info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateInfoForm">
+                        @csrf
+                        <input type="email" name="email" value="{{ $user->email }}" class="form-control" hidden>
+                        <input type="hidden" id="infoType" name="infoType"> <!-- Field Type (phone, address, image) -->
+
+                        <div id="inputField">
+                            <!-- Input field will be inserted dynamically -->
+                        </div>
+
+                        <button type="submit" class="btn mt-3"
+                            style="background: linear-gradient(45deg, #9455B9, #FF9E77); color: white; border-radius: 20px;">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- JavaScript -->
+    @push('styles')
+        <style>
+            .update-info-btn {
+                position: relative;
+                z-index: 98;
+            }
+        </style>
+    @endpush
 @endsection
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            console.log("jQuery Loaded Successfully");
+
+            $(document).on("click", ".update-info-btn", function() {
+                console.log('Button Clicked!');
+
+                let infoType = $(this).data("type");
+                console.log("Update Type:", infoType);
+
+                $("#infoType").val(infoType);
+                let inputField = $("#inputField");
+                inputField.empty();
+
+                if (infoType === "image") {
+                    inputField.append('<input type="file" name="image" class="form-control">');
+                } else {
+                    inputField.append('<input type="text" name="' + infoType +
+                        '" class="form-control" required>');
+                }
+
+                $("#modaaaaal").modal("show");
+            });
+
+            $("#updateInfoForm").submit(function(e) {
+                e.preventDefault();
+
+                let formData = new FormData(this);
+                let url = "{{ route('user.updateInfo') }}";
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert("Something went wrong.");
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
