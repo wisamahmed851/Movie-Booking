@@ -18,7 +18,8 @@
                     <th>Name</th>
                     <th>Address</th>
                     <th>City</th>
-                    <th>Timings</th>
+                    <th>Available Show Timings</th>
+                    <th>Avaliable Seats</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -30,6 +31,16 @@
                         <td>{{ $cinema->name }}</td>
                         <td>{{ $cinema->address }}</td>
                         <td>{{ $cinema->city_name }}</td>
+                        <td>
+                            @if ($cinema->timings->isNotEmpty())
+                                @foreach ($cinema->timings as $timing)
+                                    Start: {{ \Carbon\Carbon::parse($timing['start_time'])->format('g:i A') }} | 
+                                    End: {{ \Carbon\Carbon::parse($timing['end_time'])->format('g:i A') }}<br>
+                                @endforeach
+                            @else
+                                No Timings Available
+                            @endif
+                        </td>
                         <td>
                             @if ($cinema->timings->isNotEmpty())
                                 @foreach ($cinema->timings as $timing)

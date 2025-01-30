@@ -1,5 +1,6 @@
 <?php
 
+// CinemaSeat Model
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class CinemaSeat extends Model
 {
-    //
     use HasFactory;
 
-    protected $fillable = ['cinema_id', 'seat_category_id', 'seats_row', 'seat_number'];
+    protected $table = 'cinema_seats';
+
+    protected $fillable = [
+        'cinema_id',
+        'cinema_seats_categories_id',
+        'seat_number',
+        'status'
+    ];
 
     public function cinema()
     {
@@ -19,11 +26,7 @@ class CinemaSeat extends Model
 
     public function seatCategory()
     {
-        return $this->belongsTo(SeatCategory::class, 'seat_category_id');
-    }
-
-    public function seats()
-    {
-        return $this->hasMany(CinemaSeat::class, 'cinema_seats_details_id');
+        return $this->belongsTo(CinemaSeatsCategories::class, 'cinema_seats_categories_id');
     }
 }
+

@@ -12,17 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create('cinema_seats_details', function (Blueprint $table) {
+        Schema::create('cinema_seats_categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cinema_id');
-            $table->unsignedBigInteger('seat_category_id');
-            $table->string('seats_row');
-            $table->integer('seat_number');
-            $table->decimal('price', 8, 2); // Add this line
+            $table->string('seat_category');
+            $table->string('series_alphabet');
+            $table->string('no_of_seats');
+            $table->decimal('price_per_seat', 8, 2); // Add this line
             $table->timestamps();
 
             $table->foreign('cinema_id')->references('id')->on('cinemas')->onDelete('cascade');
-            $table->foreign('seat_category_id')->references('id')->on('seat_categories')->onDelete('cascade');
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
     public function down(): void
     {
         //
-        Schema::dropIfExists('cinema_seats_details');
+        Schema::dropIfExists('cinema_seats_categories');
     }
 };

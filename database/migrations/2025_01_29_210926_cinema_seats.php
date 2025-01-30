@@ -14,13 +14,13 @@ return new class extends Migration
         //
         Schema::create('cinema_seats', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cinema_seats_details_id');
             $table->unsignedBigInteger('cinema_id');
-            $table->boolean('status')->default(1); // 1 for active, 0 for inactive
-            $table->boolean('booking')->default(0); // 1 for booked, 0 for available
+            $table->unsignedBigInteger('cinema_seats_categories_id');
+            $table->string('seat_number')->comment("Seat row + Seat number");
+            $table->boolean('status')->default(1)->comment("1 for active 0 for inavtive"); // 1 for active, 0 for inactive
             $table->timestamps();
 
-            $table->foreign('cinema_seats_details_id')->references('id')->on('cinema_seats_details')->onDelete('cascade');
+            $table->foreign('cinema_seats_categories_id')->references('id')->on('cinema_seats_categories')->onDelete('cascade');
             $table->foreign('cinema_id')->references('id')->on('cinemas')->onDelete('cascade');
         });
     }

@@ -78,7 +78,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::get('/create', 'create')->name('cinemas.create');
                 Route::post('/store', 'store')->name('cinemas.store');
                 Route::get('/edit/{id}', 'edit')->name('cinemas.edit'); // Added edit route
-                Route::put('/update/{id}', 'update')->name('cinemas.update'); // Added update route
+                Route::post('/update/{id}', 'update')->name('cinemas.update'); // Added update route
             });
             Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
                 Route::get('/', 'index')->name('blogs.index');

@@ -21,6 +21,10 @@ class Cinema extends Model
     {
         return $this->hasMany(CinemaTiming::class);
     }
+    public function CinemaSeatsCategories()
+    {
+        return $this->hasMany(CinemaSeatsCategories::class);
+    }
     
     public function getStatusLabelAttribute()
     {

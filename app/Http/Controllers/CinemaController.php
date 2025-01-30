@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cinema;
 use App\Models\CinemaSeat;
 use App\Models\cinemaSeatDetails;
+use App\Models\CinemaSeatsCategories;
 use App\Models\CinemaTiming;
 use App\Models\City;
 use App\Models\Genre;
@@ -58,6 +59,7 @@ class CinemaController extends Controller
         return view('admin.cinemas.create', compact('cities'));
     }
 
+    // Store method
     public function store(Request $request)
     {
         // Validate the incoming request data
@@ -158,75 +160,68 @@ class CinemaController extends Controller
         }
     }
 
+    // Create seats method
     private function createSeats($cinemaId, $category, $row, $seats, $price)
     {
         if ($row && $seats && $price) {
-            $seatCategory = SeatCategory::where('name', $category)->first();
+            $seatCategory = CinemaSeatsCategories::create([
+                'cinema_id' => $cinemaId,
+                'seat_category' => $category,
+                'no_of_seats' => $seats,
+                'price_per_seat' => $price,
+                'series_alphabet' => $row,
+            ]);
 
             if (!$seatCategory) {
                 Log::error("Seat category '$category' not found.");
                 return;
             }
 
+            Log::info("Seat category '$category' found:", ['seatCategory' => $seatCategory]);
             Log::info("Creating seats for $category: Row $row, Seats $seats, Price $price");
 
-            $seatDetails = [];
-            $seatIds = [];
-
+            // Create the seat records
+            $seatEntries = [];
             for ($i = 1; $i <= $seats; $i++) {
-                $seatDetails[] = [
+                $seatEntries[] = [
                     'cinema_id' => $cinemaId,
-                    'seat_category_id' => $seatCategory->id,
-                    'seats_row' => $row,
-                    'seat_number' => $i,
-                    'price' => $price,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            // Insert seat details and get inserted IDs
-            $insertedSeatIds = CinemaSeatDetails::insertGetId($seatDetails);
-            Log::info("Inserted seats for $category successfully", ['seatDetails' => $seatDetails]);
-            // Create `cinema_seats` entries for tracking booking status
-            foreach ($insertedSeatIds as $seatId) {
-                $seatIds[] = [
-                    'cinema_seats_details_id' => $seatId,
-                    'cinema_id' => $cinemaId,
+                    'cinema_seats_categories_id' => $seatCategory->id,
+                    'seat_number' => $row . $i, // Combine row and seat number (e.g., A1, A2, ...)
                     'status' => 1, // Active
-                    'booking' => 0, // Not booked
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
             }
 
-            CinemaSeat::insert($seatIds);
-
-            Log::info("Inserted seats for $category successfully", ['seatIds' => $seatIds]);
+            // Insert all the seats in a single query
+            CinemaSeat::insert($seatEntries);
+            Log::info("Inserted seats for $category successfully", ['seatEntries' => $seatEntries]);
         }
     }
+
 
 
     public function edit($id)
     {
-        // Find the cinema record by ID
-        $cinema = Cinema::with(['timings'])->findOrFail($id);
+        // Find the cinema record by ID, with associated timings and seat categories
+        $cinema = Cinema::with(['timings', 'CinemaSeatsCategories'])->findOrFail($id);
 
         // Fetch all cities to populate the city dropdown in the edit form
         $cities = City::where('status', 1)->get();
 
+        // Format timings
         foreach ($cinema->timings as $timing) {
             $timing->start_time = Carbon::parse($timing->start_time)->format('H:i');
             $timing->end_time = Carbon::parse($timing->end_time)->format('H:i');
         }
-
-        // Pass cinema and cities to the view
+        // Pass cinema, cities, and seat categories to the view
         return view('admin.cinemas.edit', compact('cinema', 'cities'));
     }
 
+
     public function update(Request $request, $id)
     {
-        // Validate the incoming request data
+        // Validate the incoming request data (including seat fields)
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'address' => 'required|string|max:500',
@@ -234,13 +229,21 @@ class CinemaController extends Controller
             'city_id' => 'required|exists:cities,id',
             'start_time.*' => 'required|date_format:H:i',
             'end_time.*' => 'required|date_format:H:i',
+            'silver_row' => 'nullable|string|max:1',
+            'silver_seats' => 'nullable|integer|min:1',
+            'silver_price' => 'nullable|numeric|min:0',
+            'gold_row' => 'nullable|string|max:1',
+            'gold_seats' => 'nullable|integer|min:1',
+            'gold_price' => 'nullable|numeric|min:0',
+            'platinum_row' => 'nullable|string|max:1',
+            'platinum_seats' => 'nullable|integer|min:1',
+            'platinum_price' => 'nullable|numeric|min:0',
         ]);
 
         try {
-            // Begin a transaction
             DB::beginTransaction();
 
-            // Find the cinema and update its details
+            // Update cinema details
             $cinema = Cinema::findOrFail($id);
             $cinema->update([
                 'name' => $validatedData['title'],
@@ -249,19 +252,16 @@ class CinemaController extends Controller
                 'city_id' => $validatedData['city_id'],
             ]);
 
-            // Update the show timings
-            if ($request->has('start_time') && $request->has('end_time')) {
-                // First, delete existing timings
-                CinemaTiming::where('cinema_id', $cinema->id)->delete();
-
-                // Insert updated timings
+            // Update show timings
+            CinemaTiming::where('cinema_id', $cinema->id)->delete();
+            if ($request->has('start_time')) {
                 $timings = [];
                 foreach ($request->start_time as $key => $startTime) {
                     $timings[] = [
                         'cinema_id' => $cinema->id,
                         'start_time' => $startTime,
                         'end_time' => $request->end_time[$key],
-                        'status' => 1, // Active by default
+                        'status' => 1,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -269,29 +269,72 @@ class CinemaController extends Controller
                 CinemaTiming::insert($timings);
             }
 
-            // Commit the transaction
+            // Process seat categories
+            foreach (['silver', 'gold', 'platinum'] as $category) {
+                $enableKey = "enable_$category";
+                $rowKey = "{$category}_row";
+                $seatsKey = "{$category}_seats";
+                $priceKey = "{$category}_price";
+
+                // If category is enabled and fields are filled
+                if ($request->has($enableKey) && $request->filled([$rowKey, $seatsKey, $priceKey])) {
+                    // Update or create seat category
+                    $seatCategory = CinemaSeatsCategories::updateOrCreate(
+                        [
+                            'cinema_id' => $cinema->id,
+                            'seat_category' => $category
+                        ],
+                        [
+                            'series_alphabet' => $request->$rowKey,
+                            'no_of_seats' => $request->$seatsKey,
+                            'price_per_seat' => $request->$priceKey
+                        ]
+                    );
+
+                    // Delete existing seats
+                    CinemaSeat::where('cinema_seats_categories_id', $seatCategory->id)->delete();
+
+                    // Generate new seats
+                    $seatEntries = [];
+                    for ($i = 1; $i <= $request->$seatsKey; $i++) {
+                        $seatEntries[] = [
+                            'cinema_id' => $cinema->id,
+                            'cinema_seats_categories_id' => $seatCategory->id,
+                            'seat_number' => $request->$rowKey . $i,
+                            'status' => 1,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                    CinemaSeat::insert($seatEntries);
+                } else {
+                    // Delete category and seats if disabled
+                    $seatCategory = CinemaSeatsCategories::where('cinema_id', $cinema->id)
+                        ->where('seat_category', $category)
+                        ->first();
+
+                    if ($seatCategory) {
+                        CinemaSeat::where('cinema_seats_categories_id', $seatCategory->id)->delete();
+                        $seatCategory->delete();
+                    }
+                }
+            }
+
             DB::commit();
 
-            // Return success response
             return response()->json([
                 'status' => 'success',
-                'message' => 'Cinema and its show timings were successfully updated!',
+                'message' => 'Cinema, show timings, and seats were successfully updated!',
             ]);
         } catch (\Exception $e) {
-            // Rollback the transaction in case of error
             DB::rollBack();
-
-            // Log the error for debugging
             Log::error('Error updating cinema: ' . $e->getMessage());
-
-            // Return error response
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occurred while updating the cinema. Please try again later.',
+                'message' => 'An error occurred while updating. Please try again.',
             ], 500);
         }
     }
-
 
 
 
