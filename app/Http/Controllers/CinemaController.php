@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cinema;
+use App\Models\CinemaSeat;
+use App\Models\cinemaSeatDetails;
 use App\Models\CinemaTiming;
 use App\Models\City;
 use App\Models\Genre;
 use App\Models\Language;
 use App\Models\Movie;
 use App\Models\MovieImage;
+use App\Models\SeatCategory;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CinemaController extends Controller
 {
@@ -64,11 +68,20 @@ class CinemaController extends Controller
             'city_id' => 'required|exists:cities,id',
             'start_time.*' => 'required|date_format:H:i',
             'end_time.*' => 'required|date_format:H:i',
+            'silver_row' => 'nullable|string|max:1',
+            'silver_seats' => 'nullable|integer|min:1',
+            'silver_price' => 'nullable|numeric|min:0',
+            'gold_row' => 'nullable|string|max:1',
+            'gold_seats' => 'nullable|integer|min:1',
+            'gold_price' => 'nullable|numeric|min:0',
+            'platinum_row' => 'nullable|string|max:1',
+            'platinum_seats' => 'nullable|integer|min:1',
+            'platinum_price' => 'nullable|numeric|min:0',
         ]);
 
         try {
             // Begin a transaction
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             // Create the cinema
             $cinema = Cinema::create([
@@ -78,6 +91,8 @@ class CinemaController extends Controller
                 'city_id' => $validatedData['city_id'],
                 'status' => 1, // Active by default
             ]);
+
+            Log::info('Cinema created successfully:', ['cinema' => $cinema]);
 
             // Insert show timings
             if ($request->has('start_time') && $request->has('end_time')) {
@@ -93,28 +108,101 @@ class CinemaController extends Controller
                     ];
                 }
                 CinemaTiming::insert($timings);
+                Log::info('Show timings inserted successfully:', ['timings' => $timings]);
             }
 
+            Log::info('Processing seat categories:', [
+                'silver' => [
+                    'row' => $request->silver_row,
+                    'seats' => $request->silver_seats,
+                    'price' => $request->silver_price,
+                ],
+                'gold' => [
+                    'row' => $request->gold_row,
+                    'seats' => $request->gold_seats,
+                    'price' => $request->gold_price,
+                ],
+                'platinum' => [
+                    'row' => $request->platinum_row,
+                    'seats' => $request->platinum_seats,
+                    'price' => $request->platinum_price,
+                ]
+            ]);
+
+            // Insert seats for Silver, Gold, and Platinum categories
+            $this->createSeats($cinema->id, 'silver', $request->silver_row, $request->silver_seats, $request->silver_price);
+            $this->createSeats($cinema->id, 'gold', $request->gold_row, $request->gold_seats, $request->gold_price);
+            $this->createSeats($cinema->id, 'platinum', $request->platinum_row, $request->platinum_seats, $request->platinum_price);
+
             // Commit the transaction
-            \DB::commit();
+            DB::commit();
 
             // Return success response
             return response()->json([
                 'status' => 'success',
-                'message' => 'Cinema and its show timings were successfully created!',
+                'message' => 'Cinema, show timings, and seats were successfully created!',
             ]);
         } catch (\Exception $e) {
             // Rollback the transaction in case of error
-            \DB::rollBack();
+            DB::rollBack();
 
             // Log the error for debugging
-            \Log::error('Error creating cinema: ' . $e->getMessage());
+            Log::error('Error creating cinema: ' . $e->getMessage());
+            Log::error('Error trace: ' . $e->getTraceAsString());
 
             // Return error response
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while creating the cinema. Please try again later.',
             ], 500);
+        }
+    }
+
+    private function createSeats($cinemaId, $category, $row, $seats, $price)
+    {
+        if ($row && $seats && $price) {
+            $seatCategory = SeatCategory::where('name', $category)->first();
+
+            if (!$seatCategory) {
+                Log::error("Seat category '$category' not found.");
+                return;
+            }
+
+            Log::info("Creating seats for $category: Row $row, Seats $seats, Price $price");
+
+            $seatDetails = [];
+            $seatIds = [];
+
+            for ($i = 1; $i <= $seats; $i++) {
+                $seatDetails[] = [
+                    'cinema_id' => $cinemaId,
+                    'seat_category_id' => $seatCategory->id,
+                    'seats_row' => $row,
+                    'seat_number' => $i,
+                    'price' => $price,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            // Insert seat details and get inserted IDs
+            $insertedSeatIds = CinemaSeatDetails::insertGetId($seatDetails);
+            Log::info("Inserted seats for $category successfully", ['seatDetails' => $seatDetails]);
+            // Create `cinema_seats` entries for tracking booking status
+            foreach ($insertedSeatIds as $seatId) {
+                $seatIds[] = [
+                    'cinema_seats_details_id' => $seatId,
+                    'cinema_id' => $cinemaId,
+                    'status' => 1, // Active
+                    'booking' => 0, // Not booked
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            CinemaSeat::insert($seatIds);
+
+            Log::info("Inserted seats for $category successfully", ['seatIds' => $seatIds]);
         }
     }
 
@@ -150,7 +238,7 @@ class CinemaController extends Controller
 
         try {
             // Begin a transaction
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             // Find the cinema and update its details
             $cinema = Cinema::findOrFail($id);
@@ -182,7 +270,7 @@ class CinemaController extends Controller
             }
 
             // Commit the transaction
-            \DB::commit();
+            DB::commit();
 
             // Return success response
             return response()->json([
@@ -191,10 +279,10 @@ class CinemaController extends Controller
             ]);
         } catch (\Exception $e) {
             // Rollback the transaction in case of error
-            \DB::rollBack();
+            DB::rollBack();
 
             // Log the error for debugging
-            \Log::error('Error updating cinema: ' . $e->getMessage());
+            Log::error('Error updating cinema: ' . $e->getMessage());
 
             // Return error response
             return response()->json([
@@ -221,58 +309,5 @@ class CinemaController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
-    }
-
-
-    public function list(Request $request)
-    {
-        // Get languages and genres
-        $languages = Language::where('status', 1)->get();
-        $genres = Genre::where('status', 1)->get();
-
-        // Build the query for movies based on the filters
-        $query = Movie::with(['bannerImage', 'coverImage', 'sliderImages']);
-
-        if ($request->has('languages')) {
-            $query->whereIn('language_id', $request->languages);
-        }
-
-        if ($request->has('genres')) {
-            $query->whereIn('genre_id', $request->genres);
-        }
-
-        // Fetch the movies with pagination
-        $movies = $query->paginate(12);
-        // Map movie data to include image paths on the actual items (not on the paginator)
-        $movies->getCollection()->transform(function ($movie) {
-            $movie->banner_image = $movie->bannerImage?->banner_image_path ?? null;
-            $movie->cover_image = $movie->coverImage?->cover_image_path ?? null;
-            return $movie;
-        });
-
-        // Get pagination links (works on the Paginator object, not the collection)
-        $pagination = $movies->links('vendor.pagination.customePagination')->toHtml();
-
-        // If the request is AJAX, return the filtered movie list and pagination
-        if ($request->ajax()) {
-            $moviesHtml = view('frontend.movies.partials.movies', compact('movies'))->render();
-
-            return response()->json(['moviesHtml' => $moviesHtml, 'pagination' => $pagination]);
-        }
-
-        // For non-AJAX requests, return the view with the movies, genres, and languages
-        return view('frontend.movies.grid', compact('movies', 'genres', 'languages', 'pagination'));
-    }
-
-
-
-    public function details($id)
-    {
-        $movie = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->findOrFail($id);
-        $genres = Genre::where('status', 1)->whereIn('id', $movie->genre_ids)->get();
-        $languages = Language::whereIn('id', $movie->language_ids)->get();
-        $movie->slider_images = $movie->sliderImages?->slider_images ?? [];
-
-        return view('frontend.movies.details', compact('movie', 'genres', 'languages'));
     }
 }
