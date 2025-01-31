@@ -27,10 +27,9 @@ class CinemaController extends Controller
     //
     public function index()
     {
-        $cinemas = Cinema::with(['timings'])->get();
+        $cinemas = Cinema::with(['timings', 'CinemaSeatsCategories'])->get();
 
         $cinemas = $cinemas->map(function ($cinema) {
-
             // Fetch city name if city relationship or lookup is required
             $cinema->city_name = City::find($cinema->city_id)?->name ?? 'Unknown City';
 
@@ -40,6 +39,13 @@ class CinemaController extends Controller
                     'start_time' => $timing->start_time,
                     'end_time' => $timing->end_time,
                     'status' => $timing->status ? 'Active' : 'Inactive',
+                ];
+            });
+            $cinema->seats_info = $cinema->CinemaSeatsCategories->map(function ($seatCategory) {
+                return [
+                    'category' => $seatCategory->seat_category,
+                    'no_of_seats' => $seatCategory->no_of_seats,
+                    'price' => $seatCategory->price_per_seat,
                 ];
             });
 

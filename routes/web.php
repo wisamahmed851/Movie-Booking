@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AssignMovieController;
+use App\Http\Controllers\AssignMoviesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogsController;
@@ -79,6 +81,14 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
                 Route::post('/store', 'store')->name('cinemas.store');
                 Route::get('/edit/{id}', 'edit')->name('cinemas.edit'); // Added edit route
                 Route::post('/update/{id}', 'update')->name('cinemas.update'); // Added update route
+            });
+            Route::controller(AssignMoviesController::class)->prefix('assign/movies')->group(function () {
+                Route::get('/', 'index')->name('assign.movies.index');
+                Route::post('/status/{id}', 'status')->name('assign.movies.status'); // Changed {user} to {id}
+                Route::get('/create', 'create')->name('assign.movies.create');
+                Route::post('/store', 'store')->name('assign.movies.store');
+                Route::get('/edit/{id}', 'edit')->name('assign.movies.edit'); // Added edit route
+                Route::post('/update/{id}', 'update')->name('assign.movies.update'); // Added update route
             });
             Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
                 Route::get('/', 'index')->name('blogs.index');

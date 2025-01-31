@@ -4,87 +4,72 @@
     <div class="container-fluid pt-4 px-4">
         <div class="card-header d-flex justify-content-between align-items-center gap-1 text-white"
             style="background-color: #3f424c; padding-top: 25px; border-radius: 10px 10px 0 0;">
-            <h4 class="card-title flex-grow-1">All Cinema List</h4>
-            <a href="{{ route('cinemas.create') }}" class="btn btn-sm btn-primary">
-                Add Cinema
+            <h4 class="card-title flex-grow-1">All Assigned Movies</h4>
+            <a href="{{ route('assign.movies.create') }}" class="btn btn-sm btn-primary">
+                Assign Movie
             </a>
         </div>
 
         <!-- Add margin-top to create space between header and table -->
-        <table id="cinemaTable" class="table  text-white"
+        <table id="assignMoviesTable" class="table text-white"
             style="background-color: #3f424c; border-radius: 10px; margin-top: 20px;">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>Available Show Timings</th>
-                    <th>Avaliable Seats</th>
+                    <th>Movie Name</th>
+                    <th>Cinema Name</th>
+                    <th>Show Timings</th>
+                    <th>Show Date</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody class="text-white">
-                @foreach ($cinemas as $cinema)
-                    <tr class="text-white">
-                        <td>{{ $cinema->id }}</td>
-                        <td>{{ $cinema->name }}</td>
-                        <td>{{ $cinema->address }}</td>
-                        <td>{{ $cinema->city_name }}</td>
-                        <td>
-                            @if ($cinema->timings->isNotEmpty())
-                                @foreach ($cinema->timings as $timing)
-                                    Start: {{ \Carbon\Carbon::parse($timing['start_time'])->format('g:i A') }} |
-                                    End: {{ \Carbon\Carbon::parse($timing['end_time'])->format('g:i A') }}<br>
-                                @endforeach
-                            @else
-                                No Timings Available
-                            @endif
-                        </td>
-
-                        <td>
-                            @if ($cinema->seats_info->isNotEmpty())
-                                @foreach ($cinema->seats_info as $seat)
-                                    {{ $seat['category'] }} {{ $seat['no_of_seats'] }} {{ $seat['price'] }}.Rs<br>
-                                @endforeach
-                            @else
-                                No Seats Available
-                            @endif
-                        </td>
-                        <td>{{ $cinema->status == 1 ? 'Active' : 'Inactive' }}</td>
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-secondary dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Actions
-                                </button>
-                                <ul class="dropdown-menu">
-                                    @if ($cinema->status === 1)
-                                        <li>
-                                            <a href="{{ route('cinemas.edit', ['id' => $cinema->id]) }}"
-                                                class="dropdown-item">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item change-status" data-id="{{ $cinema->id }}"
-                                                data-status="0">
-                                                <i class="fas fa-toggle-off"></i> Mark as Inactive
-                                            </button>
-                                        </li>
-                                    @else
-                                        <li>
-                                            <button class="dropdown-item change-status" data-id="{{ $cinema->id }}"
-                                                data-status="1">
-                                                <i class="fas fa-toggle-on"></i> Mark as Active
-                                            </button>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                @foreach ($assignMovies as $assignMovie)
+                    @foreach ($assignMovie->details as $detail)
+                        <tr class="text-white">
+                            <td>{{ $assignMovie->id }}</td>
+                            <td>{{ $assignMovie->movie->title }}</td>
+                            <td>{{ $assignMovie->cinema->name }}</td>
+                            <td>
+                                {{ \Carbon\Carbon::parse($detail->cinemaTiming->start_time)->format('g:i A') }} -
+                                {{ \Carbon\Carbon::parse($detail->cinemaTiming->end_time)->format('g:i A') }}
+                            </td>
+                            <td>{{ \Carbon\Carbon::parse($detail->show_date)->format('d M Y') }}</td>
+                            <td>{{ $assignMovie->status == 1 ? 'Active' : 'Inactive' }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @if ($assignMovie->status === 1)
+                                            <li>
+                                                <a href="{{ route('assign.movies.edit', ['id' => $assignMovie->id]) }}"
+                                                    class="dropdown-item">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item change-status" data-id="{{ $assignMovie->id }}"
+                                                    data-status="0">
+                                                    <i class="fas fa-toggle-off"></i> Mark as Inactive
+                                                </button>
+                                            </li>
+                                        @else
+                                            <li>
+                                                <button class="dropdown-item change-status" data-id="{{ $assignMovie->id }}"
+                                                    data-status="1">
+                                                    <i class="fas fa-toggle-on"></i> Mark as Active
+                                                </button>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>
@@ -98,7 +83,7 @@
     <script>
         $(document).ready(function() {
             // Initialize DataTable
-            $('#cinemaTable').DataTable({
+            $('#assignMoviesTable').DataTable({
                 "paging": true, // Enable pagination
                 "searching": true, // Enable search bar
                 "ordering": true, // Enable column sorting
@@ -127,9 +112,9 @@
                 e.preventDefault();
 
                 const button = $(this);
-                const id = button.data('id'); // Get the cinema ID
+                const id = button.data('id'); // Get the assigned movie ID
                 const newStatus = button.data('status'); // Get the new status
-                const url = "{{ route('cinemas.status', ':id') }}".replace(':id', id);
+                const url = "{{ route('assign.movies.status', ':id') }}".replace(':id', id);
 
                 $.ajax({
                     url: url,
@@ -152,7 +137,7 @@
                             const row = button.closest(
                             'tr'); // Find the closest row to the button
                             const statusCell = row.find(
-                            'td:nth-child(7)'); // Find the status cell
+                            'td:nth-child(6)'); // Find the status cell
 
                             // Update the status text and button dynamically
                             if (newStatus == 1) {
@@ -168,7 +153,7 @@
                             if (newStatus == 1) {
                                 actionsDropdown.html(`
                                     <li>
-                                        <a href="/cinemas/edit/${button.data('id')}" class="dropdown-item">
+                                        <a href="/assign/movies/edit/${button.data('id')}" class="dropdown-item">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                     </li>

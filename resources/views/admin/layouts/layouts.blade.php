@@ -136,6 +136,23 @@
                                 style="padding-left: 75px">Create</a>
                         </div>
                     </div>
+                    {{-- Assinging movies --}}
+                    <div class="nav-item dropdown ">
+                        <a href="#"
+                            class="nav-link dropdown-toggle {{ Request::routeIs('assign.movies.index') || Request::routeIs('assign.movies.create') || Request::routeIs('assign.movies.edit') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown">
+                            <i class="far fa-file-alt me-2"></i>Assigning
+                        </a>
+                        <div class="dropdown-menu bg-transparent border-0"
+                            style="padding-top: 0px; padding-bottom: 0px; padding-left: 0px; margin-left: 0px;">
+                            <a href="{{ route('assign.movies.index') }}"
+                                class="dropdown-item {{ Request::routeIs('assign.movies.index') ? 'active' : '' }}"
+                                style="padding-left: 75px">List</a>
+                            <a href="{{ route('assign.movies.create') }}"
+                                class="dropdown-item {{ Request::routeIs('assign.movies.create') ? 'active' : '' }}"
+                                style="padding-left: 75px">Create</a>
+                        </div>
+                    </div>
                     {{-- Blogs --}}
                     <div class="nav-item dropdown ">
                         <a href="#"
@@ -399,15 +416,8 @@
                                     window.location.href = redirectUrl;
                                 }
                             } else if (response.status === 'error') {
-                                let errors = response.message;
-                                let errorMessages = '';
-                                for (let field in errors) {
-                                    if (errors.hasOwnProperty(field)) {
-                                        errorMessages += errors[field][0] + '\n';
-                                    }
-                                }
                                 Toastify({
-                                    text: errorMessages.trim(),
+                                    text: response.message,
                                     backgroundColor: "red",
                                     duration: 5000
                                 }).showToast();
