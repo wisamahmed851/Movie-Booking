@@ -25,71 +25,75 @@ class AssignMoviesController extends Controller
     public function create()
     {
         // Fetch all movies and cinemas with timings
-        $movies = Movie::all();
+        $movies = Movie::with('coverImage')->get();
         $cinemas = Cinema::with('timings')->get();
 
         return view('admin.assigMovies.create', compact('movies', 'cinemas'));
     }
 
     public function store(Request $request)
-    {
-        // Validate the request
-        $request->validate([
-            'movie_id' => 'required|exists:movies,id',
-            'cinemas' => 'required|array',
-            'cinemas.*' => 'exists:cinemas,id',
-            'cinema_timings' => 'required|array',
-            'cinema_timings.*' => 'array',
-            'cinema_timings.*.*' => 'exists:cinema_timings,id',
-            'show_dates' => 'required|array',
-            'show_dates.*' => 'array',
-            'show_dates.*.*' => 'date',
-        ]);
+{
+    // Validate the request
+    $request->validate([
+        'movie_id' => 'required|exists:movies,id',
+        'cinemas' => 'required|array',
+        'cinemas.*' => 'exists:cinemas,id',
+        'cinema_timings' => 'required|array',
+        'cinema_timings.*' => 'array',
+        'cinema_timings.*.*' => 'exists:cinema_timings,id',
+        'show_dates' => 'required|array',
+        'show_dates.*' => 'array',
+        'show_dates.*.*' => 'date',
+    ]);
 
-        // Check for conflicting show timings
-        foreach ($request->cinemas as $cinemaId) {
-            foreach ($request->cinema_timings[$cinemaId] as $index => $timingId) {
-                $showDate = $request->show_dates[$cinemaId][$index];
-                $cinemaName = Cinema::find($cinemaId)->name;
+    // Check for conflicting show timings
+    foreach ($request->cinemas as $cinemaId) {
+        foreach ($request->cinema_timings[$cinemaId] as $index => $timingId) {
+            $showDate = $request->show_dates[$cinemaId][$index];
+            $cinemaName = Cinema::find($cinemaId)->name;
 
-                // Check if the timing and date are already booked for this cinema
-                $conflict = AssignMoviesDetails::where('cinema_timings_id', $timingId)
-                    ->where('show_date', $showDate)
-                    ->exists();
+            // Check if the timing and date are already booked for this cinema
+            $conflict = AssignMoviesDetails::where('cinema_timings_id', $timingId)
+                ->where('show_date', $showDate)
+                ->exists();
 
-                if ($conflict) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'The selected timing and date are already booked for cinema: ' . $cinemaName,
-                    ]); // 422 Unprocessable Entity
-                }
+            if ($conflict) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'The selected timing and date are already booked for cinema: ' . $cinemaName,
+                ], 422); // 422 Unprocessable Entity
             }
         }
+    }
 
-        // Assign movie to selected cinemas
-        foreach ($request->cinemas as $cinemaId) {
-            // Create assign_movies record
-            $assignMovie = AssignMovies::create([
+    // Assign movie to selected cinemas
+    foreach ($request->cinemas as $cinemaId) {
+        // Find or create the AssignMovies entry for this movie and cinema
+        $assignMovie = AssignMovies::firstOrCreate(
+            [
                 'movie_id' => $request->movie_id,
                 'cinema_id' => $cinemaId,
-                'status' => 1, // Active
+            ],
+            [
+                'status' => 1, // Default status to Active
+            ]
+        );
+
+        // Create assign_movies_details records for each timing
+        foreach ($request->cinema_timings[$cinemaId] as $index => $timingId) {
+            AssignMoviesDetails::create([
+                'assign_movies_id' => $assignMovie->id,
+                'cinema_timings_id' => $timingId,
+                'show_date' => $request->show_dates[$cinemaId][$index],
             ]);
-
-            // Create assign_movies_details records for each timing
-            foreach ($request->cinema_timings[$cinemaId] as $index => $timingId) {
-                AssignMoviesDetails::create([
-                    'assign_movies_id' => $assignMovie->id,
-                    'cinema_timings_id' => $timingId,
-                    'show_date' => $request->show_dates[$cinemaId][$index],
-                ]);
-            }
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Movie has been successfully assigned to cinemas!',
-        ]);
     }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Movie has been successfully assigned to cinemas!',
+    ]);
+}
 
     public function edit($id)
     {

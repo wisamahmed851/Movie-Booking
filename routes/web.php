@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AssignMovieController;
 use App\Http\Controllers\AssignMoviesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -124,6 +123,7 @@ Route::middleware([ValidUser::class])->group(
             Route::get('/', 'profile')->name('user.profile');
             Route::post('/update-info', 'updateInfo')->name('user.updateInfo');
         });
+      
     }
 );
 Route::prefix('')->group(
@@ -147,6 +147,8 @@ Route::prefix('')->group(
             Route::get('/list', 'list')->name('movies.grid');
             Route::get('/loadmovies', 'loadmovies')->name('movies.loadmovies');
             Route::get('/details/{id}', 'details')->name('movies.details');
+            Route::get('/ticket-plan/{id}', 'ticketplan')->name('movies.ticket-plan');
+            Route::get('/seats-plan/{id}', 'seatsplan')->name('movies.seat-plan');
         });
         Route::controller(UserController::class)->prefix('user')->group(function () {
             Route::get('/login', 'loginform')->name('user.login')->middleware(Guest::class);

@@ -50,7 +50,7 @@
                             </a>
                         </div>
                         <div class="react-item mr-auto">
-                            <a href="book-ticket/{{ $movie->id }}">
+                            <a href="">
                                 <div class="thumb">
                                     <img src="{{ asset('Frontend/images/icons/book.png') }}" alt="icons">
                                 </div>
@@ -58,16 +58,30 @@
                             </a>
                         </div>
                         <div class="react-item">
-                            <a href="watch-trailer/{{ $movie->id }}" class="popup-video">
+                            <a href="{{ $movie->trailler }}" class="video-popup">
                                 <div class="thumb">
                                     <img src="{{ asset('Frontend/images/icons/play-button.png') }}" alt="icons">
                                 </div>
                                 <span>watch trailer</span>
                             </a>
                         </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
 </div>
+<script>
+    $(document).ready(function() {
+        let currentLayout = 'grid'; // Default layout
+        // Initialize the magnificPopup plugin
+        $('.video-popup').magnificPopup({
+            type: 'iframe',
+            mainClass: 'mfp-fade',
+            removalDelay: 300,
+            preloader: false,
+            fixedContentPos: false
+        });
+    });
+</script>

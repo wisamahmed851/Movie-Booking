@@ -136,7 +136,7 @@
         $(document).ready(function() {
             handleEditFormSubmission('#movieEditForm', {
                 url: '{{ route('movies.update', ['id' => $movie->id]) }}',
-                useFormData: false, // Serialize form data as no files are included
+                useFormData: true, // Serialize form data as no files are included
                 redirectUrl: "{{ route('movies.index') }}" // Redirect after success
             });
         });

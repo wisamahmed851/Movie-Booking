@@ -162,26 +162,51 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('input[type="checkbox"]').each(function() {
-                toggleFields(this);
-            }).on('change', function() {
-                toggleFields(this);
-            });
-        });
-
-        function toggleFields(checkbox) {
-            $(checkbox).closest('div').next('div').find('input').prop('disabled', !checkbox.checked);
+@push('styles')
+    <style>
+        /* Ensure the clock icon inside the time input is visible */
+        .time-input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            /* Inverts the color to make it visible on dark backgrounds */
+            opacity: 1;
+            /* Ensure it's visible */
+            cursor: pointer;
         }
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Add new show timing row
-            $('#addShowTiming').on('click', function() {
-                const newRow = `
+
+        /* Adjust for Firefox */
+        .time-input {
+            color: white;
+            /* Ensures text is readable */
+            background-color: black;
+            /* Matches the input background */
+            border: 1px solid #dc3545;
+            /* Adjust border if needed */
+        }
+
+        /* Optional: Adjust placeholder styles */
+        .time-input::placeholder {
+            color: #aaa;
+        }
+    </style>
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('input[type="checkbox"]').each(function() {
+                    toggleFields(this);
+                }).on('change', function() {
+                    toggleFields(this);
+                });
+            });
+
+            function toggleFields(checkbox) {
+                $(checkbox).closest('div').next('div').find('input').prop('disabled', !checkbox.checked);
+            }
+        </script>
+        <script>
+            $(document).ready(function() {
+                // Add new show timing row
+                $('#addShowTiming').on('click', function() {
+                    const newRow = `
                     <div class="row align-items-center mb-3 show-timing-row">
                         <div class="col-md-5">
                             <label for="start_time[]" class="form-label text-white">Start Time</label>
@@ -195,19 +220,19 @@
                             <button type="button" class="btn btn-danger remove-show-timing">Remove</button>
                         </div>
                     </div>`;
-                $('#showTimingsContainer').append(newRow);
+                    $('#showTimingsContainer').append(newRow);
+                });
+
+                // Remove show timing row
+                $(document).on('click', '.remove-show-timing', function() {
+                    $(this).closest('.show-timing-row').remove();
+                });
+
+                // Handle form submission
+
+                handleAjaxFormSubmit('#cinemaCreateForm', '{{ route('cinemas.store') }}',
+                    '{{ route('cinemas.index') }}');
+
             });
-
-            // Remove show timing row
-            $(document).on('click', '.remove-show-timing', function() {
-                $(this).closest('.show-timing-row').remove();
-            });
-
-            // Handle form submission
-
-            handleAjaxFormSubmit('#cinemaCreateForm', '{{ route('cinemas.store') }}',
-                '{{ route('cinemas.index') }}');
-
-        });
-    </script>
-@endpush
+        </script>
+    @endpush

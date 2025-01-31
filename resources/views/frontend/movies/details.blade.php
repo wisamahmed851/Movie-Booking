@@ -100,7 +100,7 @@
                         <p><a href="#0">Rate It</a></p>
                     </div>
                 </div>
-                <a href="#0" class="custom-button">book tickets</a>
+                <a class="custom-button" href="{{route('movies.ticket-plan' , $movie->id)}}">book tickets</a>
             </div>
         </div>
     </section>
