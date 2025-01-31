@@ -46,7 +46,8 @@
                         <td>
                             @if ($cinema->seats_info->isNotEmpty())
                                 @foreach ($cinema->seats_info as $seat)
-                                    {{ $seat['category'] }} {{ $seat['no_of_seats'] }} {{ $seat['price'] }}.Rs<br>
+                                    {{ $seat['category'] }} {{ $seat['no_of_seats'] }}
+                                    {{ number_format($seat['price'], $seat['price'] == floor($seat['price']) ? 0 : 2) }}.Rs<br>
                                 @endforeach
                             @else
                                 No Seats Available
@@ -150,9 +151,9 @@
 
                             // Update the status column dynamically
                             const row = button.closest(
-                            'tr'); // Find the closest row to the button
+                                'tr'); // Find the closest row to the button
                             const statusCell = row.find(
-                            'td:nth-child(7)'); // Find the status cell
+                                'td:nth-child(7)'); // Find the status cell
 
                             // Update the status text and button dynamically
                             if (newStatus == 1) {
