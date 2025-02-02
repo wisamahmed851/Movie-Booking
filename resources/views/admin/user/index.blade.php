@@ -76,6 +76,12 @@
                                                                     {{ $user->role == 0 ? 'Demote to User' : 'Promote to Admin' }}
                                                                 </button>
                                                             </li>
+                                                            <li>
+                                                                <button class="dropdown-item destroy"
+                                                                    data-id="{{ $user->id }}" data-status="0">
+                                                                    <i class="fas fa-toggle-off"></i> Destroy
+                                                                </button>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </td>
@@ -252,6 +258,8 @@
                         },
                     });
                 });
+
+                 setupDestroyHandler('User', "{{ route('user.destroy', ':id') }}");
             });
         </script>
         <!-- End Container Fluid -->

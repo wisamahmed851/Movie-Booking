@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\SendOtpMail;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -68,6 +69,32 @@ class UserController extends Controller
                 'newStatus' => $user->status,
             ]
         ]);
+    }
+    public function destroy(string $id)
+    {
+        //
+        try {
+            $user = User::find($id);
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User not found',
+                    'data' => null
+                ]);
+            }
+            $user->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User is deleted',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
     }
     public function togglerole(User $user)
     {

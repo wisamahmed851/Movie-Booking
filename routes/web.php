@@ -35,6 +35,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             });
             Route::controller(UserController::class)->prefix('user')->group(function () {
                 Route::get('/', 'index')->name('users.index');
+                Route::DELETE('/destroy/{id}', 'destroy')->name('user.destroy');
                 Route::post('/toggleStatus/{user}', 'toggleStatus')->name('user.toggleStatus');
                 Route::get('/create', 'create')->name('users.create');
                 Route::post('/store', 'store')->name('users.store');
@@ -43,6 +44,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(GenreController::class)->prefix('genres')->group(function () {
                 Route::get('/', 'index')->name('genres.index');
                 Route::post('/status/{id}', 'status')->name('genres.status'); // Changed {user} to {id}
+                Route::DELETE('/destroy/{id}', 'destroy')->name('genres.destroy'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('genres.create');
                 Route::post('/store', 'store')->name('genres.store');
                 Route::get('/edit/{id}', 'edit')->name('genres.edit'); // Added edit route
@@ -51,6 +53,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(LanguageController::class)->prefix('languages')->group(function () {
                 Route::get('/', 'index')->name('languages.index');
                 Route::post('/status/{id}', 'status')->name('languages.status'); // Changed {user} to {id}
+                Route::DELETE('/destroy/{id}', 'destroy')->name('languages.destroy'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('languages.create');
                 Route::post('/store', 'store')->name('languages.store');
                 Route::get('/edit/{id}', 'edit')->name('languages.edit'); // Added edit route
@@ -59,7 +62,8 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
 
             Route::controller(CityController::class)->prefix('city')->group(function () {
                 Route::get('/', 'index')->name('city.index');
-                Route::post('/status/{id}', 'status')->name('city.status'); // Changed {user} to {id}
+                Route::post('/status/{id}', 'status')->name('city.status');
+                Route::DELETE('/destroy/{id}', 'destroy')->name('city.destroy');
                 Route::get('/create', 'create')->name('city.create');
                 Route::post('/store', 'store')->name('city.store');
                 Route::get('/edit/{id}', 'edit')->name('city.edit'); // Added edit route
@@ -68,6 +72,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(MovieController::class)->prefix('movies')->group(function () {
                 Route::get('/', 'index')->name('movies.index');
                 Route::post('/status/{id}', 'status')->name('movies.status'); // Changed {user} to {id}
+                Route::DELETE('/destroy/{id}', 'destroy')->name('movies.destroy'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('movies.create');
                 Route::post('/store', 'store')->name('movies.store');
                 Route::get('/edit/{id}', 'edit')->name('movies.edit'); // Added edit route
@@ -76,6 +81,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(CinemaController::class)->prefix('cinemas')->group(function () {
                 Route::get('/', 'index')->name('cinemas.index');
                 Route::post('/status/{id}', 'status')->name('cinemas.status'); // Changed {user} to {id}
+                Route::DELETE('/destroy/{id}', 'destroy')->name('cinemas.destroy'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('cinemas.create');
                 Route::post('/store', 'store')->name('cinemas.store');
                 Route::get('/edit/{id}', 'edit')->name('cinemas.edit'); // Added edit route
@@ -84,6 +90,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(AssignMoviesController::class)->prefix('assign/movies')->group(function () {
                 Route::get('/', 'index')->name('assign.movies.index');
                 Route::post('/status/{id}', 'status')->name('assign.movies.status'); // Changed {user} to {id}
+                Route::DELETE('/destroy/{id}', 'destroy')->name('assign.movies.destroy'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('assign.movies.create');
                 Route::post('/store', 'store')->name('assign.movies.store');
                 Route::get('/edit/{id}', 'edit')->name('assign.movies.edit'); // Added edit route
@@ -92,6 +99,7 @@ Route::middleware([ValidUser::class, CheckRole::class])->group(
             Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
                 Route::get('/', 'index')->name('blogs.index');
                 Route::post('/status/{id}', 'status')->name('blogs.status'); // Changed {user} to {id}
+                Route::DELETE('/destroy/{id}', 'destroy')->name('blogs.destroy'); // Changed {user} to {id}
                 Route::get('/create', 'create')->name('blogs.create');
                 Route::post('/store', 'store')->name('blogs.store');
                 Route::get('/edit/{id}', 'edit')->name('blogs.edit'); // Added edit route
@@ -123,7 +131,7 @@ Route::middleware([ValidUser::class])->group(
             Route::get('/', 'profile')->name('user.profile');
             Route::post('/update-info', 'updateInfo')->name('user.updateInfo');
         });
-      
+
     }
 );
 Route::prefix('')->group(

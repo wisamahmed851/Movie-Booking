@@ -47,11 +47,24 @@
                                                 <i class="fas fa-toggle-off"></i> Mark as Inactive
                                             </button>
                                         </li>
+                                        <li>
+
+                                            <button class="dropdown-item destroy" data-id="{{ $genre->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                     @else
                                         <li>
                                             <button class="dropdown-item change-status" data-id="{{ $genre->id }}"
                                                 data-status="1">
                                                 <i class="fas fa-toggle-on"></i> Mark as Active
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $genre->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
                                             </button>
                                         </li>
                                     @endif
@@ -145,7 +158,7 @@
                             if (newStatus == 1) {
                                 actionsDropdown.html(`
                 <li>
-                    <a href="/movies/edit/${button.data('id')}" class="dropdown-item">
+                    <a href="{{ route('genres.edit', ['id' => $genre->id]) }}" class="dropdown-item">
                         <i class="fas fa-edit"></i> Edit
                     </a>
                 </li>
@@ -184,7 +197,7 @@
                     }
                 });
             });
-
+            setupDestroyHandler('Genere', "{{ route('genres.destroy', ':id') }}");
         });
     </script>
 @endpush

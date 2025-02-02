@@ -50,6 +50,9 @@
             <div class="padding-top padding-bottom">
                 <div class="account-area">
                     <div class="section-header-3">
+                        <a href="{{ route('front.index') }}" style="padding-bottom: 10px">
+                            <img src="{{ asset('frontend/images/logo/logo.png') }}" alt="logo">
+                        </a>
                         <span class="cate">hello</span>
                         <h2 class="title">welcome back</h2>
                     </div>
@@ -66,7 +69,7 @@
                         <div class="form-group checkgroup">
                             <input type="checkbox" id="bal2" required checked>
                             <label for="bal2">remember password</label>
-                            <a href="{{route('user.forgotpassword')}}" class="forget-pass">Forget Password</a>
+                            <a href="{{ route('user.forgotpassword') }}" class="forget-pass">Forget Password</a>
                         </div>
                         <div class="form-group text-center">
                             <input type="submit" value="log in">

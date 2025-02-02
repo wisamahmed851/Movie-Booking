@@ -36,7 +36,7 @@
                                 <span class="text-muted">No Image</span>
                             @endif
                         </td>
-                        <td>{{ $blog->status == "1" ? 'Active' : 'Inactive' }}</td>
+                        <td>{{ $blog->status == '1' ? 'Active' : 'Inactive' }}</td>
                         <td>
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-secondary dropdown-toggle"
@@ -44,7 +44,7 @@
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu">
-                                    @if ($blog->status === "1")
+                                    @if ($blog->status === '1')
                                         <li>
                                             <a href="{{ route('blogs.edit', ['id' => $blog->id]) }}" class="dropdown-item">
                                                 <i class="fas fa-edit"></i> Edit
@@ -56,11 +56,23 @@
                                                 <i class="fas fa-toggle-off"></i> Mark as Inactive
                                             </button>
                                         </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $blog->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                     @else
                                         <li>
                                             <button class="dropdown-item change-status" data-id="{{ $blog->id }}"
                                                 data-status="1">
                                                 <i class="fas fa-toggle-on"></i> Mark as Active
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $blog->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
                                             </button>
                                         </li>
                                     @endif
@@ -161,6 +173,12 @@
                                             <i class="fas fa-toggle-off"></i> Mark as Inactive
                                         </button>
                                     </li>
+                                    <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $blog->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                 `);
                             } else {
                                 actionsDropdown.html(`
@@ -169,6 +187,12 @@
                                             <i class="fas fa-toggle-on"></i> Mark as Active
                                         </button>
                                     </li>
+                                    <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $blog->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                 `);
                             }
                         } else {
@@ -191,6 +215,9 @@
                     }
                 });
             });
+
+            setupDestroyHandler('Blog', "{{ route('blogs.destroy', ':id') }}");
+
         });
     </script>
 @endpush

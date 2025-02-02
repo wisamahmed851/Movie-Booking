@@ -69,14 +69,14 @@
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="{{ asset('Backend/img/user.jpg') }}" alt=""
-                            style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="{{ asset(Auth::user()->img ?: 'frontend/css/img/ava3.webp') }}"
+                            alt="" style="width: 40px; height: 40px;">
                         <div
                             class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
                         </div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                        <h6 class="mb-0">{{ Auth::user()->name }}</h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -155,8 +155,7 @@
                     </div>
                     {{-- Blogs --}}
                     <div class="nav-item dropdown ">
-                        <a href="#"
-                            class="nav-link dropdown-toggle {{ Request::routeIs('blogs.index') }}"
+                        <a href="#" class="nav-link dropdown-toggle {{ Request::routeIs('blogs.index') }}"
                             data-bs-toggle="dropdown">
                             <i class="far fa-file-alt me-2"></i>Blogs
                         </a>
@@ -255,8 +254,9 @@
                             class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="{{ asset('img/user.jpg') }}" alt=""
-                                        style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle"
+                                        src="{{ asset(Auth::user()->img ?: 'frontend/css/img/ava3.webp') }}"
+                                        alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -266,8 +266,9 @@
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="{{ asset('img/user.jpg') }}" alt=""
-                                        style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle"
+                                        src="{{ asset(Auth::user()->img ?: 'frontend/css/img/ava3.webp') }}"
+                                        alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -277,8 +278,9 @@
                             <hr class="dropdown-divider">
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="{{ asset('img/user.jpg') }}" alt=""
-                                        style="width: 40px; height: 40px;">
+                                    <img class="rounded-circle"
+                                        src="{{ asset(Auth::user()->img ?: 'frontend/css/img/ava3.webp') }}"
+                                        alt="" style="width: 40px; height: 40px;">
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
                                         <small>15 minutes ago</small>
@@ -316,15 +318,14 @@
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{{ asset('Backend/img/user.jpg') }}"
-                                alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <img class="rounded-circle me-lg-2"
+                                src="{{ asset(Auth::user()->img ?: 'frontend/css/img/ava3.webp') }}" alt=""
+                                style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{Auth::user()->name}}</span>
                         </a>
                         <div
                             class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            <a href="{{route('auth.logout')}}" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>
@@ -418,7 +419,7 @@
                             } else if (response.status === 'error') {
                                 Toastify({
                                     text: response.message,
-                                    backgroundColor: "red",
+                                    backgroundColor: "yello",
                                     duration: 5000
                                 }).showToast();
                             }
@@ -493,6 +494,57 @@
                 }
 
                 $.ajax(ajaxOptions);
+            });
+        }
+
+        function setupDestroyHandler(entityName, destroyRoute) {
+            $(document).on('click', '.destroy', function(e) {
+                e.preventDefault();
+
+                const button = $(this);
+                const id = button.data('id');
+                const url = destroyRoute.replace(':id', id);
+
+                if (!confirm(`Are you sure you want to delete this ${entityName}?`)) {
+                    return;
+                }
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Toastify({
+                                text: response.message,
+                                backgroundColor: "green",
+                                duration: 3000
+                            }).showToast();
+
+                            button.closest('tr').fadeOut(300, function() {
+                                $(this).remove();
+                            });
+                        } else {
+                            Toastify({
+                                text: response.message,
+                                backgroundColor: "red",
+                                duration: 3000
+                            }).showToast();
+                        }
+                    },
+                    error: function(xhr) {
+                        const errors = xhr.responseJSON.errors || ['An error occurred.'];
+                        const errorMessages = Object.values(errors).join('\n');
+
+                        Toastify({
+                            text: errorMessages,
+                            backgroundColor: "red",
+                            duration: 5000
+                        }).showToast();
+                    }
+                });
             });
         }
     </script>

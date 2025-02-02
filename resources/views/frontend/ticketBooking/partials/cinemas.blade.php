@@ -15,15 +15,17 @@
                     </div>
                     <div class="movie-schedule">
                         @foreach ($shows as $show)
-                            <div class="item">
-                                {{ \Carbon\Carbon::parse($show['start_time'])->format('H:i') }} 
+                            <div class="item" >
+                                <input type="hidden" value="{{ $show['assigned_show_id'] }}"
+                                                class="assigned_show_id">
+                                            {{ \Carbon\Carbon::parse($show['start_time'])->format('H:i') }}
                             </div>
                         @endforeach
                     </div>
                 </li>
             @endforeach
         </ul>
-        
+
     </div>
     <div class="col-lg-3 col-md-6 col-sm-10">
         <div class="widget-1 widget-banner">

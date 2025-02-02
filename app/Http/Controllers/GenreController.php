@@ -64,14 +64,6 @@ class GenreController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request, $id)
@@ -145,6 +137,25 @@ class GenreController extends Controller
                 'data' => null
             ]);
         }catch(Exception $ex){
+            return response()->json([
+                'status' => 'Error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $genre = Genre::find($id);
+            $genre->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Genre is deleted',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
             return response()->json([
                 'status' => 'Error',
                 'message' => $ex->getMessage(),

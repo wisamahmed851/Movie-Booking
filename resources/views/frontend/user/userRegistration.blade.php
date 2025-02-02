@@ -49,6 +49,9 @@
             <div class="padding-top padding-bottom">
                 <div class="account-area">
                     <div class="section-header-3">
+                        <a href="{{ route('front.index') }}" style="padding-bottom: 10px">
+                        <img src="{{ asset('frontend/images/logo/logo.png') }}" alt="logo">
+                    </a>
                         <span class="cate">welcome</span>
                         <h2 class="title">to Boleto </h2>
                     </div>

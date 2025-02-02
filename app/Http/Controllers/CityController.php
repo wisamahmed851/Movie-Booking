@@ -64,13 +64,6 @@ class CityController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -143,5 +136,25 @@ class CityController extends Controller
                 'data' => null
             ]);
         }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $city = City::find($id);
+            $city->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'City deleted successfully!',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
+
     }
 }

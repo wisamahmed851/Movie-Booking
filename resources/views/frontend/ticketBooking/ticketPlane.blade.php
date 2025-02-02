@@ -12,23 +12,24 @@
                 <img src="{{ asset('Frontend/images/movie/seat-plan.png') }}" alt="ticket">
             </div>
             <!-- Link for seat plans, updated to include dynamic show id -->
-            <a class="custom-button seatPlanButton" id="seatPlanLink">Seat Plans<i
+            <a class="custom-button seatPlanButton" style="cursor: pointer;f" id="seatPlanLink">Seat Plans<i
                     class="fas fa-angle-right"></i></a>
         </div>
     </section>
     <!-- ==========Window-Warning-Section========== -->
 
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner hero-area bg_img" data-background="assets/images/banner/banner03.jpg">
+    <section class="details-banner hero-area bg_img"
+        data-background="{{ asset('storage/' . $formattedData['banner_image']) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-content">
-                    <h3 class="title">Venus</h3>
+                    <h3 class="title">{{ $formattedData['movie'] }}</h3>
                     <div class="tags">
-                        <a href="#0">English</a>
-                        <a href="#0">Hindi</a>
-                        <a href="#0">Telegu</a>
-                        <a href="#0">Tamil</a>
+                        @foreach ($formattedData['languages'] as $languagesName => $Languages)
+                            <a href="#0">{{ $Languages }}</a>
+                        @endforeach
+
                     </div>
                 </div>
             </div>
@@ -117,7 +118,7 @@
                     <div class="widget-1 widget-banner">
                         <div class="widget-1-body">
                             <a href="#0">
-                                <img src="assets/images/sidebar/banner/banner03.jpg" alt="banner">
+                                <img src="{{ asset('Frontend/images/sidebar/banner/banner03.jpg') }}" alt="banner">
                             </a>
                         </div>
                     </div>
@@ -131,26 +132,8 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            var selectedShowId = null;
-
-            // Capture the selected show ID when a time is clicked
-            $('.movie-schedule .item').on('click', function() {
-                selectedShowId = $(this).find('.assigned_show_id').val();
-            });
-
-
-            $('#seatPlanLink').on('click', function(event) {
-                if (selectedShowId) {
-                    // Use Laravel's route() helper to generate the URL dynamically
-                    var url = "{{ route('movies.seat-plan', ':show_id') }}".replace(':show_id',
-                        selectedShowId);
-                    window.location.href = url; // Redirect to the generated URL
-                } else {
-                    // Prevent default action if no show is selected
-                    event.preventDefault();
-                    alert("Please select a show time first!");
-                }
-            });
+            // Attach event listeners on initial page load
+            attachEventListeners();
 
             // Listen to changes on the select dropdowns
             $('.select-bar').on('change', function() {
@@ -173,6 +156,8 @@
                     },
                     success: function(response) {
                         $('.seat-plan-wrapper').html(response);
+                        // Re-attach event listeners after AJAX content is loaded
+                        attachEventListeners();
                     },
                     error: function() {
                         alert('Error fetching data. Please try again.');
@@ -180,5 +165,36 @@
                 });
             });
         });
+
+        function attachEventListeners() {
+            var selectedShowId = null;
+
+            $(".window-warning .lay").on("click", function() {
+                $(".window-warning").addClass("inActive");
+            });
+            $(".seat-plan-wrapper li .movie-schedule .item").on(
+                "click",
+                function() {
+                    $(".window-warning").removeClass("inActive");
+                }
+            );
+            // Capture the selected show ID when a time is clicked
+            $('.movie-schedule .item').on('click', function() {
+                selectedShowId = $(this).find('.assigned_show_id').val();
+
+            });
+
+            $('#seatPlanLink').on('click', function(event) {
+                if (selectedShowId) {
+                    // Use Laravel's route() helper to generate the URL dynamically
+                    var url = "{{ route('movies.seat-plan', ':show_id') }}".replace(':show_id', selectedShowId);
+                    window.location.href = url; // Redirect to the generated URL
+                } else {
+                    // Prevent default action if no show is selected
+                    event.preventDefault();
+                    alert("Please select a show time first!");
+                }
+            });
+        }
     </script>
 @endpush

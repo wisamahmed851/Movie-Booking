@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cinema;
+use App\Models\CinemaSeat;
 use App\Models\City;
 use App\Models\Genre;
 use App\Models\Language;
@@ -207,6 +208,32 @@ class MovieController extends Controller
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
     }
+    public function destroy(string $id)
+    {
+        //
+        try {
+            $movie = Movie::find($id);
+            if (!$movie) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Movie not found',
+                    'data' => null
+                ]);
+            }
+            $movie->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Movie is deleted',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
+    }
     public function loadmovies(Request $request)
     {
         // Build the query for movies with relationships
@@ -339,7 +366,9 @@ class MovieController extends Controller
             ->join('movies as m', 'am.movie_id', '=', 'm.id')
             ->select(
                 'm.title as movie_title',
+                'm.language_ids as language_ids',
                 'm.id as movie_id',
+                'm.banner_image_id as banner_image_id',
                 'c.name as cinema_name',
                 'amd.show_date',
                 'amd.id as assigned_show_id',
@@ -361,10 +390,22 @@ class MovieController extends Controller
         }
         $cinemasData = $query->orderBy('amd.show_date')->orderBy('ct.start_time')->get();
 
+        $movie = Movie::find($id);
+        $languagesName = [];
+        $bannerImage = MovieImage::find($movie->banner_image_id);
+
+        if ($bannerImage && $bannerImage->banner_image_path) {
+            $bannerImage = $bannerImage->banner_image_path;
+        }
+        if ($movie->language_ids) {
+            $languagesName = Language::whereIn('id', $movie->language_ids)->pluck('name')->toArray();
+        }
         // Format Data
         $formattedData = [
             'movie' => $cinemasData->first()->movie_title ?? 'Unknown',
             'movie_id' => $cinemasData->first()->movie_id ?? 'Unknown',
+            'languages' => $languagesName,
+            'banner_image' => $bannerImage ?? null,
             'cinemas' => [],
         ];
 
@@ -411,8 +452,72 @@ class MovieController extends Controller
         ]);
     }
 
-    public function seatsplan($id){
-        
-        return view('frontend.seatPlans.seatPlan');
+    public function seatsplan($id)
+    {
+        $query = DB::table('assign_movies_details as amd')
+            ->where('amd.id', $id)
+            ->join('cinema_timings as ct', 'amd.cinema_timings_id', '=', 'ct.id')
+            ->join('assign_movies as am', 'amd.assign_movies_id', '=', 'am.id')
+            ->join('cinemas as c', 'am.cinema_id', '=', 'c.id')
+            ->join('movies as m', 'am.movie_id', '=', 'm.id')
+            ->select(
+                'm.title as movie_title',
+                'm.language_ids as language_ids',
+                'm.id as movie_id',
+                'm.banner_image_id as banner_image_id',
+                'c.id as cinema_id', // Fetching cinema ID
+                'c.name as cinema_name',
+                'amd.show_date',
+                'ct.start_time',
+                'ct.end_time'
+            )
+            ->first(); // Get only one record (specific show)
+
+        if (!$query) {
+            return abort(404, 'Show not found'); // Handle missing show
+        }
+
+        // Fetch all seat numbers for this cinema
+        $seats = DB::table('cinema_seats as cs')
+            ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
+            ->where('cs.cinema_id', $query->cinema_id)
+            ->select('cs.seat_number', 'csc.seat_category', 'cs.id', 'csc.price_per_seat') // Get only seat numbers
+            ->get();
+
+        // Group seats by category
+        $groupedSeats = $seats->groupBy('seat_category');
+
+        $sortedSeats = [];
+        $categoriesOrder = ['silver', 'gold', 'platinum']; // Define the desired order
+
+        foreach ($categoriesOrder as $category) {
+            if (isset($groupedSeats[$category])) {
+                $sortedSeats[$category] = $groupedSeats[$category];
+            }
+        }
+        Log::info($groupedSeats);
+        // Fetch language names
+        $languagesName = [];
+        if ($query->language_ids) {
+            $languagesName = Language::whereIn('id', explode(',', $query->language_ids))->pluck('name')->toArray();
+        }
+
+        // Fetch banner image
+        $bannerImage = MovieImage::find($query->banner_image_id);
+        $bannerImagePath = $bannerImage ? $bannerImage->banner_image_path : null;
+
+        // Prepare response data
+        $formattedData = [
+            'movie' => $query->movie_title ?? 'Unknown',
+            'movie_id' => $query->movie_id ?? 'Unknown',
+            'languages' => $languagesName,
+            'banner_image' => $bannerImagePath,
+            'show_date' => $query->show_date,
+            'start_time' => $query->start_time,
+            'cinema_name' => $query->cinema_name,
+            'seats' => $sortedSeats, // Grouped seat list
+        ];
+
+        return view('frontend.seatPlans.seatPlan', compact('formattedData'));
     }
 }

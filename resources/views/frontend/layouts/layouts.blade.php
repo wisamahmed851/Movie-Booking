@@ -99,13 +99,18 @@
                             class="{{ Request::routeIs('pages.contact') ? 'active' : '' }}">contact</a>
                     </li>
                 </ul>
-                <a @if (Auth::check()) href="{{ route('user.profile') }} "
-                @else
-                href="{{ route('user.login') }} " @endif
+                <a @if (Auth::check()) @if (Request::routeIs('user.profile')) href="{{ route('auth.logout') }} "@else
+href="{{ route('user.profile') }} " @endif
+                @else href="{{ route('user.login') }} " @endif
                     class="signupRegiste">
                     @if (Auth::check())
-                        <i class="fas fa-user"></i>
-                        <span>{{ Auth::user()->name }}</span>
+                        @if (Request::routeIs('user.profile'))
+                            <i class="fas fa-user"></i>
+                            <span>Logout</span>
+                        @else
+                            <i class="fas fa-user"></i>
+                            <span>{{ Auth::user()->name }}</span>
+                        @endif
                     @else
                         <i class="fas fa-user"></i>
                         <span>Sign in</span>

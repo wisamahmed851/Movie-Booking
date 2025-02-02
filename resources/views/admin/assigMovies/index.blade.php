@@ -25,7 +25,7 @@
                 </tr>
             </thead>
             <tbody class="text-white">
-                @foreach ($assignMovies as $assignMovie)
+                @forelse ($assignMovies as $assignMovie)
                     @php
                         $details = $assignMovie->details;
                         $count = $details->count();
@@ -35,7 +35,7 @@
                     <tr class="text-white">
                         <td>{{ $assignMovie->id }}</td>
                         <td>
-                            @if($assignMovie->movie->coverImage->cover_image_path)
+                            @if ($assignMovie->movie->coverImage->cover_image_path)
                                 <img src="{{ asset('storage/' . $assignMovie->movie->coverImage->cover_image_path) }}"
                                     alt="" width="50" height="50">
                             @else
@@ -46,14 +46,14 @@
                         <td>{{ $assignMovie->cinema->name }}</td>
                         <td>{{ $count }}</td>
                         <td>
-                            @if($startDate)
+                            @if ($startDate)
                                 {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }}
                             @else
                                 N/A
                             @endif
                         </td>
                         <td>
-                            @if($endDate)
+                            @if ($endDate)
                                 {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}
                             @else
                                 N/A
@@ -80,6 +80,12 @@
                                                 <i class="fas fa-toggle-off"></i> Mark as Inactive
                                             </button>
                                         </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $assignMovie->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                     @else
                                         <li>
                                             <button class="dropdown-item change-status" data-id="{{ $assignMovie->id }}"
@@ -87,12 +93,22 @@
                                                 <i class="fas fa-toggle-on"></i> Mark as Active
                                             </button>
                                         </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $assignMovie->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                     @endif
                                 </ul>
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center">No assigned movies found.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -141,7 +157,8 @@
                             }).showToast();
 
                             const row = button.closest('tr');
-                            const statusCell = row.find('td:nth-child(7)'); // Updated column index
+                            const statusCell = row.find(
+                                'td:nth-child(7)'); // Updated column index
 
                             // Update status text
                             statusCell.text(newStatus == 1 ? 'Active' : 'Inactive');
@@ -160,6 +177,12 @@
                                             <i class="fas fa-toggle-off"></i> Mark as Inactive
                                         </button>
                                     </li>
+                                    <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $assignMovie->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                 `);
                             } else {
                                 actionsDropdown.html(`
@@ -168,6 +191,12 @@
                                             <i class="fas fa-toggle-on"></i> Mark as Active
                                         </button>
                                     </li>
+                                    <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $assignMovie->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                 `);
                             }
                         } else {
@@ -188,6 +217,9 @@
                     }
                 });
             });
+
+            setupDestroyHandler('Assign Movie', "{{ route('assign.movies.destroy', ':id') }}");
+
         });
     </script>
 @endpush

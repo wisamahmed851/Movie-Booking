@@ -74,11 +74,23 @@
                                                 <i class="fas fa-toggle-off"></i> Mark as Inactive
                                             </button>
                                         </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $cinema->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                     @else
                                         <li>
                                             <button class="dropdown-item change-status" data-id="{{ $cinema->id }}"
                                                 data-status="1">
                                                 <i class="fas fa-toggle-on"></i> Mark as Active
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $cinema->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
                                             </button>
                                         </li>
                                     @endif
@@ -178,6 +190,12 @@
                                             <i class="fas fa-toggle-off"></i> Mark as Inactive
                                         </button>
                                     </li>
+                                    <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $cinema->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                 `);
                             } else {
                                 actionsDropdown.html(`
@@ -186,6 +204,12 @@
                                             <i class="fas fa-toggle-on"></i> Mark as Active
                                         </button>
                                     </li>
+                                    <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $cinema->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
                                 `);
                             }
                         } else {
@@ -208,6 +232,10 @@
                     }
                 });
             });
+
+
+            setupDestroyHandler('Cinema', "{{ route('cinemas.destroy', ':id') }}");
+
         });
     </script>
 @endpush

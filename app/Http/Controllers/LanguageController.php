@@ -144,4 +144,30 @@ class LanguageController extends Controller
             ]);
         }
     }
+    public function destroy(string $id)
+    {
+        //
+        try {
+            $language = Language::find($id);
+            if (!$language) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Language not found',
+                    'data' => null
+                ]);
+            }
+            $language->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Language is deleted',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
+    }
 }

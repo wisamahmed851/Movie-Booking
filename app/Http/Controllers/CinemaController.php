@@ -359,4 +359,30 @@ class CinemaController extends Controller
             return redirect()->back()->with('error', 'An error occurred. Please try again.');
         }
     }
+
+    public function destroy($id){
+        //
+        try {
+            $cinema = Cinema::find($id);
+            if (!$cinema) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Cinema not found',
+                    'data' => null
+                ]);
+            }
+            $cinema->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cinema is deleted',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex->getMessage(),
+                'data' => null
+            ]);
+        }
+    }
 }

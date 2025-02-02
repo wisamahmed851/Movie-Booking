@@ -26,7 +26,7 @@ class BlogsController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'short_description' => 'required|string|max:255',
+            'short_description' => 'required|string',
             'cover_image' => 'required|image',
             'long_description' => 'required|string'
         ]);
@@ -164,5 +164,31 @@ class BlogsController extends Controller
         }])->find($id);
 
         return view('frontend.blogs.blogDetail', compact('blog'));
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $blog = Blogs::find($id);
+            if (!$blog) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Blog not found',
+                    'data' => null
+                ]);
+            }
+            $blog->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Blog is deleted',
+                'data' => null
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $ex,
+                'data' => null
+            ]);
+        }
     }
 }

@@ -46,11 +46,23 @@
                                                 <i class="fas fa-toggle-off"></i> Mark as Inactive
                                             </button>
                                         </li>
-                                        @else
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $language->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
+                                    @else
                                         <li>
                                             <button class="dropdown-item change-status" data-id="{{ $language->id }}"
                                                 data-status="1">
                                                 <i class="fas fa-toggle-on"></i> Mark as Active
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $language->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
                                             </button>
                                         </li>
                                     @endif
@@ -132,7 +144,7 @@
                             if (newStatus == 1) {
                                 statusCell.text('Active'); // Update status text
                                 button.data('status', 0); // Update button data-status
-                                
+
                             } else {
                                 statusCell.text('InActive'); // Update status text
                                 button.data('status', 1); // Update button data-status
@@ -140,11 +152,11 @@
                             }
                             // Update the dropdown menu for Actions
                             const actionsDropdown = row.find(
-                            '.dropdown-menu'); // Locate dropdown menu
+                                '.dropdown-menu'); // Locate dropdown menu
                             if (newStatus == 1) {
                                 actionsDropdown.html(`
                 <li>
-                    <a href="/movies/edit/${button.data('id')}" class="dropdown-item">
+                    <a href="{{ route('languages.edit', ['id' => $language->id]) }}" class="dropdown-item">
                         <i class="fas fa-edit"></i> Edit
                     </a>
                 </li>
@@ -153,6 +165,12 @@
                         <i class="fas fa-toggle-off"></i> Mark as Inactive
                     </button>
                 </li>
+                <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $language->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
             `);
                             } else {
                                 actionsDropdown.html(`
@@ -161,6 +179,12 @@
                         <i class="fas fa-toggle-on"></i> Mark as Active
                     </button>
                 </li>
+                <li>
+                                            <button class="dropdown-item destroy" data-id="{{ $language->id }}"
+                                                data-status="0">
+                                                <i class="fas fa-toggle-off"></i> Destroy
+                                            </button>
+                                        </li>
             `);
                             }
                         } else {
@@ -183,6 +207,8 @@
                     }
                 });
             });
+            setupDestroyHandler('Language', "{{ route('languages.destroy', ':id') }}");
+
 
         });
     </script>

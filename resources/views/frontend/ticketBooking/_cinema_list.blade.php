@@ -14,6 +14,7 @@
             <div class="movie-schedule">
                 @foreach ($shows as $show)
                     <div class="item">
+                        <input type="hidden" value="{{ $show['assigned_show_id'] }}" class="assigned_show_id">
                         {{ \Carbon\Carbon::parse($show['start_time'])->format('H:i') }}
                     </div>
                 @endforeach
