@@ -157,6 +157,10 @@ Route::prefix('')->group(
             Route::get('/details/{id}', 'details')->name('movies.details');
             Route::get('/ticket-plan/{id}', 'ticketplan')->name('movies.ticket-plan');
             Route::get('/seats-plan/{id}', 'seatsplan')->name('movies.seat-plan');
+            Route::POST('/check-out', 'checkout')->name('movies.check-out');
+            Route::POST('/confirm-booking', 'confirmBooking')->name('movies.confirm-booking');
+            Route::get('/ticket/{id}', 'showTicket')->name('movies.ticket.show');
+            Route::get('/ticket/{id}/download', 'downloadTicket')->name('movies.ticket.download');
         });
         Route::controller(UserController::class)->prefix('user')->group(function () {
             Route::get('/login', 'loginform')->name('user.login')->middleware(Guest::class);

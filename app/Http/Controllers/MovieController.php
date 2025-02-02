@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookingDetails;
+use App\Models\Bookings;
 use App\Models\Cinema;
 use App\Models\CinemaSeat;
 use App\Models\City;
@@ -13,6 +15,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -431,7 +434,6 @@ class MovieController extends Controller
             ->distinct('amd.show_date')
             ->pluck('amd.show_date');
 
-        log::error($formattedData);
 
         return view('frontend.ticketBooking.ticketPlane', compact('formattedData', 'cinemas', 'cities', 'availableDates'));
     }
@@ -462,6 +464,7 @@ class MovieController extends Controller
             ->join('movies as m', 'am.movie_id', '=', 'm.id')
             ->select(
                 'm.title as movie_title',
+                'amd.id as assign_movies_details_id',
                 'm.language_ids as language_ids',
                 'm.id as movie_id',
                 'm.banner_image_id as banner_image_id',
@@ -479,33 +482,43 @@ class MovieController extends Controller
 
         // Fetch all seat numbers for this cinema
         $seats = DB::table('cinema_seats as cs')
-            ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
-            ->where('cs.cinema_id', $query->cinema_id)
-            ->select('cs.seat_number', 'csc.seat_category', 'cs.id', 'csc.price_per_seat') // Get only seat numbers
-            ->get();
-
+        ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
+        ->leftJoin('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
+        ->leftJoin('bookings as b', function ($join) use ($id) {
+            $join->on('bd.booking_id', '=', 'b.id')
+                ->where('b.assign_movies_details_id', '=', $id);
+        })
+        ->where('cs.cinema_id', $query->cinema_id)
+        ->select(
+            'cs.id',
+            'cs.seat_number',
+            'csc.seat_category',
+            'csc.price_per_seat',
+            'cs.cinema_id',
+            DB::raw('MAX(CASE WHEN b.id IS NOT NULL THEN 1 ELSE 0 END) as is_booked')
+        )
+        ->groupBy('cs.id', 'cs.seat_number', 'csc.seat_category', 'csc.price_per_seat', 'cs.cinema_id')
+        ->get();
         // Group seats by category
         $groupedSeats = $seats->groupBy('seat_category');
 
         $sortedSeats = [];
         $categoriesOrder = ['silver', 'gold', 'platinum']; // Define the desired order
-
         foreach ($categoriesOrder as $category) {
             if (isset($groupedSeats[$category])) {
                 $sortedSeats[$category] = $groupedSeats[$category];
             }
         }
-        Log::info($groupedSeats);
         // Fetch language names
         $languagesName = [];
         if ($query->language_ids) {
             $languagesName = Language::whereIn('id', explode(',', $query->language_ids))->pluck('name')->toArray();
         }
+        Log::info($sortedSeats);
 
         // Fetch banner image
         $bannerImage = MovieImage::find($query->banner_image_id);
         $bannerImagePath = $bannerImage ? $bannerImage->banner_image_path : null;
-
         // Prepare response data
         $formattedData = [
             'movie' => $query->movie_title ?? 'Unknown',
@@ -515,9 +528,101 @@ class MovieController extends Controller
             'show_date' => $query->show_date,
             'start_time' => $query->start_time,
             'cinema_name' => $query->cinema_name,
+            'assign_movies_details_id' => $query->assign_movies_details_id,
             'seats' => $sortedSeats, // Grouped seat list
         ];
 
         return view('frontend.seatPlans.seatPlan', compact('formattedData'));
+    }
+    public function checkout(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'selected_seats' => 'required',
+            'total_price' => 'required|numeric',
+            'movie_id' => 'required|exists:movies,id',
+            'movie_title' => 'required',
+            'show_date' => 'required|date',
+            'start_time' => 'required',
+            'cinema_name' => 'required',
+            'banner_image' => 'required',
+            'assign_movies_details_id' => 'required',
+        ]);
+
+        // Fetch seat details from the database with a join on cinema_seats_categories
+        $seatIds = explode(',', $request->input('selected_seats'));
+        $seats = CinemaSeat::whereIn('cinema_seats.id', $seatIds)
+            ->join('cinema_seats_categories', 'cinema_seats.cinema_seats_categories_id', '=', 'cinema_seats_categories.id')
+            ->select(
+                'cinema_seats.id as seat_id',
+                'cinema_seats.seat_number',
+                'cinema_seats_categories.price_per_seat',
+                'cinema_seats_categories.id as cinema_seats_categories_id',
+            )
+            ->get();
+
+        $movieImage = DB::table('movies as m')
+            ->where('m.id', $request->movie_id)
+            ->join('movie_images as mi', 'm.banner_image_id', '=', 'mi.id')
+            ->select('mi.banner_image_path as image_path')
+            ->first();
+
+        // Calculate total price based on fetched seats
+        $totalPrice = $seats->sum('price_per_seat');
+        // Prepare the data for the view
+        $checkoutData = [
+            'selected_seats' => $seats->map(function ($seat) {
+                return [
+                    'seat_id' => $seat->seat_id,
+                    'seat_number' => $seat->seat_number,
+                    'price_per_seat' => $seat->price_per_seat,
+                    'cinema_seats_categories_id' => $seat->cinema_seats_categories_id
+                ];
+            })->toArray(),
+            'total_price' => $totalPrice,
+            'movie_id' => $request->input('movie_id'),
+            'movie_image' => $movieImage ? $movieImage->image_path : null,
+            'assign_movies_details_id'
+            => $request->input('assign_movies_details_id'),
+            'movie_title' => $request->input('movie_title'),
+            'show_date' => $request->input('show_date'),
+            'start_time' => $request->input('start_time'),
+            'cinema_name' => $request->input('cinema_name'),
+            'banner_image' => $request->input('banner_image'),
+        ];
+
+        return view('frontend.checkOut.check-out', compact('checkoutData'));
+    }
+
+    public function confirmBooking(Request $request)
+    {
+        DB::beginTransaction();
+
+        $validated = $request->validate([
+            'assign_movies_details_id' => 'required|exists:assign_movies_details,id',
+            'total_price' => 'required|numeric',
+            'selected_seats' => 'required|json',
+        ]);
+
+        // Create booking
+        $booking = Bookings::create([
+            'user_id' => Auth::user()->id,
+            'assign_movies_details_id' => $validated['assign_movies_details_id'],
+            'total_price' => $validated['total_price'],
+            'booking_date' => now(),
+        ]);
+
+        // Create booking details
+        $seats = json_decode($request->selected_seats, true);
+        foreach ($seats as $seat) {
+            BookingDetails::create([
+                'booking_id' => $booking->id,
+                'seat_id' => $seat['seat_id'], // Changed from 'id' to 'seat_id'
+                'cinema_seats_categories_id' => $seat['cinema_seats_categories_id'],
+            ]);
+        }
+
+        DB::commit();
+        return redirect()->route('front.index')->with('success', 'Booking confirmed!');
     }
 }

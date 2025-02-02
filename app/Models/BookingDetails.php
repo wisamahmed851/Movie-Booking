@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BookingDetail extends Model
+class BookingDetails extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -14,7 +14,8 @@ class BookingDetail extends Model
 
     protected $fillable = [
         'booking_id',
-        'cinema_seat_id',
+        'seat_id',
+        'cinema_seats_categories_id',
     ];
 
     // Relationship with Booking

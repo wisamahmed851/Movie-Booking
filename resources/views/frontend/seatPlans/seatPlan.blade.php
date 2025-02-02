@@ -65,10 +65,9 @@
                                             @foreach ($seatChunk as $seat)
                                                 <li class="front-seat">
                                                     <ul>
-                                                        <li class="single-seat seat-free" data-seat-id="{{ $seat->id }}"
-                                                            data-seat-number="{{ $seat->seat_number }}"
-                                                            data-seat-price="{{ $seat->price_per_seat }}">
-                                                            <img src="{{ asset('Frontend/images/movie/seat01-free.png') }}"
+                                                        <li class="single-seat @if ($seat->is_booked) seat-booked @else seat-free @endif"
+                                                            @if (!$seat->is_booked) data-seat-id="{{ $seat->id }}"data-seat-number="{{ $seat->seat_number }}"data-seat-price="{{ $seat->price_per_seat }}" @endif>
+                                                            <img src="{{ asset($seat->is_booked ? 'Frontend/images/movie/seat01-booked.png' : 'Frontend/images/movie/seat01-free.png') }}"
                                                                 alt="seat">
                                                             <span class="sit-num">{{ $seat->seat_number }}</span>
                                                         </li>
@@ -95,10 +94,19 @@
                         <h3 class="title" id="total-price">$0</h3>
                     </div>
                     <div class="book-item">
-                        <form id="seat-booking-form" action="" method="POST">
+                        <form id="seat-booking-form" action="{{ route('movies.check-out') }}" method="POST">
                             @csrf
                             <input type="hidden" name="selected_seats" id="selected-seats-input">
                             <input type="hidden" name="total_price" id="total-price-input">
+                            <input type="hidden" name="movie_id" value="{{ $formattedData['movie_id'] }}">
+                            <input type="hidden" name="movie_title" value="{{ $formattedData['movie'] }}">
+                            <input type="hidden" name="show_date" value="{{ $formattedData['show_date'] }}">
+                            <input type="hidden" name="start_time" value="{{ $formattedData['start_time'] }}">
+                            <input type="hidden" name="cinema_name" value="{{ $formattedData['cinema_name'] }}">
+                            <input type="hidden" name="banner_image" value="{{ $formattedData['banner_image'] }}">
+                            <input type="hidden" name="assign_movies_details_id"
+                                value="{{ $formattedData['assign_movies_details_id'] }}">
+
                             <button type="submit" class="custom-button">proceed</button>
                         </form>
                     </div>
@@ -127,6 +135,15 @@
         .seat-free.selected img {
             content: url("{{ asset('Frontend/images/movie/seat01-booked.png') }}");
         }
+
+        .seat-booked {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .seat-booked img {
+            content: url("{{ asset('Frontend/images/movie/seat01.png') }}") !important;
+        }
     </style>
 @endpush
 
@@ -150,7 +167,7 @@
                     if (index > 0 && index % maxSeatsPerLine === 0) {
                         formattedSeats += '<br>'; // Add a line break after every `maxSeatsPerLine` seats
                     }
-                    formattedSeats += seat + ', ';
+                    formattedSeats += seat.seatNumber + ', ';
                 });
 
                 // Remove the trailing comma and space
@@ -158,12 +175,12 @@
 
                 selectedSeatsElement.innerHTML = formattedSeats || 'No seats selected';
                 totalPriceElement.textContent = `${totalPrice}.Rs`;
-                selectedSeatsInput.value = selectedSeats.join(',');
+                selectedSeatsInput.value = selectedSeats.map(seat => seat.id).join(',');
                 totalPriceInput.value = totalPrice;
             }
 
             // Add event listeners to each seat
-            document.querySelectorAll('.single-seat').forEach(seat => {
+            document.querySelectorAll('.single-seat.seat-free').forEach(seat => {
                 seat.addEventListener('click', function() {
                     const seatId = this.getAttribute('data-seat-id');
                     const seatNumber = this.getAttribute('data-seat-number');
@@ -172,12 +189,16 @@
                     if (this.classList.contains('selected')) {
                         // Deselect the seat
                         this.classList.remove('selected');
-                        selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+                        selectedSeats = selectedSeats.filter(seat => seat.id !== seatId);
                         totalPrice -= seatPrice;
                     } else {
                         // Select the seat
                         this.classList.add('selected');
-                        selectedSeats.push(seatNumber);
+                        selectedSeats.push({
+                            id: seatId,
+                            seatNumber: seatNumber,
+                            price: seatPrice
+                        });
                         totalPrice += seatPrice;
                     }
 
@@ -206,7 +227,7 @@
                 }
             }
 
-            // updateTimer();
+            updateTimer();
         });
     </script>
 @endpush

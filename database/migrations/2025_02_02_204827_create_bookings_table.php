@@ -4,8 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBookingsTable extends Migration
+return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up()
     {
         Schema::create('bookings', function (Blueprint $table) {
@@ -14,7 +17,6 @@ class CreateBookingsTable extends Migration
             $table->decimal('total_price', 8, 2); // Total price of the booking
             $table->date('booking_date'); // Date of the booking
             $table->unsignedBigInteger('assign_movies_details_id'); // Foreign key for assign_movies_details table
-            $table->string('status')->default('pending'); // Booking status (e.g., pending, confirmed, cancelled)
             $table->timestamps(); // created_at and updated_at
             $table->softDeletes(); // deleted_at for soft deletes
 
@@ -28,4 +30,4 @@ class CreateBookingsTable extends Migration
     {
         Schema::dropIfExists('bookings');
     }
-}
+};
