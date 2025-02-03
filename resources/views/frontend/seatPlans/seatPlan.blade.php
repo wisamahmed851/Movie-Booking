@@ -3,7 +3,7 @@
 @section('content')
     <input type="hidden" value="{{ $formattedData['movie_id'] }}" id="movie_id">
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner hero-area bg_img seat-plan-banner" data-background="assets/images/banner/banner04.jpg">
+    <section class="details-banner hero-area bg_img seat-plan-banner" data-background="{{asset('storage/' . $formattedData['banner_image'])}}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-content style-two">
@@ -206,7 +206,6 @@
                 });
             });
 
-            // Timer functionality
             let timeLeft = 300; // 5 minutes in seconds
             let timerDisplay = document.querySelector(".time-remain");
 
@@ -215,7 +214,6 @@
                 let seconds = timeLeft % 60;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
                 timerDisplay.textContent = `${minutes}:${seconds}`;
-
                 let movieId = document.getElementById("movie_id").value;
                 let url = "{{ route('movies.details', ':movie_id') }}".replace(':movie_id', movieId);
 
@@ -226,7 +224,6 @@
                     window.location.href = url;
                 }
             }
-
             updateTimer();
         });
     </script>

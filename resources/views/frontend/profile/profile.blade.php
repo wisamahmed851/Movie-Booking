@@ -38,38 +38,41 @@
                 <div class="col-lg-8">
                     <div class="card mb-4" style="background-color: #001232; border: none;">
                         <div class="card-body">
+                            <!-- Name -->
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-3">
                                     <p class="mb-0"
                                         style="background: linear-gradient(45deg, #e6485f, #5560FF); -webkit-background-clip: text; color: transparent;">
                                         Full Name</p>
                                 </div>
-                                <div class="col-sm-9 text-end">
-                                    <p class="text-muted mb-0">{{ $user->name }}</p>
+                                <div class="col-sm-9">
+                                    <p class="mb-0 text-white">{{ $user->name }}</p> <!-- Changed text color to white -->
                                 </div>
                             </div>
                             <hr style="border-color: #9455B9; background: linear-gradient(45deg, #e6485f, #5560FF);">
 
+                            <!-- Email -->
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-3">
                                     <p class="mb-0"
                                         style="background: linear-gradient(45deg, #e6485f, #5560FF); -webkit-background-clip: text; color: transparent;">
                                         Email</p>
                                 </div>
-                                <div class="col-sm-9 text-end">
-                                    <p class="text-muted mb-0">{{ $user->email }}</p>
+                                <div class="col-sm-9">
+                                    <p class="mb-0 text-white">{{ $user->email }}</p> <!-- Changed text color to white -->
                                 </div>
                             </div>
                             <hr style="border-color: #9455B9; background: linear-gradient(45deg, #e6485f, #5560FF);">
+
+                            <!-- Password -->
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-3">
                                     <p class="mb-0"
                                         style="background: linear-gradient(45deg, #e6485f, #5560FF); -webkit-background-clip: text; color: transparent;">
                                         Password</p>
                                 </div>
-                                <div class="col-sm-9 text-end d-flex justify-content-between align-items-center">
-                                    <p class="text-muted mb-0">******</p>
-
+                                <div class="col-sm-9 d-flex justify-content-between align-items-center">
+                                    <p class="mb-0 text-white">******</p> <!-- Changed text color to white -->
                                     <a class="btn btn-sm passworChange" data-bs-toggle="modal" data-bs-toggle="modal"
                                         style="background: linear-gradient(45deg, #e6485f, #5560FF); color: white; border-radius: 20px;">
                                         Change Password
@@ -77,6 +80,8 @@
                                 </div>
                             </div>
                             <hr style="border-color: #9455B9; background: linear-gradient(45deg, #e6485f, #5560FF);">
+
+                            <!-- Phone -->
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-3">
                                     <p class="mb-0"
@@ -84,13 +89,13 @@
                                         Phone</p>
                                 </div>
                                 <div class="col-sm-9 d-flex justify-content-between align-items-center">
-                                    <p class="text-muted mb-0">
+                                    <p class="mb-0 text-white">
                                         @if ($user->phone)
                                             {{ $user->phone }}
                                         @else
                                             Not Available
                                         @endif
-                                    </p>
+                                    </p> <!-- Changed text color to white -->
                                     @if (!$user->phone)
                                         <a class="btn btn-sm update-info-btn" data-type="phone"
                                             style="background: linear-gradient(45deg, #e6485f, #5560FF); color: white; border-radius: 20px;">
@@ -101,6 +106,7 @@
                             </div>
                             <hr style="border-color: #9455B9; background: linear-gradient(45deg, #e6485f, #5560FF);">
 
+                            <!-- Address -->
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-3">
                                     <p class="mb-0"
@@ -108,13 +114,13 @@
                                         Address</p>
                                 </div>
                                 <div class="col-sm-9 d-flex justify-content-between align-items-center">
-                                    <p class="text-muted mb-0">
+                                    <p class="mb-0 text-white">
                                         @if ($user->address)
                                             {{ $user->address }}
                                         @else
                                             Not Available
                                         @endif
-                                    </p>
+                                    </p> <!-- Changed text color to white -->
                                     @if (!$user->address)
                                         <a class="btn btn-sm update-info-btn" data-type="address"
                                             style="background: linear-gradient(45deg, #e6485f, #5560FF); color: white; border-radius: 20px;">
@@ -123,15 +129,13 @@
                                     @endif
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </section>
+
     <!-- Update Info Modal -->
     <div class="modal fade" id="modaaaaal" tabindex="-1" aria-labelledby="updateInfoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -195,31 +199,35 @@
             </div>
         </div>
     </div>
-
-
-    <!-- JavaScript -->
-    @push('styles')
-        <style>
-            .update-info-btn,
-            .passworChange {
-                cursor: pointer;
-                position: relative;
-                z-index: 98;
-                padding: 5px 15px;
-            }
-
-            .profile-img {
-                cursor: pointer;
-                position: relative;
-                z-index: 98;
-            }
-
-            .profile-img-container:hover .hover-overlay {
-                opacity: 1;
-            }
-        </style>
-    @endpush
 @endsection
+
+@push('styles')
+    <style>
+        .update-info-btn,
+        .passworChange {
+            cursor: pointer;
+            position: relative;
+            z-index: 98;
+            padding: 5px 15px;
+        }
+
+        .profile-img {
+            cursor: pointer;
+            position: relative;
+            z-index: 98;
+        }
+
+        .profile-img-container:hover .hover-overlay {
+            opacity: 1;
+        }
+
+        /* Ensure text is white */
+        .text-white {
+            color: white !important;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
@@ -235,6 +243,7 @@
                 changePasswordModal.show();
             });
         });
+
         $(document).ready(function() {
             console.log("jQuery Loaded Successfully");
 
@@ -257,6 +266,7 @@
 
                 $("#modaaaaal").modal("show");
             });
+
             $("#updateInfoForm").submit(function(e) {
                 e.preventDefault();
 
@@ -304,6 +314,7 @@
                     }
                 });
             });
+
             $('#changePasswordForm').on('submit', function(e) {
                 e.preventDefault();
 
@@ -356,7 +367,6 @@
                     }
                 });
             });
-
         });
     </script>
 @endpush

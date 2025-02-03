@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'strip' => [
+        'secret' => env('STRIPE_SECRET'),
+    ],
+
 ];

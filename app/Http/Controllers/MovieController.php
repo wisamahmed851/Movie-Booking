@@ -11,6 +11,7 @@ use App\Models\Genre;
 use App\Models\Language;
 use App\Models\Movie;
 use App\Models\MovieImage;
+use Barryvdh\DomPDF\Facade\PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +19,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Stripe\Charge;
+use Stripe\Stripe;
 
 class MovieController extends Controller
 {
@@ -553,6 +557,18 @@ class MovieController extends Controller
     }
     public function checkout(Request $request)
     {
+        // If it's a GET request, check for payment status in the query parameters
+        if ($request->isMethod('get')) {
+            $paymentStatus = $request->query('payment');
+            $bookingStatus = $request->query('booking');
+            $checkoutData = session('checkoutData');
+
+            return view('frontend.checkOut.check-out', compact(
+                'checkoutData',
+                'paymentStatus',
+                'bookingStatus'
+            ));
+        }
         // Validate the request
         $request->validate([
             'selected_seats' => 'required',
@@ -607,10 +623,41 @@ class MovieController extends Controller
             'cinema_name' => $request->input('cinema_name'),
             'banner_image' => $request->input('banner_image'),
         ];
-
+        session(['checkoutData' => $checkoutData]); // Store the checkout data in the session
         return view('frontend.checkOut.check-out', compact('checkoutData'));
     }
+    public function processPayment(Request $request)
+    {
+        \Log::info('Payment process started', ['request' => $request->all()]);
 
+        try {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => 'Movie Booking',
+                        ],
+                        'unit_amount' => $request->amount,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('movies.check-out') . '?payment=success',
+                'cancel_url' => route('movies.check-out') . '?payment=failed',
+            ]);
+
+            \Log::info('Stripe session created', ['session' => $session]);
+
+            return response()->json(['id' => $session->id]);
+        } catch (\Exception $e) {
+            \Log::error('Payment process failed', ['error' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
     public function confirmBooking(Request $request)
     {
         DB::beginTransaction();
@@ -623,7 +670,7 @@ class MovieController extends Controller
 
         // Create booking
         $booking = Bookings::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'assign_movies_details_id' => $validated['assign_movies_details_id'],
             'total_price' => $validated['total_price'],
             'booking_date' => now(),
@@ -634,12 +681,96 @@ class MovieController extends Controller
         foreach ($seats as $seat) {
             BookingDetails::create([
                 'booking_id' => $booking->id,
-                'seat_id' => $seat['seat_id'], // Changed from 'id' to 'seat_id'
+                'seat_id' => $seat['seat_id'],
                 'cinema_seats_categories_id' => $seat['cinema_seats_categories_id'],
             ]);
         }
 
         DB::commit();
-        return redirect()->route('front.index')->with('success', 'Booking confirmed!');
+
+        // Store booking ID in session for PDF generation
+        session(['last_booking_id' => $booking->id]);
+
+        return redirect()->route('movies.check-out', ['booking' => 'success']);
+    }
+
+
+
+    public function viewTicket($id)
+    {
+        $booking = DB::table('bookings as b')
+            ->where('b.id', $id)
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->join('assign_movies_details as amd', 'b.assign_movies_details_id', '=', 'amd.id')
+            ->join('cinema_timings as ct', 'amd.cinema_timings_id', '=', 'ct.id')
+            ->join('assign_movies as am', 'amd.assign_movies_id', '=', 'am.id')
+            ->join('cinemas as c', 'am.cinema_id', '=', 'c.id')
+            ->join('movies as m', 'am.movie_id', '=', 'm.id')
+            ->select(
+                'b.id as booking_id',
+                'm.title as movie_title',
+                'm.language_ids as language_ids',
+                'm.id as movie_id',
+                'c.name as cinema_name',
+                'amd.show_date',
+                'amd.id as assigned_show_id',
+                'ct.start_time as show_start_time',
+                'ct.end_time as show_end_time',
+                'b.total_price',
+                'b.booking_date'
+            )
+            ->first();
+
+        // Fetch seat numbers for this booking
+        $seats = DB::table('cinema_seats as cs')
+            ->join('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
+            ->join('cinema_seats_categories as csc', 'bd.cinema_seats_categories_id', '=', 'csc.id')
+            ->where('bd.booking_id', $id)
+            ->select('cs.seat_number', 'csc.seat_category')
+            ->get();
+
+        // Log the seats and booking as JSON
+        Log::info(json_encode($seats));
+        Log::info(json_encode($booking));
+
+        // Generate the PDF
+        return PDF::loadView('frontend.pdf.ticket', compact('booking', 'seats'))->stream('ticket.pdf');
+    }
+
+
+    public function downloadTicket($id)
+    {
+        $booking = DB::table('bookings as b')
+            ->where('b.id', $id)
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->join('assign_movies_details as amd', 'b.assign_movies_details_id', '=', 'amd.id')
+            ->join('cinema_timings as ct', 'amd.cinema_timings_id', '=', 'ct.id')
+            ->join('assign_movies as am', 'amd.assign_movies_id', '=', 'am.id')
+            ->join('cinemas as c', 'am.cinema_id', '=', 'c.id')
+            ->join('movies as m', 'am.movie_id', '=', 'm.id')
+            ->select(
+                'b.id as booking_id',
+                'm.title as movie_title',
+                'm.language_ids as language_ids',
+                'm.id as movie_id',
+                'c.name as cinema_name',
+                'amd.show_date',
+                'amd.id as assigned_show_id',
+                'ct.start_time as show_start_time',
+                'ct.end_time as show_end_time',
+                'b.total_price',
+                'b.booking_date'
+            )
+            ->first();
+
+        // Fetch seat numbers for this booking
+        $seats = DB::table('cinema_seats as cs')
+            ->join('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
+            ->join('cinema_seats_categories as csc', 'bd.cinema_seats_categories_id', '=', 'csc.id')
+            ->where('bd.booking_id', $id)
+            ->select('cs.seat_number', 'csc.seat_category')
+            ->get();
+
+        return PDF::loadView('frontend.pdf.ticket', compact('booking', 'seats'))->download('ticket-' . $id . '.pdf');
     }
 }

@@ -8,9 +8,7 @@
             <div class="details-banner-wrapper">
                 <div class="details-banner-content style-two">
                     <h3 class="title">{{ $checkoutData['movie_title'] }}</h3>
-                    <div class="tags">
-
-                    </div>
+                    <div class="tags"></div>
                 </div>
             </div>
         </div>
@@ -35,8 +33,8 @@
                     </span>
                 </div>
                 <div class="item">
-                    <h5 class="time-remain">05:00</h5>
-                    <p>Mins Left</p>
+                    <h5 class="time-remain"></h5>
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -48,81 +46,46 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
-
-
                     <div class="checkout-widget checkout-card mb-0">
-                        {{-- <h5 class="title">Payment Option </h5>
-                       <ul class="payment-option">
-                            <li class="active">
-                                <a href="#0">
-                                    <img src="assets/images/payment/card.png" alt="payment">
-                                    <span>Credit Card</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#0">
-                                    <img src="assets/images/payment/card.png" alt="payment">
-                                    <span>Debit Card</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#0">
-                                    <img src="assets/images/payment/paypal.png" alt="payment">
-                                    <span>paypal</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <h6 class="subtitle">Enter Your Card Details </h6> --}}
-                        {{-- <form class="payment-card-form">
-                            <div class="form-group w-100">
-                                <label for="card1">Card Details</label>
-                                <input type="text" id="card1">
-                                <div class="right-icon">
-                                    <i class="flaticon-lock"></i>
-                                </div>
-                            </div>
-                            <div class="form-group w-100">
-                                <label for="card2"> Name on the Card</label>
-                                <input type="text" id="card2">
-                            </div>
-                            <div class="form-group">
-                                <label for="card3">Expiration</label>
-                                <input type="text" id="card3" placeholder="MM/YY">
-                            </div>
-                            <div class="form-group">
-                                <label for="card4">CVV</label>
-                                <input type="text" id="card4" placeholder="CVV">
-                            </div>
-                            <div class="form-group check-group">
-                                <input id="card5" type="checkbox" checked>
-                                <label for="card5">
-                                    <span class="title">QuickPay</span>
-                                    <span class="info">Save this card information to my Boleto account and make faster
-                                        payments.</span>
-                                </label>
-                            </div>
-                        </form> --}}
-                        <form method="POST" action="{{ route('movies.confirm-booking') }}">
+                        <form id="payment-form">
                             @csrf
-                            <input type="hidden" name="assign_movies_details_id"
-                                value="{{ $checkoutData['assign_movies_details_id'] }}">
-                            <input type="hidden" name="total_price" value="{{ $checkoutData['total_price'] }}">
-                            <input type="hidden" name="selected_seats"
-                                value="{{ json_encode($checkoutData['selected_seats']) }}">
-
-                            <div class="checkout-widget checkout-card mb-0">
-                                <div class="form-group">
-                                    <button type="submit" class="custom-button">Confirm Booking</button>
-                                </div>
-                                <p class="notice">
-                                    By Clicking "Confirm Booking" you agree to the <a href="#0">terms and
-                                        conditions</a>
-                                </p>
+                            <div class="form-group">
+                                <button type="button" id="pay-button" class="custom-button">Proceed to Payment</button>
                             </div>
                         </form>
-                        {{-- <p class="notice">
-                            By Clicking "Make Payment" you agree to the <a href="#0">terms and conditions</a>
-                        </p> --}}
+                        @if (request('booking') === 'success' && session('last_booking_id'))
+                            <div class="booking-confirmed">
+                                <button class="custom-button" disabled>Booking Confirmed</button>
+                                <div class="pdf-buttons mt-3">
+                                    <a href="{{ route('movies.ticket.view', ['id' => session('last_booking_id')]) }}"
+                                        class="custom-button" target="_blank">View PDF</a>
+                                    <a href="{{ route('movies.ticket.download', ['id' => session('last_booking_id')]) }}"
+                                        class="custom-button">Download PDF</a>
+                                </div>
+                            </div>
+                        @else
+                            <form method="POST" action="{{ route('movies.confirm-booking') }}" id="booking-form">
+                                @csrf
+                                <input type="hidden" name="assign_movies_details_id"
+                                    value="{{ $checkoutData['assign_movies_details_id'] }}">
+                                <input type="hidden" name="total_price" value="{{ $checkoutData['total_price'] }}">
+                                <input type="hidden" name="selected_seats"
+                                    value="{{ json_encode($checkoutData['selected_seats']) }}">
+                                <input type="hidden" id="movie_id" name="movie_id"
+                                    value="{{ $checkoutData['movie_id'] }}">
+
+                                <div class="checkout-widget checkout-card mb-0">
+                                    <div class="form-group">
+                                        <button type="submit" id="confirm-booking-button" class="custom-button"
+                                            disabled>Confirm Booking</button>
+                                    </div>
+                                    <p class="notice">
+                                        By Clicking "Confirm Booking" you agree to the <a href="#0">terms and
+                                            conditions</a>
+                                    </p>
+                                </div>
+                            </form>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4">
@@ -141,7 +104,6 @@
                                     </span>
                                 </div>
                             </li>
-
                         </ul>
                         <ul class="side-shape">
                             <li>
@@ -156,7 +118,7 @@
                         </ul>
                     </div>
                     <div class="proceed-area  text-center">
-                        <h6 class="subtitle"><span>Tottal Amount</span><span>{{ $checkoutData['total_price'] }} Rs</span>
+                        <h6 class="subtitle"><span>Total Amount</span><span>{{ $checkoutData['total_price'] }} Rs</span>
                         </h6>
                     </div>
                 </div>
@@ -165,8 +127,24 @@
     </div>
     <!-- ==========Movie-Section========== -->
 @endsection
+
 @push('styles')
     <style>
+        .pdf-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .booking-confirmed {
+            text-align: center;
+        }
+
+        .booking-confirmed button[disabled] {
+            background: #28a745;
+            cursor: not-allowed;
+        }
+
         .timming-show {
             border-radius: 5px;
             padding-top: 5px;
@@ -181,30 +159,87 @@
         }
     </style>
 @endpush
+
 @push('scripts')
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+            const payButton = document.getElementById('pay-button');
+            const confirmBookingButton = document.getElementById('confirm-booking-button');
 
-            let timeLeft = 300; // 5 minutes in seconds
-            let timerDisplay = document.querySelector(".time-remain");
+            // Check for payment success in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentStatus = urlParams.get('payment');
 
-            function updateTimer() {
-                let minutes = Math.floor(timeLeft / 60);
-                let seconds = timeLeft % 60;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-                timerDisplay.textContent = `${minutes}:${seconds}`;
-
-                let movieId = document.getElementById("movie_id").value;
-                let url = "{{ route('movies.details', ':movie_id') }}".replace(':movie_id', movieId);
-
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    setTimeout(updateTimer, 1000);
-                } else {
-                    window.location.href = url;
-                }
+            if (paymentStatus === 'success') {
+                confirmBookingButton.disabled = false;
+                Toastify({
+                    text: "Payment successful! You can now confirm your booking.",
+                    backgroundColor: "green",
+                    duration: 3000
+                }).showToast();
+                payButton.style.display = 'none';
+            } else if (paymentStatus === 'failed') {
+                Toastify({
+                    text: "Payment failed. Please try again.",
+                    backgroundColor: "red",
+                    duration: 3000
+                }).showToast();
             }
-            updateTimer();
+           
+            payButton.addEventListener('click', async () => {
+                try {
+                    const response = await fetch("{{ route('movies.ticket.payment') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            amount: {{ $checkoutData['total_price'] }} *
+                                100, // Convert to cents
+                            currency: 'usd'
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const session = await response.json();
+
+                    const result = await stripe.redirectToCheckout({
+                        sessionId: session.id
+                    });
+
+                    if (result.error) {
+                        Toastify({
+                            text: result.error.message,
+                            backgroundColor: "red",
+                            duration: 3000
+                        }).showToast();
+                    }
+                } catch (error) {
+                    console.error('Error during payment process:', error);
+                    Toastify({
+                        text: "An error occurred while processing your payment. Please try again.",
+                        backgroundColor: "red",
+                        duration: 3000
+                    }).showToast();
+                }
+            });
+            @if (request('booking') === 'success' && session('last_booking_id'))
+                confirmBookingButton.disabled = false;
+                Toastify({
+                    text: "Payment successful! You can now confirm your booking.",
+                    backgroundColor: "green",
+                    duration: 3000
+                }).showToast();
+                payButton.style.display = 'none';
+            @endif
+            
         });
     </script>
 @endpush
