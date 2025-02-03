@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/nice-select.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.animatedheadline.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ asset('frontend/css/main.css') }}">
     <link rel="icon" href="{{ asset('frontend/css/img/mdb-favicon.ico" type="image/x-icon') }}" />
     <!-- Font Awesome -->
@@ -63,7 +65,7 @@
     <!-- ==========Preloader========== -->
     <!-- ==========Overlay========== -->
     <div class="overlay"></div>
-    <a href="#0" class="scrollToTop">
+    <a href="" class="scrollToTop">
         <i class="fas fa-angle-up"></i>
     </a>
     <!-- ==========Overlay========== -->
@@ -150,33 +152,33 @@ href="{{ route('user.profile') }} " @endif
         <div class="container">
             <div class="footer-top">
                 <div class="logo">
-                    <a href="index-1.html">
+                    <a href="{{route('front.index')}}">
                         <img src="{{ asset('frontend/images/footer/logo.png') }}" alt="footer">
                     </a>
                 </div>
                 <ul class="social-icons">
                     <li>
-                        <a href="#0">
+                        <a href="">
                             <i class="fab fa-facebook-f"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="#0" class="active">
+                        <a href="" class="active">
                             <i class="fab fa-twitter"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="#0">
+                        <a href="">
                             <i class="fab fa-pinterest-p"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="#0">
+                        <a href="">
                             <i class="fab fa-google"></i>
                         </a>
                     </li>
                     <li>
-                        <a href="#0">
+                        <a href="">
                             <i class="fab fa-instagram"></i>
                         </a>
                     </li>
@@ -185,25 +187,9 @@ href="{{ route('user.profile') }} " @endif
             <div class="footer-bottom">
                 <div class="footer-bottom-area">
                     <div class="left">
-                        <p>Copyright © 2020.All Rights Reserved By <a href="#0">Boleto </a></p>
+                        <p>Copyright © 2020.All Rights Reserved By <a href="">Boleto </a></p>
                     </div>
-                    <ul class="links">
-                        <li>
-                            <a href="#0">About</a>
-                        </li>
-                        <li>
-                            <a href="#0">Terms Of Use</a>
-                        </li>
-                        <li>
-                            <a href="#0">Privacy Policy</a>
-                        </li>
-                        <li>
-                            <a href="#0">FAQ</a>
-                        </li>
-                        <li>
-                            <a href="#0">Feedback</a>
-                        </li>
-                    </ul>
+
                 </div>
             </div>
         </div>
