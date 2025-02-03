@@ -160,6 +160,7 @@
                         attachEventListeners();
                     },
                     error: function() {
+                        attachEventListeners();
                         alert('Error fetching data. Please try again.');
                     }
                 });
@@ -186,6 +187,7 @@
 
             $('#seatPlanLink').on('click', function(event) {
                 if (selectedShowId) {
+                    event.preventDefault();
                     // Use Laravel's route() helper to generate the URL dynamically
                     var url = "{{ route('movies.seat-plan', ':show_id') }}".replace(':show_id', selectedShowId);
                     window.location.href = url; // Redirect to the generated URL

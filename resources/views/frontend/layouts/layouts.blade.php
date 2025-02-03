@@ -138,7 +138,7 @@ href="{{ route('user.profile') }} " @endif
             <div class="container">
                 <div class="newslater-container bg_img" data-background="images/newslater/newslater-bg01.jpg">
                     <div class="newslater-wrapper">
-                        <h5 class="cate">subscribe to Boleto </h5>
+                        <h5 class="cate"></h5>
                         <h3 class="title">to get exclusive benifits</h3>
                         <form class="newslater-form">
                             <input type="text" placeholder="Your Email Address">

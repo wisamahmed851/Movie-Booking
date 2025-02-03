@@ -155,6 +155,7 @@ Route::prefix('')->group(
             Route::get('/list', 'list')->name('movies.grid');
             Route::get('/loadmovies', 'loadmovies')->name('movies.loadmovies');
             Route::get('/details/{id}', 'details')->name('movies.details');
+            Route::post('/rate/{movie}', 'rate')->name('movies.rate');
             Route::get('/ticket-plan/{id}', 'ticketplan')->name('movies.ticket-plan');
             Route::get('/seats-plan/{id}', 'seatsplan')->name('movies.seat-plan');
             Route::POST('/check-out', 'checkout')->name('movies.check-out');

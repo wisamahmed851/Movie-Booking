@@ -329,7 +329,7 @@
                     <div class="article-section padding-bottom">
                         <div class="section-header-1">
                             <h2 class="title">events</h2>
-                            <a class="view-all" href="events.html">View All</a>
+                            <a class="view-all" href="">View All</a>
                         </div>
                         <div class="row mb-30-none justify-content-center">
                             <div class="col-sm-6 col-lg-4">

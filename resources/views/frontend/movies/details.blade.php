@@ -1,3 +1,7 @@
+@php
+    $hours = floor($movie->duration / 60);
+    $minutes = $movie->duration % 60;
+@endphp
 @extends('frontend.layouts.layouts')
 
 @section('content')
@@ -7,7 +11,7 @@
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
                     <img src="{{ asset('storage/' . $movie->coverImage->cover_image_path) }}" alt="{{ $movie->title }}">
-                    <a href="{{$movie->trailler}}" class="video-popup">
+                    <a href="{{ $movie->trailler }}" class="video-popup">
                         <img src="{{ asset('frontend/images/movie/video-button.png') }}" alt="movie">
                     </a>
                 </div>
@@ -15,7 +19,7 @@
                     <h3 class="title">{{ $movie->title }}</h3>
                     <div class="tags">
                         @foreach ($genres as $genre)
-                            <a href="javascript:void(0);" class="genre-link">{{ $genre->name }}</a>
+                            <a href="" class="genre-link">{{ $genre->name }}</a>
                         @endforeach
                     </div>
                     @foreach ($languages as $laguage)
@@ -28,7 +32,8 @@
                                 <i class="fas fa-calendar-alt"></i><span>{{ $movie->release_date }}</span>
                             </div>
                             <div class="item">
-                                <i class="far fa-clock"></i><span>{{ $movie->duration }}</span>
+                                <i
+                                    class="far fa-clock"></i><span>{{ $hours > 0 ? $hours . 'h ' : '' }}{{ $minutes > 0 ? $minutes . 'min' : '' }}</span>
                             </div>
                         </div>
                         <ul class="social-share">
@@ -51,37 +56,55 @@
         <div class="container">
             <div class="book-wrapper offset-lg-3">
                 <div class="left-side">
+                    <!-- Tomatometer (Critic Score) -->
                     <div class="item">
                         <div class="item-header">
                             <div class="thumb">
-                                <img src="{{ asset('Frontend/images/movie/tomato2.png') }}" alt="movie">
+                                <img src="{{ asset('frontend/images/movie/tomato2.png') }}" alt="movie">
                             </div>
                             <div class="counter-area">
-                                <span class="counter-item odometer" data-odometer-final="88">0</span>
+                                <span class="counter-item odometer"
+                                    data-odometer-final="{{ $movie->tomatometer ?? 0 }}">0</span>
                             </div>
                         </div>
                         <p>tomatometer</p>
                     </div>
+
+                    <!-- Audience Score -->
                     <div class="item">
                         <div class="item-header">
                             <div class="thumb">
-                                <img src="{{ asset('Frontend/images/movie/cake2.png') }}" alt="movie">
+                                <img src="{{ asset('frontend/images/movie/cake2.png') }}" alt="movie">
                             </div>
                             <div class="counter-area">
-                                <span class="counter-item odometer" data-odometer-final="88">0</span>
+                                <span class="counter-item odometer"
+                                    data-odometer-final="{{ round($movie->average_rating * 20) }}">0</span>
                             </div>
                         </div>
                         <p>audience Score</p>
                     </div>
+
+                    <!-- User Rating Display -->
                     <div class="item">
                         <div class="item-header">
-                            <h5 class="title">4.5</h5>
+                            <h5 class="title">{{ number_format($movie->average_rating, 1) }}</h5>
                             <div class="rated">
-                                <i class="fas fa-heart"></i>
-                                <i class="fas fa-heart"></i>
-                                <i class="fas fa-heart"></i>
-                                <i class="fas fa-heart"></i>
-                                <i class="fas fa-heart"></i>
+                                @php
+                                    $fullStars = floor($movie->average_rating);
+                                    $hasHalf = $movie->average_rating - $fullStars > 0;
+                                @endphp
+
+                                @for ($i = 0; $i < $fullStars; $i++)
+                                    <i class="fas fa-heart"></i>
+                                @endfor
+
+                                @if ($hasHalf)
+                                    <i class="fas fa-heart-half-alt"></i>
+                                @endif
+
+                                @for ($i = 0; $i < 5 - $fullStars - ($hasHalf ? 1 : 0); $i++)
+                                    <i class="far fa-heart"></i>
+                                @endfor
                             </div>
                         </div>
                         <p>Users Rating</p>
@@ -95,12 +118,13 @@
                                 <i class="fas fa-heart"></i>
                                 <i class="fas fa-heart"></i>
                             </div>
-                            <h5 class="title">0.0</h5>
+                            <h5 class="title">{{ number_format($movie->average_rating, 1) }}</h5>
                         </div>
-                        <p><a href="#0">Rate It</a></p>
+                        <p><a href="#" data-toggle="modal" data-target="#ratingModal">Rate It</a></p>
+                        <!-- Updated line -->
                     </div>
                 </div>
-                <a class="custom-button" href="{{route('movies.ticket-plan' , $movie->id)}}">book tickets</a>
+                <a class="custom-button" href="{{ route('movies.ticket-plan', $movie->id) }}">book tickets</a>
             </div>
         </div>
     </section>
@@ -111,19 +135,6 @@
         <div class="container">
             <div class="row justify-content-center flex-wrap-reverse mb--50">
                 <div class="col-lg-3 col-sm-10 col-md-6 mb-50">
-                    <div class="widget-1 widget-tags">
-                        <ul>
-                            <li>
-                                <a href="#0">2D</a>
-                            </li>
-                            <li>
-                                <a href="#0">imax 2D</a>
-                            </li>
-                            <li>
-                                <a href="#0">4DX</a>
-                            </li>
-                        </ul>
-                    </div>
                     {{-- <div class="widget-1 widget-offer">
                         <h3 class="title">Applicable offer</h3>
                         <div class="offer-body">
@@ -176,13 +187,13 @@
                     <div class="movie-details">
                         <h3 class="title">photos</h3>
                         <div class="details-photos owl-carousel">
-                             @if ($movie->slider_images)
+                            @if ($movie->slider_images)
                                 @foreach ($movie->slider_images as $slider)
                                     <div class="thumb">
-                                    <a href="" class="img-pop">
-                                        <img src="{{ asset('storage/' . $slider) }}" alt="movie">
-                                    </a>
-                                </div>
+                                        <a href="" class="img-pop">
+                                            <img src="{{ asset('storage/' . $slider) }}" alt="movie">
+                                        </a>
+                                    </div>
                                 @endforeach
                             @else
                                 No images available
@@ -501,4 +512,63 @@
         </div>
     </section>
     <!-- ==========Movie-Section========== -->
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="title">Rate {{ $movie->title }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('movies.rate', $movie->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="rating-area text-center">
+                            <div class="stars">
+                                @for ($i = 5; $i >= 1; $i--)
+                                    <input type="radio" id="star{{ $i }}" name="rating"
+                                        value="{{ $i }}" {{ old('rating') == $i ? 'checked' : '' }}>
+                                    <label for="star{{ $i }}"><i class="fas fa-heart"></i></label>
+                                @endfor
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+@push('scripts')
+    <style>
+        .rating-area .stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            direction: rtl;
+            /* Right to left for better UX */
+        }
+
+        .rating-area input[type="radio"] {
+            display: none;
+        }
+
+        .rating-area label {
+            color: #ddd;
+            cursor: pointer;
+            font-size: 30px;
+        }
+
+        .rating-area input[type="radio"]:checked~label,
+        .rating-area input[type="radio"]:hover~label,
+        .rating-area label:hover,
+        .rating-area label:hover~label {
+            color: #e12454;
+        }
+    </style>
+@endpush

@@ -453,7 +453,24 @@ class MovieController extends Controller
             'languages' => $languages,
         ]);
     }
+    public function rate(Request $request, Movie $movie)
+    {
+        $validated = $request->validate([
+            'rating' => 'required|integer|between:1,5'
+        ]);
 
+        $rating = $movie->ratings()->updateOrCreate(
+            ['user_id' => Auth::user()->id],
+            ['rating' => $validated['rating']]
+        );
+
+        // Update movie ratings
+        $movie->ratings_count = $movie->ratings()->count();
+        $movie->average_rating = $movie->ratings()->avg('rating');
+        $movie->save();
+
+        return back()->with('success', 'Thanks for rating this movie!');
+    }
     public function seatsplan($id)
     {
         $query = DB::table('assign_movies_details as amd')
@@ -482,23 +499,23 @@ class MovieController extends Controller
 
         // Fetch all seat numbers for this cinema
         $seats = DB::table('cinema_seats as cs')
-        ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
-        ->leftJoin('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
-        ->leftJoin('bookings as b', function ($join) use ($id) {
-            $join->on('bd.booking_id', '=', 'b.id')
-                ->where('b.assign_movies_details_id', '=', $id);
-        })
-        ->where('cs.cinema_id', $query->cinema_id)
-        ->select(
-            'cs.id',
-            'cs.seat_number',
-            'csc.seat_category',
-            'csc.price_per_seat',
-            'cs.cinema_id',
-            DB::raw('MAX(CASE WHEN b.id IS NOT NULL THEN 1 ELSE 0 END) as is_booked')
-        )
-        ->groupBy('cs.id', 'cs.seat_number', 'csc.seat_category', 'csc.price_per_seat', 'cs.cinema_id')
-        ->get();
+            ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
+            ->leftJoin('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
+            ->leftJoin('bookings as b', function ($join) use ($id) {
+                $join->on('bd.booking_id', '=', 'b.id')
+                    ->where('b.assign_movies_details_id', '=', $id);
+            })
+            ->where('cs.cinema_id', $query->cinema_id)
+            ->select(
+                'cs.id',
+                'cs.seat_number',
+                'csc.seat_category',
+                'csc.price_per_seat',
+                'cs.cinema_id',
+                DB::raw('MAX(CASE WHEN b.id IS NOT NULL THEN 1 ELSE 0 END) as is_booked')
+            )
+            ->groupBy('cs.id', 'cs.seat_number', 'csc.seat_category', 'csc.price_per_seat', 'cs.cinema_id')
+            ->get();
         // Group seats by category
         $groupedSeats = $seats->groupBy('seat_category');
 
