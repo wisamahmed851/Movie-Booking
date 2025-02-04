@@ -149,7 +149,7 @@
                 headerOne.addClass("header-active");
             }
         });
-        
+
         //Tab Section
         $(".tab ul.tab-menu li").on("click", function (g) {
             var tab = $(this).closest(".tab"),

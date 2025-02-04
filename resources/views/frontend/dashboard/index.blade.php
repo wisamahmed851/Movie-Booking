@@ -55,9 +55,9 @@
                 </div>
                 <div class="tab-area">
                     <div class="tab-item active">
-                        <form class="ticket-search-form">
+                        <form class="ticket-search-form" id="movieFilterForm">
                             <div class="form-group large">
-                                <input type="text" placeholder="Search for Movies">
+                                <input type="text" name="search" placeholder="Search for Movies">
                                 <button type="submit"><i class="fas fa-search"></i></button>
                             </div>
                             <div class="form-group">
@@ -65,9 +65,13 @@
                                     <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">city</span>
-                                <select class="select-bar">
+                                <select class="select-bar" name="city">
+                                    <option value="">All Cities</option>
                                     @foreach ($cities as $city)
-                                        <option value="{{ $city->id }}">{{ $city->name }}</option>
+                                        <option value="{{ $city->id }}"
+                                            {{ request('city') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -76,11 +80,14 @@
                                     <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">date</span>
-                                <select class="select-bar">
-                                    <option value="26-12-19">23/10/2020</option>
-                                    <option value="26-12-19">24/10/2020</option>
-                                    <option value="26-12-19">25/10/2020</option>
-                                    <option value="26-12-19">26/10/2020</option>
+                                <select class="select-bar" name="date">
+                                    <option value="">All Dates</option>
+                                    @foreach ($availableDates as $date)
+                                        <option value="{{ $date }}"
+                                            {{ request('date') == $date ? 'selected' : '' }}>
+                                            {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
@@ -88,114 +95,19 @@
                                     <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
                                 </div>
                                 <span class="type">cinema</span>
-                                <select class="select-bar">
+                                <select class="select-bar" name="cinema">
+                                    <option value="">All Cinemas</option>
                                     @foreach ($cinemas as $cinema)
-                                        <option value="{{ $cinema->id }}">{{ $cinema->name }}</option>
+                                        <option value="{{ $cinema->id }}"
+                                            {{ request('cinema') == $cinema->id ? 'selected' : '' }}>
+                                            {{ $cinema->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </form>
                     </div>
-                    <div class="tab-item">
-                        <form class="ticket-search-form">
-                            <div class="form-group large">
-                                <input type="text" placeholder="Search for Events">
-                                <button type="submit"><i class="fas fa-search"></i></button>
-                            </div>
-                            <div class="form-group">
-                                <div class="thumb">
-                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
-                                </div>
-                                <span class="type">city</span>
-                                <select class="select-bar">
-                                    <option value="london">London</option>
-                                    <option value="dhaka">dhaka</option>
-                                    <option value="rosario">rosario</option>
-                                    <option value="madrid">madrid</option>
-                                    <option value="koltaka">kolkata</option>
-                                    <option value="rome">rome</option>
-                                    <option value="khoksa">khoksa</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="thumb">
-                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
-                                </div>
-                                <span class="type">date</span>
-                                <select class="select-bar">
-                                    <option value="26-12-19">23/10/2020</option>
-                                    <option value="26-12-19">24/10/2020</option>
-                                    <option value="26-12-19">25/10/2020</option>
-                                    <option value="26-12-19">26/10/2020</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="thumb">
-                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
-                                </div>
-                                <span class="type">event</span>
-                                <select class="select-bar">
-                                    <option value="angular">angular</option>
-                                    <option value="startup">startup</option>
-                                    <option value="rosario">rosario</option>
-                                    <option value="madrid">madrid</option>
-                                    <option value="koltaka">kolkata</option>
-                                    <option value="Last-First">Last-First</option>
-                                    <option value="wish">wish</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tab-item">
-                        <form class="ticket-search-form">
-                            <div class="form-group large">
-                                <input type="text" placeholder="Search fo Sports">
-                                <button type="submit"><i class="fas fa-search"></i></button>
-                            </div>
-                            <div class="form-group">
-                                <div class="thumb">
-                                    <img src="{{ asset('Frontend/images/ticket/city.png') }}" alt="ticket">
-                                </div>
-                                <span class="type">city</span>
-                                <select class="select-bar">
-                                    <option value="london">London</option>
-                                    <option value="dhaka">dhaka</option>
-                                    <option value="rosario">rosario</option>
-                                    <option value="madrid">madrid</option>
-                                    <option value="koltaka">kolkata</option>
-                                    <option value="rome">rome</option>
-                                    <option value="khoksa">khoksa</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="thumb">
-                                    <img src="{{ asset('Frontend/images/ticket/date.png') }}" alt="ticket">
-                                </div>
-                                <span class="type">date</span>
-                                <select class="select-bar">
-                                    <option value="26-12-19">23/10/2020</option>
-                                    <option value="26-12-19">24/10/2020</option>
-                                    <option value="26-12-19">25/10/2020</option>
-                                    <option value="26-12-19">26/10/2020</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class="thumb">
-                                    <img src="{{ asset('Frontend/images/ticket/cinema.png') }}" alt="ticket">
-                                </div>
-                                <span class="type">sports</span>
-                                <select class="select-bar">
-                                    <option value="football">football</option>
-                                    <option value="cricket">cricket</option>
-                                    <option value="cabadi">cabadi</option>
-                                    <option value="madrid">madrid</option>
-                                    <option value="gadon">gadon</option>
-                                    <option value="rome">rome</option>
-                                    <option value="khoksa">khoksa</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
+                    <!-- Other tab items... -->
                 </div>
             </div>
         </div>
@@ -289,42 +201,7 @@
                             <h2 class="title">movies</h2>
                             <a class="view-all" href="{{ route('movies.grid') }}">View All</a>
                         </div>
-                        <div class="row mb-30-none justify-content-center">
-                            @foreach ($movies as $movie)
-                                <div class="col-sm-6 col-lg-4 ">
-                                    <div class="movie-grid" data-id="{{ $movie->id }}">
-                                        <div class="movie-thumb c-thumb">
-                                            <a href="{{ route('movies.details', $movie->id) }}">
-                                                <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="movie">
-                                            </a>
-                                        </div>
-                                        <div class="movie-content bg-one">
-                                            <h5 class="title m-0">
-                                                <a
-                                                    href="{{ route('movies.details', $movie->id) }}">{{ $movie->title }}</a>
-                                            </h5>
-                                            <ul class="movie-rating-percent">
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset('Frontend/images/movie/tomato.png') }}"
-                                                            alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb">
-                                                        <img src="{{ asset('Frontend/images/movie/cake.png') }}"
-                                                            alt="movie">
-                                                    </div>
-                                                    <span class="content">88%</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-
-                        </div>
+                        @include('frontend.dashboard.partials._movies', ['movies' => $movies])
                     </div>
                     <div class="article-section padding-bottom">
                         <div class="section-header-1">
@@ -397,77 +274,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="article-section">
-                        <div class="section-header-1">
-                            <h2 class="title">sports</h2>
-                            <a class="view-all" href="sports.html">View All</a>
-                        </div>
-                        <div class="row mb-30-none justify-content-center">
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="sports-grid">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="">
-                                            <img src="{{ asset('Frontend/images/sports/sports01.jpg') }}" alt="sports">
-                                        </a>
-                                        <div class="event-date">
-                                            <h6 class="date-title">28</h6>
-                                            <span>Dec</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title m-0">
-                                            <a href="">football league tournament</a>
-                                        </h5>
-                                        <div class="movie-rating-percent">
-                                            <span>327 Montague Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="sports-grid">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="">
-                                            <img src="{{ asset('Frontend/images/sports/sports02.jpg') }}" alt="sports">
-                                        </a>
-                                        <div class="event-date">
-                                            <h6 class="date-title">28</h6>
-                                            <span>Dec</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title m-0">
-                                            <a href="">world cricket league 2020</a>
-                                        </h5>
-                                        <div class="movie-rating-percent">
-                                            <span>327 Montague Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="sports-grid">
-                                    <div class="movie-thumb c-thumb">
-                                        <a href="">
-                                            <img src="{{ asset('Frontend/images/sports/sports03.jpg') }}" alt="sports">
-                                        </a>
-                                        <div class="event-date">
-                                            <h6 class="date-title">28</h6>
-                                            <span>Dec</span>
-                                        </div>
-                                    </div>
-                                    <div class="movie-content bg-one">
-                                        <h5 class="title m-0">
-                                            <a href="">basket ball tournament 2020</a>
-                                        </h5>
-                                        <div class="movie-rating-percent">
-                                            <span>327 Montague Street</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -494,6 +301,54 @@
                         selectedMovie);
                 }
             });
+        });
+    </script>
+@endpush
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            var delayTimer;
+
+            // Handle form changes
+            $('#movieFilterForm').on('change keyup', 'select, input[name="search"]', function() {
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(submitFilterForm, 500);
+            });
+
+            function submitFilterForm() {
+                var formData = $('#movieFilterForm').serialize();
+
+                $.ajax({
+                    url: '{{ route('movies.filter') }}',
+                    type: 'GET',
+                    data: formData,
+                    success: function(response) {
+                        // Update movies list
+                        $('.movie-section .row.mb-30-none').html(response.moviesHtml);
+
+                        // Update date options
+                        var dateSelect = $('select[name="date"]');
+                        dateSelect.empty().append('<option value="">All Dates</option>');
+
+                        response.availableDates.forEach(function(dateStr) {
+                            var date = new Date(dateStr);
+                            var formattedDate = ('0' + date.getDate()).slice(-2) + '/' +
+                                ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+                                date.getFullYear();
+
+                            dateSelect.append($('<option>', {
+                                value: dateStr,
+                                text: formattedDate,
+                                selected: dateStr === "{{ request('date') }}"
+                            }));
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error('Filter error:', xhr.responseText);
+                    }
+                });
+            }
         });
     </script>
 @endpush

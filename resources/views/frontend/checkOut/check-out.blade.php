@@ -47,12 +47,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="checkout-widget checkout-card mb-0">
-                        <form id="payment-form">
-                            @csrf
-                            <div class="form-group">
-                                <button type="button" id="pay-button" class="custom-button">Proceed to Payment</button>
-                            </div>
-                        </form>
+
                         @if (request('booking') === 'success' && session('last_booking_id'))
                             <div class="booking-confirmed">
                                 <button class="custom-button" disabled>Booking Confirmed</button>
@@ -64,6 +59,12 @@
                                 </div>
                             </div>
                         @else
+                            <form id="payment-form">
+                                @csrf
+                                <div class="form-group">
+                                    <button type="button" id="pay-button" class="custom-button">Proceed to Payment</button>
+                                </div>
+                            </form>
                             <form method="POST" action="{{ route('movies.confirm-booking') }}" id="booking-form">
                                 @csrf
                                 <input type="hidden" name="assign_movies_details_id"
@@ -168,10 +169,12 @@
             const payButton = document.getElementById('pay-button');
             const confirmBookingButton = document.getElementById('confirm-booking-button');
 
-            // Check for payment success in the URL
+            // Check URL parameters for both payment and booking status
             const urlParams = new URLSearchParams(window.location.search);
             const paymentStatus = urlParams.get('payment');
+            const bookingStatus = urlParams.get('booking');
 
+            // Handle payment status
             if (paymentStatus === 'success') {
                 confirmBookingButton.disabled = false;
                 Toastify({
@@ -179,7 +182,7 @@
                     backgroundColor: "green",
                     duration: 3000
                 }).showToast();
-                payButton.style.display = 'none';
+                if (payButton) payButton.style.display = 'none';
             } else if (paymentStatus === 'failed') {
                 Toastify({
                     text: "Payment failed. Please try again.",
@@ -187,59 +190,61 @@
                     duration: 3000
                 }).showToast();
             }
-           
-            payButton.addEventListener('click', async () => {
-                try {
-                    const response = await fetch("{{ route('movies.ticket.payment') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            amount: {{ $checkoutData['total_price'] }} *
-                                100, // Convert to cents
-                            currency: 'usd'
-                        })
-                    });
 
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+            // Handle booking confirmation
+            if (bookingStatus === 'success' && {{ session('last_booking_id') ? 'true' : 'false' }}) {
+                Toastify({
+                    text: "Booking confirmed successfully!",
+                    backgroundColor: "green",
+                    duration: 3000
+                }).showToast();
 
-                    const session = await response.json();
+                // Hide payment-related elements
+                if (payButton) payButton.style.display = 'none';
+                const confirmBtn = document.getElementById('confirm-booking-button');
+                if (confirmBtn) confirmBtn.style.display = 'none';
+            }
 
-                    const result = await stripe.redirectToCheckout({
-                        sessionId: session.id
-                    });
+            if (payButton) {
+                payButton.addEventListener('click', async () => {
+                    try {
+                        const response = await fetch("{{ route('movies.ticket.payment') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                amount: {{ $checkoutData['total_price'] }} * 100,
+                                currency: 'usd'
+                            })
+                        });
 
-                    if (result.error) {
+                        if (!response.ok) throw new Error('Network response was not ok');
+
+                        const session = await response.json();
+                        const result = await stripe.redirectToCheckout({
+                            sessionId: session.id
+                        });
+
+                        if (result.error) {
+                            Toastify({
+                                text: result.error.message,
+                                backgroundColor: "red",
+                                duration: 3000
+                            }).showToast();
+                        }
+                    } catch (error) {
+                        console.error('Payment error:', error);
                         Toastify({
-                            text: result.error.message,
+                            text: "Payment processing failed. Please try again.",
                             backgroundColor: "red",
                             duration: 3000
                         }).showToast();
                     }
-                } catch (error) {
-                    console.error('Error during payment process:', error);
-                    Toastify({
-                        text: "An error occurred while processing your payment. Please try again.",
-                        backgroundColor: "red",
-                        duration: 3000
-                    }).showToast();
-                }
-            });
-            @if (request('booking') === 'success' && session('last_booking_id'))
-                confirmBookingButton.disabled = false;
-                Toastify({
-                    text: "Payment successful! You can now confirm your booking.",
-                    backgroundColor: "green",
-                    duration: 3000
-                }).showToast();
-                payButton.style.display = 'none';
-            @endif
-            
+                });
+            }
         });
     </script>
 @endpush

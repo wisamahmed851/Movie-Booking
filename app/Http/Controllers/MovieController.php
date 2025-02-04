@@ -628,7 +628,6 @@ class MovieController extends Controller
     }
     public function processPayment(Request $request)
     {
-        \Log::info('Payment process started', ['request' => $request->all()]);
 
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));

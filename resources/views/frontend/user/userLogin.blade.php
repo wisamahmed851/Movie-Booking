@@ -45,11 +45,16 @@
     <!-- ==========Preloader========== -->
 
     <!-- ==========Sign-In-Section========== -->
-    <section class="account-section bg_img" data-background="assets/images/account/account-bg.jpg">
+    <section class="account-section bg_img" data-background="{{asset('frontend/images/account/account-bg.jpg') }}">
         <div class="container">
-            <div class="padding-top padding-bottom">
-                <div class="account-area">
-                    <div class="section-header-3">
+    <div class="padding-top padding-bottom">
+        <div class="account-area">
+            <!-- Back arrow button -->
+            <a href="{{ route('front.index') }}" class="back-arrow" style="position: absolute; top: 20px; left: 20px;">
+                <i class="fas fa-arrow-left" style="font-size: 24px; color: #fff;"></i>
+            </a>
+
+            <div class="section-header-3">
                         <a href="{{ route('front.index') }}" style="padding-bottom: 10px">
                             <img src="{{ asset('frontend/images/logo/logo.png') }}" alt="logo">
                         </a>
@@ -187,6 +192,16 @@
 
             });
         });
+        // Add this error handling for session errors
+        @if (session('error'))
+            Toastify({
+                text: "{{ session('error') }}",
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#ff5f6d",
+            }).showToast();
+        @endif
     });
 </script>
 

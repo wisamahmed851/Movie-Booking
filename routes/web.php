@@ -138,6 +138,7 @@ Route::prefix('')->group(
     function () {
         Route::controller(FrontController::class)->prefix('')->group(function () {
             Route::get('/', 'index')->name('front.index');
+            Route::get('/movies/filter', 'filter')->name('movies.filter');
         });
         Route::controller(ComentBlogController::class)->prefix('comments')->group(function () {
             Route::post('/store', 'store')->name('comments.store');
@@ -155,14 +156,14 @@ Route::prefix('')->group(
             Route::get('/list', 'list')->name('movies.grid');
             Route::get('/loadmovies', 'loadmovies')->name('movies.loadmovies');
             Route::get('/details/{id}', 'details')->name('movies.details');
-            Route::post('/rate/{movie}', 'rate')->name('movies.rate');
-            Route::get('/ticket-plan/{id}', 'ticketplan')->name('movies.ticket-plan');
-            Route::get('/seats-plan/{id}', 'seatsplan')->name('movies.seat-plan');
-            Route::any('/check-out', 'checkout')->name('movies.check-out');
-            Route::POST('/confirm-booking', 'confirmBooking')->name('movies.confirm-booking');
-            Route::POST('/payment', 'processPayment')->name('movies.ticket.payment');
-            Route::get('/booking/{id}/ticket', 'viewTicket')->name('movies.ticket.view');
-            Route::get('/booking/{id}/ticket/download', 'downloadTicket')->name('movies.ticket.download');
+            Route::post('/rate/{movie}', 'rate')->name('movies.rate')->middleware(ValidUser::class);
+            Route::get('/ticket-plan/{id}', 'ticketplan')->name('movies.ticket-plan')->middleware(ValidUser::class);
+            Route::get('/seats-plan/{id}', 'seatsplan')->name('movies.seat-plan')->middleware(ValidUser::class);
+            Route::any('/check-out', 'checkout')->name('movies.check-out')->middleware(ValidUser::class);
+            Route::POST('/confirm-booking', 'confirmBooking')->name('movies.confirm-booking')->middleware(ValidUser::class);
+            Route::POST('/payment', 'processPayment')->name('movies.ticket.payment')->middleware(ValidUser::class);
+            Route::get('/booking/{id}/ticket', 'viewTicket')->name('movies.ticket.view')->middleware(ValidUser::class);
+            Route::get('/booking/{id}/ticket/download', 'downloadTicket')->name('movies.ticket.download')->middleware(ValidUser::class);
         });
         Route::controller(UserController::class)->prefix('user')->group(function () {
             Route::get('/login', 'loginform')->name('user.login')->middleware(Guest::class);

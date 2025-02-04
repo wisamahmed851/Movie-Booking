@@ -3,7 +3,7 @@
         <div class="row" >
             @foreach ($movies as $movie)
                 <div
-                    class="col-sm-6 col-lg-4 @if ($movies->count() == 1) col-lg-12 @endif @if ($movies->count() == 2) col-lg-6 @endif">
+                    class="col-sm-6 col-lg-4 @if ($movies->count() == 1) col-lg-4 @endif @if ($movies->count() == 2) col-lg-4 @endif">
                     <!-- Changed id to class and added data-id -->
                     <div class="movie-grid" data-id="{{ $movie->id }}">
                         <div class="movie-thumb c-thumb">

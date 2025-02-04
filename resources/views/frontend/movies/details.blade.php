@@ -191,7 +191,7 @@
                                 @foreach ($movie->slider_images as $slider)
                                     <div class="thumb">
                                         <a href="" class="img-pop">
-                                            <img src="{{ asset('storage/' . $slider) }}" alt="movie">
+                                            <img src="{{ asset('storage/' . $slider) }}" alt="movie" height="250px">
                                         </a>
                                     </div>
                                 @endforeach
