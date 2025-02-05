@@ -885,9 +885,7 @@ class MovieController extends Controller
             )
             ->get();
 
-        // Log the seats and booking as JSON
-        Log::info(json_encode($seats));
-        Log::info(json_encode($booking));
+        
 
         // Generate the PDF
         return PDF::loadView('frontend.pdf.ticket', compact('booking', 'seats'))->stream('ticket.pdf');
@@ -919,13 +917,15 @@ class MovieController extends Controller
             )
             ->first();
 
-        // Fetch seat numbers and price details for this booking
         $seats = DB::table('cinema_seats as cs')
             ->join('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
-            ->join('cinema_seats_categories as csc', 'bd.cinema_seats_categories_id', '=', 'csc.id')
-            ->join('seat_prices as sp', 'cs.id', '=', 'sp.seat_id') // Assuming there's a seat_prices table with pricing
+            ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
             ->where('bd.booking_id', $id)
-            ->select('cs.seat_number', 'csc.seat_category', 'sp.price_per_seat')
+            ->select(
+                'cs.seat_number',
+                'csc.seat_category',
+                'csc.price_per_seat' // Fetch the price from the 'cinema_seats_categories' table
+            )
             ->get();
 
         return PDF::loadView('frontend.pdf.ticket', compact('booking', 'seats'))->download('ticket-' . $id . '.pdf');
