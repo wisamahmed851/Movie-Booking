@@ -361,9 +361,16 @@ class MovieController extends Controller
         // Build the base query using DB::table
         $query = DB::table('movies as m')
             ->select(
-                'm.id', 'm.title', 'm.language_ids','m.duration',
-                'm.release_date', 'm.ratings_count', 'm.average_rating',
-                'm.trailler','mi.cover_image_path as cover_image',
+                'm.id',
+                'm.title',
+                'm.language_ids',
+                'm.duration',
+                'm.release_date',
+                'm.ratings_count',
+                'm.average_rating',
+                'm.tomatometer',
+                'm.trailler',
+                'mi.cover_image_path as cover_image',
                 DB::raw('MIN(amd.show_date) as next_showing'),
                 DB::raw('GROUP_CONCAT(DISTINCT c.city_id) as city_ids'),
                 DB::raw('GROUP_CONCAT(DISTINCT am.cinema_id) as cinema_ids'),
@@ -393,7 +400,21 @@ class MovieController extends Controller
                 }
             });
         }
+        if ($request->filled('city')) {
+            $query->where('c.city_id', $request->city);
+        }
 
+        if ($request->filled('cinema')) {
+            $query->where('am.cinema_id', $request->cinema);
+        }
+
+        if ($request->filled('date')) {
+            $query->where('amd.show_date', $request->date);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('m.title', 'like', '%' . $request->search . '%');
+        }
         // Apply city filter
         if ($request->has('cities') && !empty($request->cities)) {
             $query->where(function ($q) use ($request) {
@@ -437,6 +458,8 @@ class MovieController extends Controller
                 'cover_image' => $movie->cover_image,
                 'duration' => $movie->duration,
                 'release_date' => $movie->release_date,
+                'average_rating' => $movie->average_rating,
+                'tomatometer' => $movie->tomatometer,
                 'trailer' => $movie->trailler,
                 'ratings_count' => $movie->ratings_count,
 
@@ -473,7 +496,7 @@ class MovieController extends Controller
         return view('frontend.movies.grid', compact('movies', 'cities', 'cinemas', 'genres', 'languages', 'pagination', 'availableDates'));
     }
 
-    
+
 
 
 
@@ -687,14 +710,14 @@ class MovieController extends Controller
             $paymentStatus = $request->query('payment');
             $bookingStatus = $request->query('booking');
             $checkoutData = session('checkoutData');
-    
+
             return view('frontend.checkOut.check-out', compact(
                 'checkoutData',
                 'paymentStatus',
                 'bookingStatus'
             ));
         }
-    
+
         // Validate the request
         $request->validate([
             'selected_seats' => 'required',
@@ -707,7 +730,7 @@ class MovieController extends Controller
             'banner_image' => 'required',
             'assign_movies_details_id' => 'required',
         ]);
-    
+
         // Fetch seat details from the database with a join on cinema_seats_categories
         $seatIds = explode(',', $request->input('selected_seats'));
         $seats = CinemaSeat::whereIn('cinema_seats.id', $seatIds)
@@ -720,20 +743,20 @@ class MovieController extends Controller
                 'cinema_seats_categories.seat_category as category_name' // Ensure you have a 'name' column for the category
             )
             ->get();
-    
+
         // Group seats by their category
         $groupedSeats = $seats->groupBy('category_name');
-    
+
         // Calculate total price based on fetched seats
         $totalPrice = $seats->sum('price_per_seat');
-    
+
         // Fetch movie image
         $movieImage = DB::table('movies as m')
             ->where('m.id', $request->movie_id)
             ->join('movie_images as mi', 'm.banner_image_id', '=', 'mi.id')
             ->select('mi.banner_image_path as image_path')
             ->first();
-    
+
         // Prepare the data for the view
         $checkoutData = [
             'grouped_seats' => $groupedSeats,
@@ -747,10 +770,10 @@ class MovieController extends Controller
             'cinema_name' => $request->input('cinema_name'),
             'banner_image' => $request->input('banner_image'),
         ];
-    
+
         // Store the checkout data in the session
         session(['checkoutData' => $checkoutData]);
-    
+
         return view('frontend.checkOut.check-out', compact('checkoutData'));
     }
     public function processPayment(Request $request)
@@ -789,13 +812,13 @@ class MovieController extends Controller
     public function confirmBooking(Request $request)
     {
         DB::beginTransaction();
-    
+
         $validated = $request->validate([
             'assign_movies_details_id' => 'required|exists:assign_movies_details,id',
             'total_price' => 'required|numeric',
             'selected_seats' => 'required|json',
         ]);
-    
+
         // Create the booking entry
         $booking = Bookings::create([
             'user_id' => Auth::id(),
@@ -803,10 +826,10 @@ class MovieController extends Controller
             'total_price' => $validated['total_price'],
             'booking_date' => now(),
         ]);
-    
+
         // Decode the grouped seats JSON data
         $groupedSeats = json_decode($validated['selected_seats'], true);
-    
+
         // Iterate over each seat category and process the seats
         foreach ($groupedSeats as $category => $seats) {
             foreach ($seats as $seat) {
@@ -817,15 +840,15 @@ class MovieController extends Controller
                 ]);
             }
         }
-    
+
         DB::commit();
-    
+
         // Store the last booking ID in session for further use
         session(['last_booking_id' => $booking->id]);
-    
+
         return redirect()->route('movies.check-out', ['booking' => 'success']);
     }
-    
+
     public function viewTicket($id)
     {
         $booking = DB::table('bookings as b')
@@ -851,7 +874,7 @@ class MovieController extends Controller
             )
             ->first();
 
-            $seats = DB::table('cinema_seats as cs')
+        $seats = DB::table('cinema_seats as cs')
             ->join('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
             ->join('cinema_seats_categories as csc', 'cs.cinema_seats_categories_id', '=', 'csc.id')
             ->where('bd.booking_id', $id)
@@ -861,7 +884,7 @@ class MovieController extends Controller
                 'csc.price_per_seat' // Fetch the price from the 'cinema_seats_categories' table
             )
             ->get();
-        
+
         // Log the seats and booking as JSON
         Log::info(json_encode($seats));
         Log::info(json_encode($booking));
@@ -896,8 +919,8 @@ class MovieController extends Controller
             )
             ->first();
 
-            // Fetch seat numbers and price details for this booking
-            $seats = DB::table('cinema_seats as cs')
+        // Fetch seat numbers and price details for this booking
+        $seats = DB::table('cinema_seats as cs')
             ->join('booking_details as bd', 'cs.id', '=', 'bd.seat_id')
             ->join('cinema_seats_categories as csc', 'bd.cinema_seats_categories_id', '=', 'csc.id')
             ->join('seat_prices as sp', 'cs.id', '=', 'sp.seat_id') // Assuming there's a seat_prices table with pricing

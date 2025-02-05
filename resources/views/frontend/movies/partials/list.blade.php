@@ -1,4 +1,5 @@
 <div class="movie-area mb-10">
+@if ($movies)
     @foreach ($movies as $movie)
         <div class="movie-list">
             <div class="movie-thumb c-thumb">
@@ -35,13 +36,13 @@
                         <div class="thumb">
                             <img src="{{ asset('Frontend/images/movie/tomato.png') }}" alt="rating">
                         </div>
-                        <span class="content">88%%</span>
+                        <span class="content" data-odometer-final="">{{ round($movie['tomatometer']) }}%</span>
                     </li>
                     <li>
                         <div class="thumb">
                             <img src="{{ asset('Frontend/images/movie/cake.png') }}" alt="rating">
                         </div>
-                        <span class="content">88%%</span>
+                        <span class="content" data-odometer-final="">{{ round($movie['average_rating'] * 20) }}%</span>
                     </li>
                 </ul>
                 <div class="book-area">
@@ -74,7 +75,12 @@
             </div>
         </div>
     @endforeach
+    @else
+    <h1>No movies</h1>
 </div>
+
+
+@endif
 <script>
     $(document).ready(function() {
         let currentLayout = 'grid'; // Default layout

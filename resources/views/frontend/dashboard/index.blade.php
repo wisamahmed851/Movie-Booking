@@ -313,7 +313,7 @@
             // Handle form changes
             $('#movieFilterForm').on('change keyup', 'select, input[name="search"]', function() {
                 clearTimeout(delayTimer);
-                delayTimer = setTimeout(submitFilterForm, 500);
+                delayTimer = setTimeout(submitFilterForm, 100);
             });
 
             function submitFilterForm() {

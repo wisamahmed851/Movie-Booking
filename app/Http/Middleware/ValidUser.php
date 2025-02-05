@@ -27,6 +27,6 @@ class ValidUser
             ]);
         }
 
-        return redirect()->route('user.login');
+        return redirect()->route('user.login')->with('error', 'You need to log in first.');
     }
 }

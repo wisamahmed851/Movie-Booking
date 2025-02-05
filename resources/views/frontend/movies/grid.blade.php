@@ -3,7 +3,7 @@
 @section('content')
     <!-- ==========Banner-Section========== -->
     <section class="banner-section">
-        <div class="banner-bg bg_img bg-fixed" data-background="{{ asset ('frontend/images/banner/banner02.jpg') }}"></div>
+        <div class="banner-bg bg_img bg-fixed" data-background="{{ asset('frontend/images/banner/banner02.jpg') }}"></div>
         <div class="container">
             <div class="banner-content">
                 <h1 class="title bold">get <span class="color-theme">movie</span> tickets</h1>
@@ -12,7 +12,7 @@
         </div>
     </section>
     <!-- ==========Banner-Section========== -->
-<!-- ==========Ticket-Search========== -->
+    <!-- ==========Ticket-Search========== -->
     <section class="search-ticket-section padding-top pt-lg-0">
         <div class="container">
             <div class="search-tab bg_img" data-background="{{ asset('frontend/images/ticket/ticket-bg01.jpg') }}">
@@ -250,248 +250,79 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        let currentLayout = 'grid'; // Default layout
+    <script>
+        $(document).ready(function() {
+            let currentLayout = $('.grid-button li.active').data('layout') || 'grid'; // Default layout
+            let delayTimer;
 
-        // Handle layout change
-        $(document).on('click', '.grid-button li', function(e) {
-            e.preventDefault();
+            function applyFilters(url = '{{ route('movies.loadmovies') }}') {
+                let filters = $('#movieFilterForm').serializeArray();
+                filters.push({
+                    name: 'layouts',
+                    value: currentLayout
+                });
 
-            // Get the selected layout type
-            currentLayout = $(this).data('layout');
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    data: filters,
+                    success: function(response) {
+                        // Update the movie grid
+                        $('#movie-grid').html(response.moviesHtml);
+                        $('#paginationControll').html(response.pagination);
 
-            // Add 'active' class to the selected button and remove from others
-            $('.grid-button li').removeClass('active');
-            $(this).addClass('active');
-
-            // Trigger any necessary updates if needed
-        });
-        $(document).on('change', '.filter-input', function() {
-            // Collect selected language IDs
-            let filters = {
-                languages: $('input[name="languages[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                genres: $('input[name="genres[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                sortBy: $('#sortDropdown').val(),
-                Pagination: $('#Pagination').val(),
-                layouts: currentLayout,
-            };
-
-            // Make AJAX call
-            $.ajax({
-                url: '{{ route('movies.loadmovies') }}',
-                method: 'GET',
-                data: filters,
-                success: function(response) {
-                    // Update the movie grid
-                    console.log(response);
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#paginationControll').html(response.pagination);
-
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                }
-            });
-        });
-        $('#sortDropdown').on('change', function() {
-            let filters = {
-                languages: $('input[name="languages[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                genres: $('input[name="genres[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                sortBy: $('#sortDropdown').val(),
-                Pagination: $('#Pagination').val(),
-                layouts: currentLayout,
-            };
-
-
-            $.ajax({
-                url: '{{ route('movies.loadmovies') }}',
-                method: 'GET',
-                data: filters,
-                success: function(response) {
-                    // Update the movie grid
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#paginationControll').html(response.pagination);
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                }
-            });
-        })
-        $('#Pagination').on('change', function() {
-            let filters = {
-                languages: $('input[name="languages[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                genres: $('input[name="genres[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                sortBy: $('#sortDropdown').val(),
-                Pagination: $('#Pagination').val(),
-                layouts: currentLayout,
-            };
-
-            $.ajax({
-                url: '{{ route('movies.loadmovies') }}',
-                method: 'GET',
-                data: filters,
-                success: function(response) {
-                    // Update the movie grid
-                    console.log(response);
-
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#paginationControll').html(response.pagination);
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                }
-            });
-        })
-        $(document).on('click', '#paginationControll a', function(e) {
-            e.preventDefault();
-            let url = $(this).attr('href');
-            let filters = {
-                languages: $('input[name="languages[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                genres: $('input[name="genres[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                sortBy: $('#sortDropdown').val(),
-                Pagination: $('#Pagination').val(),
-                layouts: currentLayout,
-            };
-            $.ajax({
-                url: url,
-                method: 'GET',
-                data: filters,
-                success: function(response) {
-                    // Update the movie grid
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#paginationControll').html(response.pagination);
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                }
-            });
-        })
-        $(document).on('click', '.movie-grid', function(e) {
-            e.preventDefault();
-
-            let selectedMovie = $(this).data('id');
-
-            if (selectedMovie) {
-                // Redirect to the movie details page with the selected movie ID
-                window.location.href = "{{ route('movies.details', ':id') }}".replace(':id', selectedMovie);;
+                        // Update the date filter options
+                        if (response.availableDates) {
+                            let dateSelect = $('select[name="date"]');
+                            dateSelect.empty().append('<option value="">All Dates</option>');
+                            response.availableDates.forEach(function(dateStr) {
+                                let date = new Date(dateStr);
+                                let formattedDate = ('0' + date.getDate()).slice(-2) + '/' +
+                                    ('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+                                    date.getFullYear();
+                                dateSelect.append($('<option>', {
+                                    value: dateStr,
+                                    text: formattedDate,
+                                    selected: dateStr === "{{ request('date') }}"
+                                }));
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                    },
+                });
             }
-        });
-        $(document).on('click', '.card-style', function(e) {
-            e.preventDefault();
 
-            let selectedMovie = $(this).data('id');
+            // Handle layout change
+            $(document).on('click', '.grid-button li', function(e) {
+                e.preventDefault();
+                currentLayout = $(this).data('layout');
+                $('.grid-button li').removeClass('active');
+                $(this).addClass('active');
+                applyFilters();
+            });
 
-            if (selectedMovie) {
-                // Redirect to the movie details page with the selected movie ID
-                window.location.href = `/movies/details/${selectedMovie}`;
-            }
-        });
-        $(document).on('click', '.grid-button li', function(e) {
-            e.preventDefault();
+            // Handle form changes (including search input)
+            $('#movieFilterForm').on('change keyup', 'select, input[name="search"]', function() {
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(() => applyFilters(), 100);
+            });
 
-            // Get the selected layout type
-            const layout = $(this).data('layout');
+            // Handle pagination click
+            $(document).on('click', '#paginationControll a', function(e) {
+                e.preventDefault();
+                applyFilters($(this).attr('href'));
+            });
 
-            // Add 'active' class to the selected button and remove from others
-            $('.grid-button li').removeClass('active');
-            $(this).addClass('active');
-
-            // Collect filters
-            let filters = {
-                languages: $('input[name="languages[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                genres: $('input[name="genres[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                sortBy: $('#sortDropdown').val(),
-                Pagination: $('#Pagination').val(),
-                layouts: layout, // Include layout type
-            };
-
-            // AJAX request to fetch updated movies and pagination
-            $.ajax({
-                url: '{{ route('movies.loadmovies') }}', // Replace with your route for loading movies
-                method: 'GET',
-                data: filters,
-                success: function(response) {
-                    // Update the movie grid with new layout
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#paginationControll').html(response.pagination);
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                },
+            // Handle movie card click
+            $(document).on('click', '.movie-grid, .card-style', function(e) {
+                e.preventDefault();
+                let selectedMovie = $(this).data('id');
+                if (selectedMovie) {
+                    window.location.href = `/movies/details/${selectedMovie}`;
+                }
             });
         });
-
-        // Handle pagination clicks
-        $(document).on('click', '#paginationControll a', function(e) {
-            e.preventDefault();
-
-            // Get the URL for pagination
-            let url = $(this).attr('href');
-
-            // Collect filters
-            let filters = {
-                languages: $('input[name="languages[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                genres: $('input[name="genres[]"]:checked').map(function() {
-                    return $(this).val();
-                }).get(),
-                sortBy: $('#sortDropdown').val(),
-                Pagination: $('#Pagination').val(),
-                layouts: currentLayout,
-                // Use the current active layout
-            };
-
-            // AJAX request to fetch paginated results
-            $.ajax({
-                url: url,
-                method: 'GET',
-                data: filters,
-                success: function(response) {
-                    // Update the movie grid
-                    $('#movie-grid').html(response.moviesHtml);
-
-                    // Update pagination
-                    $('#paginationControll').html(response.pagination);
-                },
-                error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                },
-            });
-        });
-
-
-    });
     </script>
 @endpush
