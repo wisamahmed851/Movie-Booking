@@ -320,16 +320,19 @@ class UserController extends Controller
         ]);
     }
 
+
     public function updatePassword(Request $request)
     {
-        // Validate the input
-        $validated = $request->validate([
+       
+    
+         $validated = $request->validate([
             'oldPassword' => 'required',
             'newPassword' => 'required|min:8', // Confirm new password
         ]);
 
         // Check if the old password matches
         $user = Auth::user();
+    
         if (!Hash::check($request->oldPassword, $user->password)) {
             return response()->json(['status' => 'error', 'message' => 'Old password is incorrect.']);
         }
@@ -339,5 +342,6 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['status' => 'success', 'message' => 'Password updated successfully!']);
+      
     }
 }

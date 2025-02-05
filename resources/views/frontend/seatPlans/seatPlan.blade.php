@@ -23,8 +23,8 @@
     <section class="page-title bg-one">
         <div class="container">
             <div class="page-title-area">
-                <div class="item md-order-1">
-                    <a href="movie-ticket-plan.html" class="custom-button back-button">
+                <div class="item md-order-1"> 
+                    <a href="{{route('movies.ticket-plan', ['id' => $formattedData['movie_id']]) }}" class="custom-button back-button">
                         <i class="flaticon-double-right-arrows-angles"></i>back
                     </a>
                 </div>

@@ -153,8 +153,8 @@ Route::prefix('')->group(
             Route::get('/details/{id}', 'details')->name('blogs.details');
         });
         Route::controller(MovieController::class)->prefix('movies')->group(function () {
-            Route::get('/list', 'list')->name('movies.grid');
-            Route::get('/loadmovies', 'loadmovies')->name('movies.loadmovies');
+            Route::get('/list', 'movies')->name('movies.grid');
+            Route::get('/loadmovies', 'movies')->name('movies.loadmovies');
             Route::get('/details/{id}', 'details')->name('movies.details');
             Route::post('/rate/{movie}', 'rate')->name('movies.rate')->middleware(ValidUser::class);
             Route::get('/ticket-plan/{id}', 'ticketplan')->name('movies.ticket-plan')->middleware(ValidUser::class);
@@ -180,7 +180,7 @@ Route::prefix('')->group(
             Route::get('/resetpassword/{token}', 'resetpasswordForm')->name('user.password.reset');
             Route::post('/reset-password', 'resetPassword')->name('user.password.update');
 
-            Route::post('/update-password', 'updatePassword')->name('user.updatePassword');
+            Route::post('/update-password', 'updatePassword')->name('user.updatePassword')->middleware(ValidUser::class);;
 
             Route::get('/register', 'registerForm')->name('user.register');
             Route::post('/registerstore', 'store')->name('user.register.store');

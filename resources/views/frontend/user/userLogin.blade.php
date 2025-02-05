@@ -58,7 +58,6 @@
                         <a href="{{ route('front.index') }}" style="padding-bottom: 10px">
                             <img src="{{ asset('frontend/images/logo/logo.png') }}" alt="logo">
                         </a>
-                        <span class="cate">hello</span>
                         <h2 class="title">welcome back</h2>
                     </div>
                     <form class="account-form" id="loginForm" method="POST">

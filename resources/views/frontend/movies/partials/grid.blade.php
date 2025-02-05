@@ -5,17 +5,17 @@
                 <div
                     class="col-sm-6 col-lg-4 @if ($movies->count() == 1) col-lg-4 @endif @if ($movies->count() == 2) col-lg-4 @endif">
                     <!-- Changed id to class and added data-id -->
-                    <div class="movie-grid" data-id="{{ $movie->id }}">
+                    <div class="movie-grid" data-id="{{ $movie['id'] }}">
                         <div class="movie-thumb c-thumb">
                             <!-- Removed hardcoded href -->
                             <a href="javascript:void(0);">
-                                <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="{{ $movie->title }}">
+                                <img src="{{ asset('storage/' . $movie['cover_image']) }}" alt="">
                             </a>
                         </div>
                         <div class="movie-content bg-one">
                             <h5 class="title m-0">
                                 <!-- Removed hardcoded href -->
-                                <a href="javascript:void(0);">{{ $movie->title }}</a>
+                                <a href="javascript:void(0);">{{ $movie['title'] }}</a>
                             </h5>
                             <ul class="movie-rating-percent">
                                 <li>

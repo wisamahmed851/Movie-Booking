@@ -19,7 +19,14 @@ class ValidUser
         if (Auth::check()) {
             return $next($request); // Proceed if authenticated
         }
+        if($request->ajax()){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You dnt have access to this route',
+                'data' => null
+            ]);
+        }
 
-        return redirect(route('user.login'))->with('error', 'You must be logged in to access this page.');
+        return redirect()->route('user.login');
     }
 }

@@ -325,7 +325,7 @@
                     data: formData,
                     success: function(response) {
                         // Update movies list
-                        $('.movie-section .row.mb-30-none').html(response.moviesHtml);
+                        $('.movie-section .main-movies').html(response.moviesHtml);
 
                         // Update date options
                         var dateSelect = $('select[name="date"]');

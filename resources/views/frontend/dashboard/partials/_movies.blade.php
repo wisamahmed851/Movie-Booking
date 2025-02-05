@@ -1,4 +1,4 @@
-<div class="row mb-30-none justify-content-center">
+<div class="row mb-30-none justify-content-center main-movies">
     @foreach ($movies as $movie)
         <div class="col-sm-6 col-lg-4">
             <div class="movie-grid" data-id="{{ $movie['id'] }}">

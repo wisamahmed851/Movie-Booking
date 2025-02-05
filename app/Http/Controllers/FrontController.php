@@ -37,18 +37,7 @@ class FrontController extends Controller
             ->where('m.status', 1)
             ->groupBy('m.id');
 
-        // Apply filters
-        if ($request->filled('city')) {
-            $query->where('c.city_id', $request->city);
-        }
-
-        if ($request->filled('cinema')) {
-            $query->where('am.cinema_id', $request->cinema);
-        }
-
-        if ($request->filled('date')) {
-            $query->where('amd.show_date', $request->date);
-        }
+      
 
         // Get paginated results
         $movies = $query->take(3)->get();
