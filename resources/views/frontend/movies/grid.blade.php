@@ -252,26 +252,42 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            let currentLayout = $('.grid-button li.active').data('layout') || 'grid'; // Default layout
+            let currentLayout = $('.grid-button li.active').data('layout') || 'grid';
             let delayTimer;
 
+            function gatherFilters() {
+                return {
+                    search: $('input[name="search"]').val(),
+                    city: $('select[name="city"]').val(),
+                    date: $('select[name="date"]').val(),
+                    cinema: $('select[name="cinema"]').val(),
+                    languages: $('input[name="languages[]"]:checked').map(function() {
+                        return this.value;
+                    }).get(),
+                    genres: $('input[name="genres[]"]:checked').map(function() {
+                        return this.value;
+                    }).get(),
+                    sortBy: $('#sortDropdown').val(),
+                    Pagination: $('#Pagination').val(),
+                    layouts: currentLayout
+                };
+            }
+
             function applyFilters(url = '{{ route('movies.loadmovies') }}') {
-                let filters = $('#movieFilterForm').serializeArray();
-                filters.push({
-                    name: 'layouts',
-                    value: currentLayout
-                });
+                const filters = gatherFilters();
+
+                // Update hidden fields
+                $('#hiddenSortBy').val(filters.sortBy);
+                $('#hiddenPagination').val(filters.Pagination);
 
                 $.ajax({
                     url: url,
                     method: 'GET',
                     data: filters,
                     success: function(response) {
-                        // Update the movie grid
                         $('#movie-grid').html(response.moviesHtml);
                         $('#paginationControll').html(response.pagination);
 
-                        // Update the date filter options
                         if (response.availableDates) {
                             let dateSelect = $('select[name="date"]');
                             dateSelect.empty().append('<option value="">All Dates</option>');
@@ -283,7 +299,7 @@
                                 dateSelect.append($('<option>', {
                                     value: dateStr,
                                     text: formattedDate,
-                                    selected: dateStr === "{{ request('date') }}"
+                                    selected: dateStr === filters.date
                                 }));
                             });
                         }
@@ -294,7 +310,20 @@
                 });
             }
 
-            // Handle layout change
+            // Event Listeners
+            $('#movieFilterForm').on('change keyup', 'select, input[name="search"]', function() {
+                clearTimeout(delayTimer);
+                delayTimer = setTimeout(() => applyFilters(), 300);
+            });
+
+            $('.filter-input').on('change', function() {
+                applyFilters();
+            });
+
+            $('#sortDropdown, #Pagination').on('change', function() {
+                applyFilters();
+            });
+
             $(document).on('click', '.grid-button li', function(e) {
                 e.preventDefault();
                 currentLayout = $(this).data('layout');
@@ -303,26 +332,13 @@
                 applyFilters();
             });
 
-            // Handle form changes (including search input)
-            $('#movieFilterForm').on('change keyup', 'select, input[name="search"]', function() {
-                clearTimeout(delayTimer);
-                delayTimer = setTimeout(() => applyFilters(), 100);
-            });
-
-            // Handle pagination click
             $(document).on('click', '#paginationControll a', function(e) {
                 e.preventDefault();
                 applyFilters($(this).attr('href'));
             });
 
-            // Handle movie card click
-            $(document).on('click', '.movie-grid, .card-style', function(e) {
-                e.preventDefault();
-                let selectedMovie = $(this).data('id');
-                if (selectedMovie) {
-                    window.location.href = `/movies/details/${selectedMovie}`;
-                }
-            });
+            // Initial load if needed
+            applyFilters();
         });
     </script>
 @endpush

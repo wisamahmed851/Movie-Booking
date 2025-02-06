@@ -383,7 +383,7 @@ class MovieController extends Controller
             ->where('m.status', 1)
             ->groupBy('m.id');
 
-        // Apply language filter properly
+        // Apply filters
         if ($request->has('languages') && !empty($request->languages)) {
             $query->where(function ($q) use ($request) {
                 foreach ($request->languages as $language) {
@@ -392,7 +392,6 @@ class MovieController extends Controller
             });
         }
 
-        // Apply genre filter properly
         if ($request->has('genres') && !empty($request->genres)) {
             $query->where(function ($q) use ($request) {
                 foreach ($request->genres as $genre) {
@@ -400,6 +399,7 @@ class MovieController extends Controller
                 }
             });
         }
+
         if ($request->filled('city')) {
             $query->where('c.city_id', $request->city);
         }
@@ -415,7 +415,7 @@ class MovieController extends Controller
         if ($request->filled('search')) {
             $query->where('m.title', 'like', '%' . $request->search . '%');
         }
-        // Apply city filter
+
         if ($request->has('cities') && !empty($request->cities)) {
             $query->where(function ($q) use ($request) {
                 foreach ($request->cities as $city) {
@@ -424,7 +424,6 @@ class MovieController extends Controller
             });
         }
 
-        // Apply cinema filter
         if ($request->has('cinemas') && !empty($request->cinemas)) {
             $query->where(function ($q) use ($request) {
                 foreach ($request->cinemas as $cinema) {
@@ -446,9 +445,12 @@ class MovieController extends Controller
         }
 
         // Pagination handling
-        $perPage = $request->input('Pagination', 12);
-        $page = $request->input('page', 1);
-        $movies = $query->paginate($perPage, ['*'], 'page', $page);
+        if ($request->has('Pagination') && !empty($request->Pagination)) {
+            $movies = $query->paginate($request->Pagination, ['*'], 'page', $request->page);
+        } else {
+            $movies = $query->paginate(12);
+        }
+        
 
         // Transform the result
         $movies->getCollection()->transform(function ($movie) {
@@ -495,6 +497,7 @@ class MovieController extends Controller
         // Default page load
         return view('frontend.movies.grid', compact('movies', 'cities', 'cinemas', 'genres', 'languages', 'pagination', 'availableDates'));
     }
+
 
 
 
@@ -885,7 +888,7 @@ class MovieController extends Controller
             )
             ->get();
 
-        
+
 
         // Generate the PDF
         return PDF::loadView('frontend.pdf.ticket', compact('booking', 'seats'))->stream('ticket.pdf');

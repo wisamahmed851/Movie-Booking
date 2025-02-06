@@ -59,7 +59,7 @@ class BlogsController extends Controller
         // Validate the input
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'short_description' => 'required|string|max:255',
+            'short_description' => 'required|string',
             'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Optional image update
             'long_description' => 'required|string',
         ]);

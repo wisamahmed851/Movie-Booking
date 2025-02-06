@@ -36,7 +36,6 @@
                                 class="{{ $blogs->currentPage() == 1 ? 'disabled' : '' }}">
                                 <i class="fas fa-angle-double-left"></i><span>Prev</span>
                             </a>
-
                             @for ($i = 1; $i <= $blogs->lastPage(); $i++)
                                 <a href="{{ $blogs->url($i) }}"
                                     class="{{ $blogs->currentPage() == $i ? 'active' : '' }}">{{ $i }}</a>
