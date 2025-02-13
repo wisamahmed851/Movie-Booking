@@ -95,7 +95,7 @@
             /* Make text readable */
             background-color: black;
             /* Match input background */
-            border: 1px solid #dc3545;
+            
             /* Adjust border color if needed */
         }
 

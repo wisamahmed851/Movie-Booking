@@ -7,7 +7,7 @@
                 <div class=" rounded p-4" style="background-color: #3f424c;">
                     <div class="card-header  d-flex justify-content-between align-items-center gap-1 text-white"
                         style="background-color: #3f424c; ">
-                        <h4 class="card-title flex-grow-1 text-white">All Users List</h4>
+                        <h4 class="card-title flex-grow-1 text-white">Create Genre </h4>
                         <a href="{{ route('genres.index') }}" class="btn btn-sm btn-primary">
                             Genres List
                         </a>

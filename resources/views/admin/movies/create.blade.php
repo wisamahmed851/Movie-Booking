@@ -37,8 +37,8 @@
                 <!-- Release Date and Duration -->
                 <div class="row g-3">
                     <div class="mb-3 col-md-6">
-                        <label for="release_date" class="form-label text-white">Release Date</label>
-                        <input type="date" class="form-control" id="release_date" name="release_date" required>
+                        <label for="release_date " class="form-label text-white">Release Date</label>
+                        <input type="date" class="form-control show-date" id="release_date" name="release_date" required>
                     </div>
                     <div class="mb-3 col-md-6">
                         <label for="duration" class="form-label text-white">Duration (in minutes)</label>
@@ -138,65 +138,48 @@
 
     </div>
 @endsection
+@push('styles')
+    <style>
+        input[type="date"] {
+            position: relative;
+            padding-right: 30px;
+            /* Adjust spacing for the icon */
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        /* Ensure the calendar icon inside the date input is visible */
+        .show-date::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            /* Invert color to make it visible on dark backgrounds */
+            opacity: 1;
+            /* Ensure visibility */
+            cursor: pointer;
+            /* Indicate it's clickable */
+        }
+
+        /* Adjust input field text color */
+        .show-date {
+            color: white;
+            /* Make text readable */
+            background-color: black;
+            /* Match input background */
+            
+            /* Adjust border color if needed */
+        }
+        
+    </style>
+@endpush
 
 @push('scripts')
     <script>
-        /* $(document).ready(function() {
-            $('#movieCreateForm').on('submit', function(e) {
-                e.preventDefault(); // Prevent form from submitting normally
-
-                let formData = new FormData(this);
-                if (!$('#isTrending').is(':checked')) {
-                    formData.append('isTrending', 0);
-                }
-                if (!$('#isExclusive').is(':checked')) {
-                    formData.append('isExclusive', 0);
-                }
-
-                $.ajax({
-                    url: "{{ route('movies.store') }}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Toastify({
-                                text: response.message,
-                                backgroundColor: "green",
-                                duration: 3000
-                            }).showToast();
-                            window.location.href = "{{ route('movies.index') }}";
-                        } else if (response.status === 'error') {
-                            let errors = response.message;
-                            let errorMessages = '';
-                            for (let field in errors) {
-                                if (errors.hasOwnProperty(field)) {
-                                    errorMessages += errors[field][0] + '\n';
-                                }
-                            }
-                            Toastify({
-                                text: errorMessages.trim(),
-                                backgroundColor: "red",
-                                duration: 5000
-                            }).showToast();
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        let errors = xhr.responseJSON.errors;
-                        let errorMessage = '';
-                        for (const key in errors) {
-                            errorMessage += errors[key].join(' ') + '\n';
-                        }
-                        Toastify({
-                            text: errorMessages.trim(),
-                            backgroundColor: "red",
-                            duration: 5000
-                        }).showToast();
-                    }
-                });
-            });
-        }); */
         $(document).ready(function() {
             handleAjaxFormSubmit('#movieCreateForm', '{{ route('movies.store') }}', '{{ route('movies.index') }}');
         });

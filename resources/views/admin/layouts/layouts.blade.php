@@ -81,9 +81,13 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="{{ route('dashboard.index') }}"
+                    <a href="{{ route('dashboard.index') }}" 
                         class="nav-item nav-link {{ Request::routeIs('dashboard.index') ? 'active' : '' }}">
                         <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a href="{{ route('front.index') }}" target="_blank"
+                        class="nav-item nav-link {{ Request::routeIs('front.index') ? 'active' : '' }}">
+                        <i class="fa fa-tachometer-alt me-2"></i>Visit Website
                     </a>
                     {{-- user --}}
                     <div class="nav-item dropdown ">

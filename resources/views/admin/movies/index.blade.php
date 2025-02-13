@@ -45,7 +45,7 @@
                             @if ($movie->slider_images)
                                 @foreach ($movie->slider_images as $slider)
                                     <img src="{{ asset('storage/' . $slider) }}" alt="Slider"
-                                        style="width: 50px; height: 50px;">
+                                        style="width: 50px; height: 50px; padding-bottom: 5px;" >
                                 @endforeach
                             @else
                                 No images available

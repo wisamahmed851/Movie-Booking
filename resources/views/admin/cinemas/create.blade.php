@@ -179,7 +179,7 @@
             /* Ensures text is readable */
             background-color: black;
             /* Matches the input background */
-            border: 1px solid #dc3545;
+            
             /* Adjust border if needed */
         }
 

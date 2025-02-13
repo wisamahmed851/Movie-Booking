@@ -7,7 +7,7 @@
                 <div class=" rounded p-4">
                     <div class="card-header  d-flex justify-content-between align-items-center gap-1 text-white"
                         style="background-color: #3f424c; padding-top: 25px;">
-                        <h4 class="card-title flex-grow-1">All Users List</h4>
+                        <h4 class="card-title flex-grow-1">Create City</h4>
                         <a href="{{ route('city.index') }}" class="btn btn-sm btn-primary">
                             Cities List
                         </a>

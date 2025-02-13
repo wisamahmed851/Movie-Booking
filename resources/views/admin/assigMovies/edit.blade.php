@@ -108,6 +108,30 @@
             opacity: 1;
             cursor: pointer;
         }
+        /* Ensure the calendar icon inside the date input is visible */
+        .show-date::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            /* Invert color to make it visible on dark backgrounds */
+            opacity: 1;
+            /* Ensure visibility */
+            cursor: pointer;
+            /* Indicate it's clickable */
+        }
+
+        /* Adjust input field text color */
+        .show-date {
+            color: white;
+            /* Make text readable */
+            background-color: black;
+            /* Match input background */
+            
+            /* Adjust border color if needed */
+        }
+
+        /* Optional: Improve placeholder visibility */
+        .show-date::placeholder {
+            color: #aaa;
+        }
     </style>
 @endpush
 @push('scripts')
