@@ -191,10 +191,6 @@
                     // Use Laravel's route() helper to generate the URL dynamically
                     var url = "{{ route('movies.seat-plan', ':show_id') }}".replace(':show_id', selectedShowId);
                     window.location.href = url; // Redirect to the generated URL
-                } else {
-                    // Prevent default action if no show is selected
-                    event.preventDefault();
-                    alert("Please select a show time first!");
                 }
             });
         }

@@ -336,7 +336,14 @@
                 e.preventDefault();
                 applyFilters($(this).attr('href'));
             });
-
+            $(document).on('click', '.movie-grid', function(e) {
+                let movieId = $(this).data('id');
+                // Create a URL with a placeholder
+                let url = "{{ route('movies.details', ':id') }}";
+                // Replace the placeholder with the actual movie id
+                url = url.replace(':id', movieId);
+                window.location.href = url;
+            });
             // Initial load if needed
             applyFilters();
         });
