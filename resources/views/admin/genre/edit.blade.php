@@ -26,7 +26,7 @@
         $(document).ready(function() {
             handleEditFormSubmission('#genereCreate', {
                 url: '{{ route('genres.update', ['id' => $genre->id]) }}',
-                useFormData: false, // Serialize form data as no files are included
+                useFormData: true, // Serialize form data as no files are included
                 redirectUrl: "{{ route('genres.index') }}" // Redirect after success
             });
 
