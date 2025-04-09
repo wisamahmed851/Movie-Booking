@@ -121,9 +121,9 @@ class CityController extends Controller
     {
         try {
 
-            $genre = City::find($id);
-            $genre->status = ($genre->status == 1) ? 0 : 1;
-            $genre->save();
+            $cities = City::find($id);
+            $cities->status = ($cities->status == 1) ? 0 : 1;
+            $cities->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'City status updated successfully!',
