@@ -5,7 +5,9 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Cinema;
 use App\Models\City;
+use App\Models\Genre;
 use App\Models\Language;
+use App\Models\Movie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -68,12 +70,24 @@ class HomeController extends Controller
             ->unique()
             ->sort()
             ->values();
-            return response()->json([
-                'movies' => $movies,
-                'cinemas' => $cinemas,
-                'cities' => $cities,
-                'available_dates' => $availableDates
-            ]);
+        return response()->json([
+            'movies' => $movies,
+            'cinemas' => $cinemas,
+            'cities' => $cities,
+            'available_dates' => $availableDates
+        ]);
         // return view('frontend.dashboard.index', compact('movies', 'cinemas', 'cities', 'availableDates'));
+    }
+    public function details($id)
+    {
+        $movie = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->findOrFail($id);
+        $genres = Genre::where('status', 1)->whereIn('id', $movie->genre_ids)->get();
+        $languages = Language::whereIn('id', $movie->language_ids)->get();
+        $movie->slider_images = $movie->sliderImages?->slider_images ?? [];
+        return response()->json([
+            'movie' => $movie,
+            'genres' => $genres,
+            'languages' => $languages
+        ]);
     }
 }

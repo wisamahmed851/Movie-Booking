@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -191,7 +192,7 @@ class UserController extends Controller
         $otp = rand(100000, 999999);
 
         // Store OTP in session or database
-        \Log::info($otp);
+        Log::info($otp);
         session([
             'otp' => $otp,
             'email' => $request->email
