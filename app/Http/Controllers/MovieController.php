@@ -450,7 +450,7 @@ class MovieController extends Controller
         } else {
             $movies = $query->paginate(12);
         }
-        
+
 
         // Transform the result
         $movies->getCollection()->transform(function ($movie) {
@@ -497,8 +497,6 @@ class MovieController extends Controller
         // Default page load
         return view('frontend.movies.grid', compact('movies', 'cities', 'cinemas', 'genres', 'languages', 'pagination', 'availableDates'));
     }
-
-
 
 
 

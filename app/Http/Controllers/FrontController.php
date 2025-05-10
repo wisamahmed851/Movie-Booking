@@ -37,7 +37,7 @@ class FrontController extends Controller
             ->where('m.status', 1)
             ->groupBy('m.id');
 
-      
+
 
         // Get paginated results
         $movies = $query->take(3)->get();
@@ -68,7 +68,6 @@ class FrontController extends Controller
             ->unique()
             ->sort()
             ->values();
-
         return view('frontend.dashboard.index', compact('movies', 'cinemas', 'cities', 'availableDates'));
     }
     public function filter(Request $request)

@@ -3,7 +3,8 @@
 @section('content')
     <input type="hidden" value="{{ $formattedData['movie_id'] }}" id="movie_id">
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner hero-area bg_img seat-plan-banner" data-background="{{asset('storage/' . $formattedData['banner_image'])}}">
+    <section class="details-banner hero-area bg_img seat-plan-banner"
+        data-background="{{ asset('storage/app/public/' . $formattedData['banner_image']) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-content style-two">
@@ -23,8 +24,9 @@
     <section class="page-title bg-one">
         <div class="container">
             <div class="page-title-area">
-                <div class="item md-order-1"> 
-                    <a href="{{route('movies.ticket-plan', ['id' => $formattedData['movie_id']]) }}" class="custom-button back-button">
+                <div class="item md-order-1">
+                    <a href="{{ route('movies.ticket-plan', ['id' => $formattedData['movie_id']]) }}"
+                        class="custom-button back-button">
                         <i class="flaticon-double-right-arrows-angles"></i>back
                     </a>
                 </div>

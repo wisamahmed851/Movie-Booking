@@ -31,21 +31,21 @@
                         <td>{{ $movie->title }}</td>
                         <td>
                             @if ($movie->banner_image)
-                                <img src="{{ asset('storage/' . $movie->banner_image) }}" alt="Banner"
+                                <img src="{{ asset('storage/app/public/' . $movie->banner_image) }}" alt="Banner"
                                     style="width: 50px; height: 50px;">
                             @endif
                         </td>
                         <td>
                             @if ($movie->cover_image)
-                                <img src="{{ asset('storage/' . $movie->cover_image) }}" alt="Cover"
+                                <img src="{{ asset('storage/app/public/' . $movie->cover_image) }}" alt="Cover"
                                     style="width: 50px; height: 50px;">
                             @endif
                         </td>
                         <td>
                             @if ($movie->slider_images)
                                 @foreach ($movie->slider_images as $slider)
-                                    <img src="{{ asset('storage/' . $slider) }}" alt="Slider"
-                                        style="width: 50px; height: 50px; padding-bottom: 5px;" >
+                                    <img src="{{ asset('storage/app/public/' . $slider) }}" alt="Slider"
+                                        style="width: 50px; height: 50px; padding-bottom: 5px;">
                                 @endforeach
                             @else
                                 No images available

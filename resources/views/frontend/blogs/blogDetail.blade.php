@@ -35,7 +35,8 @@
                     <article>
                         <div class="post-item post-details">
                             <div class="post-thumb">
-                                <img src="{{ asset('storage/' . $blog->BlogDetails->cover_image) }}" alt="blog">
+                                <img src="{{ asset('storage/app/public/' . $blog->BlogDetails->cover_image) }}"
+                                    alt="blog">
                             </div>
                             <div class="post-content">
                                 <div class="post-meta text-center">
@@ -76,7 +77,7 @@
                                             {{-- Long Description --}}
                                             {!! $blog->blogDetails->long_description ?? 'Long description not available.' !!}
                                         </p>
-                                        
+
                                     </div>
 
                                     <div class="tags-area">

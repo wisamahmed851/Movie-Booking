@@ -3,7 +3,7 @@
 @section('content')
     <!-- ==========Banner-Section========== -->
     <section class="details-banner hero-area bg_img seat-plan-banner"
-        data-background="{{ asset('storage/' . $checkoutData['movie_image']) }}">
+        data-background="{{ asset('storage/app/public/' . $checkoutData['movie_image']) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-content style-two">
@@ -20,7 +20,8 @@
         <div class="container">
             <div class="page-title-area">
                 <div class="item md-order-1">
-                    <a href="{{ route('movies.seat-plan', ['id' => $checkoutData['assign_movies_details_id']])}}" class="custom-button back-button">
+                    <a href="{{ route('movies.seat-plan', ['id' => $checkoutData['assign_movies_details_id']]) }}"
+                        class="custom-button back-button">
                         <i class="flaticon-double-right-arrows-angles"></i>back
                     </a>
                 </div>
@@ -42,81 +43,81 @@
     <!-- ==========Page-Title========== -->
 
     <!-- ==========Movie-Section========== -->
-<div class="movie-facility padding-bottom padding-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="booking-summery bg-one">
-                    <h4 class="title">Booking Summary</h4>
-                    <ul>
-                        <li>
-                            <h6 class="subtitle">{{ $checkoutData['movie_title'] }}</h6>
-                        </li>
-                        <li>
-                            <h6 class="subtitle">
-                                <span>{{ $checkoutData['cinema_name'] }}</span>
-                                <span>02</span>
-                            </h6>
-                            <div class="info">
-                                <span class="date">
-                                    {{ \Carbon\Carbon::parse($checkoutData['show_date'])->format('D, M d Y') }}
-                                    {{ \Carbon\Carbon::parse($checkoutData['start_time'])->format('h:i A') }}
-                                </span>
-                            </div>
-                        </li>
-                    </ul>
-                    <ul class="side-shape">
-                        @foreach ($checkoutData['grouped_seats'] as $category => $seats)
+    <div class="movie-facility padding-bottom padding-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="booking-summery bg-one">
+                        <h4 class="title">Booking Summary</h4>
+                        <ul>
                             <li>
-                                <h6 class="subtitle">{{ $category }}</h6>
-                                @foreach ($seats as $seat)
-                                    <div class="info">
-                                        <span>{{ $seat->seat_number }}</span>
-                                        <span>{{ round($seat->price_per_seat) }} Rs</span>
-                                    </div>
-                                @endforeach
+                                <h6 class="subtitle">{{ $checkoutData['movie_title'] }}</h6>
                             </li>
-                        @endforeach
-                    </ul>
-                    <div class="proceed-area text-center">
-                        <h6 class="subtitle">
-                            <span>Total Amount</span>
-                            <span>{{ $checkoutData['total_price'] }} Rs</span>
-                        </h6>
-                    </div>
-
-                    @if (request('booking') === 'success' && session('last_booking_id'))
-                        <div class="booking-confirmed">
-                            <button class="custom-button" disabled>Booking Confirmed</button>
-                            <div class="pdf-buttons mt-3">
-                                <a href="{{ route('movies.ticket.view', ['id' => session('last_booking_id')]) }}"
-                                    class="custom-button" target="_blank">View PDF</a>
-                                <a href="{{ route('movies.ticket.download', ['id' => session('last_booking_id')]) }}"
-                                    class="custom-button">Download PDF</a>
-                            </div>
-                        </div>
-                    @else
-                        <form id="payment-form">
-                            @csrf
-                            <div class="form-group">
-                                <button type="button" id="pay-button" class="custom-button">Proceed to Payment</button>
-                            </div>
-                        </form>
-                        <form method="POST" action="{{ route('movies.confirm-booking') }}" id="booking-form">
-                            @csrf
-                            <input type="hidden" name="assign_movies_details_id"
-                                value="{{ $checkoutData['assign_movies_details_id'] }}">
-                            <input type="hidden" name="total_price" value="{{ $checkoutData['total_price'] }}">
-                            <input type="hidden" name="selected_seats"
-                                value="{{ json_encode($checkoutData['grouped_seats']) }}">
-                            <input type="hidden" id="movie_id" name="movie_id"
-                                value="{{ $checkoutData['movie_id'] }}">
-
-                            <div class="checkout-widget checkout-card mb-0">
-                                <div class="form-group">
-                                    <button type="submit" id="confirm-booking-button" class="custom-button"
-                                        style="display: none;">Confirm Booking</button>
+                            <li>
+                                <h6 class="subtitle">
+                                    <span>{{ $checkoutData['cinema_name'] }}</span>
+                                    <span>02</span>
+                                </h6>
+                                <div class="info">
+                                    <span class="date">
+                                        {{ \Carbon\Carbon::parse($checkoutData['show_date'])->format('D, M d Y') }}
+                                        {{ \Carbon\Carbon::parse($checkoutData['start_time'])->format('h:i A') }}
+                                    </span>
                                 </div>
+                            </li>
+                        </ul>
+                        <ul class="side-shape">
+                            @foreach ($checkoutData['grouped_seats'] as $category => $seats)
+                                <li>
+                                    <h6 class="subtitle">{{ $category }}</h6>
+                                    @foreach ($seats as $seat)
+                                        <div class="info">
+                                            <span>{{ $seat->seat_number }}</span>
+                                            <span>{{ round($seat->price_per_seat) }} Rs</span>
+                                        </div>
+                                    @endforeach
+                                </li>
+                            @endforeach
+                        </ul>
+                        <div class="proceed-area text-center">
+                            <h6 class="subtitle">
+                                <span>Total Amount</span>
+                                <span>{{ $checkoutData['total_price'] }} Rs</span>
+                            </h6>
+                        </div>
+
+                        @if (request('booking') === 'success' && session('last_booking_id'))
+                            <div class="booking-confirmed">
+                                <button class="custom-button" disabled>Booking Confirmed</button>
+                                <div class="pdf-buttons mt-3">
+                                    <a href="{{ route('movies.ticket.view', ['id' => session('last_booking_id')]) }}"
+                                        class="custom-button" target="_blank">View PDF</a>
+                                    <a href="{{ route('movies.ticket.download', ['id' => session('last_booking_id')]) }}"
+                                        class="custom-button">Download PDF</a>
+                                </div>
+                            </div>
+                        @else
+                            <form id="payment-form">
+                                @csrf
+                                <div class="form-group">
+                                    <button type="button" id="pay-button" class="custom-button">Proceed to Payment</button>
+                                </div>
+                            </form>
+                            <form method="POST" action="{{ route('movies.confirm-booking') }}" id="booking-form">
+                                @csrf
+                                <input type="hidden" name="assign_movies_details_id"
+                                    value="{{ $checkoutData['assign_movies_details_id'] }}">
+                                <input type="hidden" name="total_price" value="{{ $checkoutData['total_price'] }}">
+                                <input type="hidden" name="selected_seats"
+                                    value="{{ json_encode($checkoutData['grouped_seats']) }}">
+                                <input type="hidden" id="movie_id" name="movie_id"
+                                    value="{{ $checkoutData['movie_id'] }}">
+
+                                <div class="checkout-widget checkout-card mb-0">
+                                    <div class="form-group">
+                                        <button type="submit" id="confirm-booking-button" class="custom-button"
+                                            style="display: none;">Confirm Booking</button>
+                                    </div>
                                     <p class="notice">
                                         By Clicking "Confirm Booking" you agree to the <a href="#0">terms and
                                             conditions</a>
@@ -214,10 +215,12 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').content
                             },
                             body: JSON.stringify({
-                                amount: {{ $checkoutData['total_price'] }} * 100, // Ensure it's multiplied by 100
+                                amount: {{ $checkoutData['total_price'] }} *
+                                100, // Ensure it's multiplied by 100
                                 currency: 'usd'
                             })
                         });

@@ -6,11 +6,13 @@
 
 @section('content')
     <!-- ==========Banner-Section========== -->
-    <section class="details-banner bg_img" data-background="{{ asset('storage/' . $movie->bannerImage->banner_image_path) }}">
+    <section class="details-banner bg_img"
+        data-background="{{ asset('storage/app/public/' . $movie->bannerImage->banner_image_path) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
-                    <img src="{{ asset('storage/' . $movie->coverImage->cover_image_path) }}" alt="{{ $movie->title }}">
+                    <img src="{{ asset('storage/app/public/' . $movie->coverImage->cover_image_path) }}"
+                        alt="{{ $movie->title }}">
                     <a href="{{ $movie->trailler }}" class="video-popup">
                         <img src="{{ asset('frontend/images/movie/video-button.png') }}" alt="movie">
                     </a>
@@ -191,7 +193,8 @@
                                 @foreach ($movie->slider_images as $slider)
                                     <div class="thumb">
                                         <a href="" class="img-pop">
-                                            <img src="{{ asset('storage/' . $slider) }}" alt="movie" height="250px">
+                                            <img src="{{ asset('storage/app/public/' . $slider) }}" alt="movie"
+                                                height="250px">
                                         </a>
                                     </div>
                                 @endforeach
@@ -518,7 +521,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="title text-dark">Rate: {{ $movie->title }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="width: 20px; height: 20px; margin-bottom: 10px; margin-right: 10px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        style="width: 20px; height: 20px; margin-bottom: 10px; margin-right: 10px;">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

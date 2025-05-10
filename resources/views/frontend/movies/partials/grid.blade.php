@@ -1,6 +1,6 @@
 <div class="tab-item active">
     <div class="row mb-10 justify-content-center">
-        <div class="row" >
+        <div class="row">
             @foreach ($movies as $movie)
                 <div
                     class="col-sm-6 col-lg-4 @if ($movies->count() == 1) col-lg-4 @endif @if ($movies->count() == 2) col-lg-4 @endif">
@@ -9,7 +9,7 @@
                         <div class="movie-thumb c-thumb">
                             <!-- Removed hardcoded href -->
                             <a href="javascript:void(0);">
-                                <img src="{{ asset('storage/' . $movie['cover_image']) }}" alt="">
+                                <img src="{{ asset('storage/app/public/' . $movie['cover_image']) }}" alt="">
                             </a>
                         </div>
                         <div class="movie-content bg-one">
