@@ -90,4 +90,72 @@ class HomeController extends Controller
             'languages' => $languages
         ]);
     }
+    public function filter(Request $request)
+    {
+        // Start Eloquent Query
+        $query = Movie::with(['coverImage', 'assignMovies.cinema', 'assignMovies.details'])
+            ->where('status', 1);
+
+        // Apply filters
+        if ($request->filled('city')) {
+            $query->whereHas('assignMovies.cinema', function ($q) use ($request) {
+                $q->where('city_id', $request->city);
+            });
+        }
+
+        if ($request->filled('cinema')) {
+            $query->whereHas('assignMovies', function ($q) use ($request) {
+                $q->where('cinema_id', $request->cinema);
+            });
+        }
+
+        if ($request->filled('date')) {
+            $query->whereHas('assignMovies.details', function ($q) use ($request) {
+                $q->where('show_date', $request->date);
+            });
+        }
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Fetch only 3 results
+        $movies = $query->take(3)->get();
+
+        // Transform each movie
+        $movies->transform(function ($movie) {
+            // Gather all show dates from details
+            $dates = $movie->assignMovies->flatMap(function ($am) {
+                return $am->details->pluck('show_date');
+            });
+
+            // Gather all city IDs
+            $cityIds = $movie->assignMovies->pluck('cinema.city_id')->filter()->unique()->values();
+
+            // Gather all cinema IDs
+            $cinemaIds = $movie->assignMovies->pluck('cinema_id')->filter()->unique()->values();
+
+            return [
+                'id' => $movie->id,
+                'title' => $movie->title,
+                'cover_image' => $movie->coverImage->cover_image_path ?? null,
+                'next_showing' => $dates->min(),
+                'languages' => Language::whereIn('id', $movie->language_ids ?? [])->pluck('name')->toArray(),
+                'cities' => City::whereIn('id', $cityIds)->pluck('name')->toArray(),
+                'cinemas' => Cinema::whereIn('id', $cinemaIds)->pluck('name')->toArray(),
+                'available_dates' => $dates->unique()->values()->toArray()
+            ];
+        });
+
+        // Get all unique dates from movies
+        $availableDates = $movies->flatMap(fn($m) => $m['available_dates'])
+            ->unique()
+            ->sort()
+            ->values();
+
+        return response()->json([
+            'moviesHtml' => $movies,
+            'availableDates' => $availableDates
+        ]);
+    }
 }

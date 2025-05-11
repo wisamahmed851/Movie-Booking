@@ -11,8 +11,8 @@ class Cinema extends Model
 
     protected $fillable = [
         'name',
-        'description',  
-        'address',  
+        'description',
+        'address',
         'city_id',
         'status',
     ];
@@ -25,7 +25,18 @@ class Cinema extends Model
     {
         return $this->hasMany(CinemaSeatsCategories::class);
     }
-    
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+    public function assignMovies()
+    {
+        return $this->hasMany(AssignMovies::class);
+    }
+    public function assignMoviesDetails()
+    {
+        return $this->hasMany(AssignMoviesDetails::class);
+    }
     public function getStatusLabelAttribute()
     {
         return $this->status ? 'Active' : 'Inactive';

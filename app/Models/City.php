@@ -10,16 +10,22 @@ class City extends Model
     //
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = ['name', 'status'];
+    protected $table = 'cities';
+    protected $fillable = [
+        'name',
+        'country_id',
+        'status',
+    ];
+
+
+    public function cinemas()
+    {
+        return $this->hasMany(Cinema::class);
+    }
 
     /**
      * Relationships: If a language can be associated with multiple movies,
      * you can define the relationship here.
      */
-    
+
 }

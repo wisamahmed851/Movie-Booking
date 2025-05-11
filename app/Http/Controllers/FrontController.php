@@ -70,6 +70,7 @@ class FrontController extends Controller
             ->values();
         return view('frontend.dashboard.index', compact('movies', 'cinemas', 'cities', 'availableDates'));
     }
+    
     public function filter(Request $request)
     {
         // Base query (same as index method)

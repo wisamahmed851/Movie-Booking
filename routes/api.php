@@ -3,15 +3,39 @@
 use App\Http\Controllers\api\{
     AuthController,
     HomeController,
+    MovieController,
     UserController,
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [UserController::class, 'index']);
-});
-Route::get('/home', [HomeController::class, 'index']);
-Route::get('/details/{id}', [HomeController::class, 'details']);
+Route::prefix('')->group(
+    function () {
+
+        // login and register routes
+        Route::controller(AuthController::class)->group(function () {
+            Route::post('/register', 'register');
+            Route::post('/login', 'login');
+        });
+        // authenticated routes
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::controller(UserController::class)->prefix('user')->group(function () {
+                Route::get('/', 'index');
+            });
+        });
+
+
+
+        Route::controller(HomeController::class)->prefix('')->group(function () {
+            Route::get('/', 'index');
+            Route::post('/filter', 'filter');
+            Route::get('/details/{id}', 'details');
+        });
+        Route::controller(MovieController::class)->prefix('movies')->group(
+            function () {
+                Route::post('/list', 'movies');
+                Route::post('/loadmovies', 'loadMovies');
+            });
+    }
+);
