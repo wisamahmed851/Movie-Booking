@@ -706,7 +706,6 @@ class MovieController extends Controller
     }
     public function checkout(Request $request)
     {
-        dd($request->all());
 
         // If it's a GET request, check for payment status in the query parameters
         if ($request->isMethod('get')) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\api\{
     MovieController,
     UserController,
 };
+use App\Http\Controllers\BlogsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,5 +47,9 @@ Route::prefix('')->group(
                 Route::get('details/{id}', 'details');
             }
         );
+        Route::controller(BlogsController::class)->prefix('blogs')->group(function () {
+            Route::get('/list', 'list');
+            Route::get('/details/{id}', 'details');
+        });
     }
 );
