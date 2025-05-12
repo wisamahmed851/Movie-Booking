@@ -220,7 +220,7 @@
                             },
                             body: JSON.stringify({
                                 amount: {{ $checkoutData['total_price'] }} *
-                                100, // Ensure it's multiplied by 100
+                                    100, // Ensure it's multiplied by 100
                                 currency: 'usd'
                             })
                         });

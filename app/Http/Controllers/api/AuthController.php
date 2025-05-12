@@ -45,7 +45,7 @@ class AuthController extends Controller
                 'message' => 'Your account is inactive. Please contact support.',
             ], 403);
         }
-
+        // $request->user()->delete();
         // Create token
         $token = $user->createToken('API Token')->plainTextToken;
 
@@ -84,6 +84,16 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'User Registered in successfully!',
             'data' => null
+        ]);
+    }
+    public function logout(Request $request)
+    {
+        $user = $request->user();
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully',
         ]);
     }
 }

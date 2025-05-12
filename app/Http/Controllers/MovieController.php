@@ -19,6 +19,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\FacadesLog;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Stripe\Stripe;
@@ -573,7 +574,6 @@ class MovieController extends Controller
                 'end_time' => $data->end_time
             ];
         }
-        dd($formattedData);
         // If AJAX request, return only partial view
         if ($request->ajax()) {
             return view('frontend.ticketBooking._cinema_list', compact('formattedData'))->render();
@@ -706,6 +706,8 @@ class MovieController extends Controller
     }
     public function checkout(Request $request)
     {
+        dd($request->all());
+
         // If it's a GET request, check for payment status in the query parameters
         if ($request->isMethod('get')) {
             $paymentStatus = $request->query('payment');
@@ -718,7 +720,6 @@ class MovieController extends Controller
                 'bookingStatus'
             ));
         }
-
         // Validate the request
         $request->validate([
             'selected_seats' => 'required',
@@ -779,7 +780,7 @@ class MovieController extends Controller
     }
     public function processPayment(Request $request)
     {
-        \Log::info('Stripe Secret Key', ['key' => env('STRIPE_SECRET')]);
+        Log::info('Stripe Secret Key', ['key' => env('STRIPE_SECRET')]);
 
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -802,11 +803,11 @@ class MovieController extends Controller
                 'cancel_url' => route('movies.check-out') . '?payment=failed',
             ]);
 
-            \Log::info('Stripe session created', ['session' => $session]);
+            Log::info('Stripe session created', ['session' => $session]);
 
             return response()->json(['id' => $session->id]);
         } catch (\Exception $e) {
-            \Log::error('Payment process failed', ['error' => $e->getMessage()]);
+            Log::error('Payment process failed', ['error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }

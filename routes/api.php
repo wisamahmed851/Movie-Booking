@@ -25,6 +25,11 @@ Route::prefix('')->group(
             });
             Route::controller(MovieController::class)->prefix('movies')->group(function () {
                 Route::post('/ticket-plan/{id}', 'ticketplan');
+                Route::post('/seats-plan/{id}', 'seatsplan');
+                Route::any('/check-out', 'checkout');
+            });
+            Route::controller(AuthController::class)->prefix('')->group(function () {
+                Route::post('/logout', 'logout');
             });
         });
 
