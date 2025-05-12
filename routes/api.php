@@ -23,6 +23,9 @@ Route::prefix('')->group(
             Route::controller(UserController::class)->prefix('user')->group(function () {
                 Route::get('/', 'index');
             });
+            Route::controller(MovieController::class)->prefix('movies')->group(function () {
+                Route::post('/ticket-plan/{id}', 'ticketplan');
+            });
         });
 
 
@@ -30,12 +33,13 @@ Route::prefix('')->group(
         Route::controller(HomeController::class)->prefix('')->group(function () {
             Route::get('/', 'index');
             Route::post('/filter', 'filter');
-            Route::get('/details/{id}', 'details');
         });
         Route::controller(MovieController::class)->prefix('movies')->group(
             function () {
                 Route::post('/list', 'movies');
                 Route::post('/loadmovies', 'loadMovies');
-            });
+                Route::get('details/{id}', 'details');
+            }
+        );
     }
 );

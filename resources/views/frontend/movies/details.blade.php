@@ -7,11 +7,11 @@
 @section('content')
     <!-- ==========Banner-Section========== -->
     <section class="details-banner bg_img"
-        data-background="{{ asset('storage/app/public/' . $movie->bannerImage->banner_image_path) }}">
+        data-background="{{ asset('storage/' . $movie->bannerImage->banner_image_path) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-thumb">
-                    <img src="{{ asset('storage/app/public/' . $movie->coverImage->cover_image_path) }}"
+                    <img src="{{ asset('storage/' . $movie->coverImage->cover_image_path) }}"
                         alt="{{ $movie->title }}">
                     <a href="{{ $movie->trailler }}" class="video-popup">
                         <img src="{{ asset('frontend/images/movie/video-button.png') }}" alt="movie">
@@ -193,7 +193,7 @@
                                 @foreach ($movie->slider_images as $slider)
                                     <div class="thumb">
                                         <a href="" class="img-pop">
-                                            <img src="{{ asset('storage/app/public/' . $slider) }}" alt="movie"
+                                            <img src="{{ asset('storage/' . $slider) }}" alt="movie"
                                                 height="250px">
                                         </a>
                                     </div>

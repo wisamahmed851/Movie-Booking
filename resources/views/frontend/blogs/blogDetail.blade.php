@@ -35,7 +35,7 @@
                     <article>
                         <div class="post-item post-details">
                             <div class="post-thumb">
-                                <img src="{{ asset('storage/app/public/' . $blog->BlogDetails->cover_image) }}"
+                                <img src="{{ asset('storage/' . $blog->BlogDetails->cover_image) }}"
                                     alt="blog">
                             </div>
                             <div class="post-content">

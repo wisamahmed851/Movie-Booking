@@ -4,7 +4,7 @@
             <div class="movie-grid" data-id="{{ $movie['id'] }}">
                 <div class="movie-thumb c-thumb">
                     <a href="{{ route('movies.details', $movie['id']) }}">
-                        <img src="{{ asset('storage/app/public/' . $movie['cover_image']) }}" alt="movie">
+                        <img src="{{ asset('storage/' . $movie['cover_image']) }}" alt="movie">
                     </a>
                 </div>
                 <div class="movie-content bg-one">

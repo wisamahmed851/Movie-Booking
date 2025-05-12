@@ -78,18 +78,7 @@ class HomeController extends Controller
         ]);
         // return view('frontend.dashboard.index', compact('movies', 'cinemas', 'cities', 'availableDates'));
     }
-    public function details($id)
-    {
-        $movie = Movie::with(['bannerImage', 'coverImage', 'sliderImages'])->findOrFail($id);
-        $genres = Genre::where('status', 1)->whereIn('id', $movie->genre_ids)->get();
-        $languages = Language::whereIn('id', $movie->language_ids)->get();
-        $movie->slider_images = $movie->sliderImages?->slider_images ?? [];
-        return response()->json([
-            'movie' => $movie,
-            'genres' => $genres,
-            'languages' => $languages
-        ]);
-    }
+    
     public function filter(Request $request)
     {
         // Start Eloquent Query

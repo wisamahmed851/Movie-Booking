@@ -36,7 +36,7 @@
                         <td>{{ $assignMovie->id }}</td>
                         <td>
                             @if ($assignMovie->movie->coverImage->cover_image_path)
-                                <img src="{{ asset('storage/app/public/' . $assignMovie->movie->coverImage->cover_image_path) }}"
+                                <img src="{{ asset('storage/' . $assignMovie->movie->coverImage->cover_image_path) }}"
                                     alt="" width="50" height="50">
                             @else
                                 📷

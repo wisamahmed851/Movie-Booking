@@ -3,7 +3,7 @@
         <div class="post-thumb">
             <a href="blog-details.html">
                 @if ($blog->blogDetails && $blog->blogDetails->cover_image)
-                    <img src="{{ asset('storage/app/public/' . $blog->blogDetails->cover_image) }}" alt="blog">
+                    <img src="{{ asset('storage/' . $blog->blogDetails->cover_image) }}" alt="blog">
                 @endif
             </a>
         </div>

@@ -573,7 +573,7 @@ class MovieController extends Controller
                 'end_time' => $data->end_time
             ];
         }
-
+        dd($formattedData);
         // If AJAX request, return only partial view
         if ($request->ajax()) {
             return view('frontend.ticketBooking._cinema_list', compact('formattedData'))->render();

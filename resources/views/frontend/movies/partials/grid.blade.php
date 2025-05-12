@@ -9,7 +9,7 @@
                         <div class="movie-thumb c-thumb">
                             <!-- Removed hardcoded href -->
                             <a href="javascript:void(0);">
-                                <img src="{{ asset('storage/app/public/' . $movie['cover_image']) }}" alt="">
+                                <img src="{{ asset('storage/' . $movie['cover_image']) }}" alt="">
                             </a>
                         </div>
                         <div class="movie-content bg-one">

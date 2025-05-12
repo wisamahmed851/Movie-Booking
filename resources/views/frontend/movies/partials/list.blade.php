@@ -5,9 +5,9 @@
                 <div class="movie-thumb c-thumb">
                     <!-- Dynamic link and background -->
                     <a href="{{ route('movies.details', ['id' => $movie['id']]) }}" class="w-100 bg_img h-100"
-                        data-background="{{ asset('storage/app/public/' . $movie['cover_image']) }}"
-                        style="background-image: url('{{ asset('storage/app/public/' . $movie['cover_image']) }}');">
-                        <img class="d-sm-none" src="{{ asset('storage/app/public/' . $movie['cover_image']) }}"
+                        data-background="{{ asset('storage/' . $movie['cover_image']) }}"
+                        style="background-image: url('{{ asset('storage/' . $movie['cover_image']) }}');">
+                        <img class="d-sm-none" src="{{ asset('storage/' . $movie['cover_image']) }}"
                             alt="{{ $movie['title'] }}">
                     </a>
                 </div>

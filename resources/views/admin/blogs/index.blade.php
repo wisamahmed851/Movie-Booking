@@ -29,7 +29,7 @@
                         <td>{{ $blog->title }}</td>
                         <td>
                             @if ($blog->blogDetails && $blog->blogDetails->cover_image)
-                                <img src="{{ asset('storage/app/public/' . $blog->blogDetails->cover_image) }}"
+                                <img src="{{ asset('storage/' . $blog->blogDetails->cover_image) }}"
                                     alt="{{ $blog->title }}"
                                     style="width: 100px; height: 70px; object-fit: cover; border-radius: 5px;" />
                             @else

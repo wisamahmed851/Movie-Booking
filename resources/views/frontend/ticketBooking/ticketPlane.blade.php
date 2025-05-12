@@ -20,7 +20,7 @@
 
     <!-- ==========Banner-Section========== -->
     <section class="details-banner hero-area bg_img"
-        data-background="{{ asset('storage/app/public/' . $formattedData['banner_image']) }}">
+        data-background="{{ asset('storage/' . $formattedData['banner_image']) }}">
         <div class="container">
             <div class="details-banner-wrapper">
                 <div class="details-banner-content">
