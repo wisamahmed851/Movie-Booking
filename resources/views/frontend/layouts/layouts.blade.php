@@ -26,7 +26,8 @@
     <link rel="icon" href="{{ asset('frontend/css/img/mdb-favicon.ico" type="image/x-icon') }}" />
     <!-- Owl Carousel CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -110,7 +111,7 @@
                     </li>
                 </ul>
                 <a @if (Auth::check()) @if (Request::routeIs('user.profile')) href="{{ route('auth.logout') }} "@else
-href="{{ route('user.profile') }} " @endif
+                    href="{{ route('user.profile') }} " @endif
                 @else href="{{ route('user.login') }} " @endif
                     class="signupRegiste">
                     @if (Auth::check())
